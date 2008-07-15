@@ -10,11 +10,6 @@
 # pragma interface
 #endif
 
-#include <fwebui/WebUI.h>
-
-#define SHARELIST "/tmp/shareList"
-#define SHARELIST_TMP "/tmp/shareList.tmp"
-
 /*! \file FoundryUtilities.h
  * \brief Declares the class \c FoundryUtilities
  *
@@ -30,6 +25,9 @@ namespace foundryWebUI {
 	class to_lower
 	{
 	public:
+		/*!
+		 * Apply lower case operation to the char c.
+		 */
 		char operator() (char c) const {
 			return tolower(c);
 		}
@@ -41,6 +39,9 @@ namespace foundryWebUI {
 	class to_upper
 	{
 	public:
+		/*!
+		 * Apply upper case operation to the char c.
+		 */
 		char operator() (char c) const {
 			return toupper(c);
 		}
@@ -67,19 +68,19 @@ namespace foundryWebUI {
 		//@{
 
 		/*!
-		 * This removes all carriage return characters ('\r'
+		 * This removes all carriage return characters ('\\r'
 		 * 0xd) from input. It will convert all DOS style
-		 * newlines, which consist of '\r''\n' character duplets,
-		 * to UNIX style newlines ('\n'). A side effect is that
-		 * any lone '\r' characters which are present will be
-		 * removed, whether or not they are followed by a '\n'
+		 * newlines, which consist of '\\r''\\n' character duplets,
+		 * to UNIX style newlines ('\\n'). A side effect is that
+		 * any lone '\\r' characters which are present will be
+		 * removed, whether or not they are followed by a '\\n'
 		 * character.
 		 */
 		static int ensureUnixNewlines (std::string& input);
 
 		/*!
 		 * If the last character of input is a carriage return
-		 * ('\r' 0xd), then it is erased from input.
+		 * ('\\r' 0xd), then it is erased from input.
 		 */
 		static int stripTrailingCarriageReturn (std::string& input);
 
@@ -139,8 +140,8 @@ namespace foundryWebUI {
 		//@}
 
 		/*!
-		 * Given a path like C:\path\to\file in str, remove
-		 * all the preceding C:\ stuff to leave just the
+		 * Given a path like C:\\path\\to\\file in str, remove
+		 * all the preceding C:\\ stuff to leave just the
 		 * filename.
 		 */
 		static void stripDosPath (std::string& dosPath);
@@ -174,7 +175,7 @@ namespace foundryWebUI {
 		 * running state. False otherwise. Determine this by
 		 * reading /proc/[pid]/status and examinging the
 		 * second line which will say something like:
-		 * Status:\tS (sleeping)\n or Status:\tR (running)
+		 * Status:\\tS (sleeping)\\n or Status:\\tR (running)
 		 */
 		static bool pidLoaded (int pid);
 
@@ -237,8 +238,8 @@ namespace foundryWebUI {
 		 * Read a javascript file and output to
 		 * rJavascript. This is a function to use when you
 		 * want to read a javascript file and output it into
-		 * the html, so it adds <script type="text/javascript"
-		 * > at the start and </script> at the end.
+		 * the html, so it adds \<script type="text/javascript"\>
+		 * at the start and \</script\> at the end.
 		 */
 		static void getJavascript (std::stringstream& rJavascript,
 					   std::string jsFile);

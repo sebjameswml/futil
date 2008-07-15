@@ -9,13 +9,10 @@
 #include <cstdlib>
 #include <stdexcept>
 #include <list>
-#include <cgicc/Cgicc.h>
-#include <cgicc/HTMLClasses.h>
 
 #include "FoundryUtilities.h"
-#include "NetworkSection.h"
 
-#include <wmlppctrl/processlog.h>
+//#include <wmlppctrl/processlog.h>
 
 extern "C" {
 #include <sys/types.h>
@@ -28,8 +25,6 @@ extern "C" {
 }
 
 using namespace std;
-using namespace cgicc;
-using namespace wmlpp;
 
 ofstream pdfDbgFile;
 
@@ -170,7 +165,7 @@ foundryWebUI::FoundryUtilities::getLock (FILE * f)
 	
 	if (flock (fd, LOCK_EX)) {
 		theError = errno;
-		LOGLN ("flock returned errno " << theError);
+		//LOGLN ("flock returned errno " << theError);
 	}
 
 	return;
@@ -185,7 +180,7 @@ foundryWebUI::FoundryUtilities::releaseLock (FILE * f)
 
 	if (flock (fd, LOCK_UN)) {
 		theError = errno;
-		LOGLN ("flock returned errno " << theError);
+		//LOGLN ("flock returned errno " << theError);
 	}
 
 	return;
@@ -355,15 +350,6 @@ foundryWebUI::FoundryUtilities::getMacAddr (void)
 	string theMac (mac);
 
 	return theMac;
-}
-
-std::vector<std::string>
-foundryWebUI::FoundryUtilities::getAllAliases (void)
-{
-	string bn("fwebui");
-	NetworkSection n;
-	vector<string> vAliases = n.getAllAliases();
-	return vAliases;
 }
 
 void
@@ -619,9 +605,9 @@ foundryWebUI::FoundryUtilities::getWmlppLock (void)
 	FILE * f = NULL;
 	f = fopen ("/tmp/wmlpp_lock", "w");
 	if (f == NULL) {
-		LOGLN ("Failed to create /tmp/wmlpp_lock");
+		//LOGLN ("Failed to create /tmp/wmlpp_lock");
 	} else {
-		LOGLN ("Created platform lock /tmp/wmlpp_lock");
+		//LOGLN ("Created platform lock /tmp/wmlpp_lock");
 		FoundryUtilities::getLock (f);
 		fclose (f);
 	}
@@ -635,7 +621,7 @@ foundryWebUI::FoundryUtilities::releaseWmlppLock (void)
 	FILE * f = NULL;
 	f = fopen ("/tmp/wmlpp_lock", "r");
 	if (f == NULL) {
-		LOGLN ("Failed to find /tmp/wmlpp_lock");
+		//LOGLN ("Failed to find /tmp/wmlpp_lock");
 		return;
 	} else {
 		FoundryUtilities::releaseLock (f);
@@ -644,7 +630,7 @@ foundryWebUI::FoundryUtilities::releaseWmlppLock (void)
 
 	// release simply by unlinking the file.
 	if (unlink ("/tmp/wmlpp_lock") == 0) {
-		LOGLN ("Removed platform lock file /tmp/wmlpp_lock");
+		//LOGLN ("Removed platform lock file /tmp/wmlpp_lock");
 	}
 }
 
