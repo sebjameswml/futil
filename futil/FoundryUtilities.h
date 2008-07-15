@@ -10,6 +10,28 @@
 # pragma interface
 #endif
 
+
+/*
+ * First come functions which may be #included by C code.
+ */
+#ifdef __cplusplus
+extern "C" {
+#endif
+	int emailMsg (const char *subject,
+		      const char *message);
+	int emailMsgPlusAttachment (const char *subject,
+				    const char *message,
+				    const char *attachfile);
+#ifdef __cplusplus
+}
+#endif
+
+
+/*
+ * Remaining code is available to C++ programs only.
+ */
+#ifdef __cplusplus
+
 /*! \file FoundryUtilities.h
  * \brief Declares the class \c FoundryUtilities
  *
@@ -258,5 +280,7 @@ namespace foundryWebUI {
 	};
 
 } // namespace foundryWebUI
+
+#endif // __cplusplus
 
 #endif // _FOUNDRYUTILITIES_H_

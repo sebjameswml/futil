@@ -12,8 +12,6 @@
 
 #include "FoundryUtilities.h"
 
-//#include <wmlppctrl/processlog.h>
-
 extern "C" {
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -22,7 +20,202 @@ extern "C" {
 #include <sys/ioctl.h>
 #include <net/if.h>
 #include <dirent.h>
+#include <syslog.h>
 }
+
+extern "C" {
+
+	int emailMsgPlusAttachment (const char *subject, const char *message, const char *attachfile)
+	{
+		FILE * fp = NULL;
+		char recipients[1024];
+		char hostname[64];
+		char cmd[1064];
+		char attachment[256];
+		char * ptr = NULL;
+		unsigned int len = 0;
+
+		syslog (LOG_DEBUG, "%s: Called", __FUNCTION__);
+
+		/*
+		 * Read the ssmtp.conf file to get email recipients.
+		 */
+		if (!(fp = fopen ("/etc/ssmtp/ssmtp.conf", "r"))) return -1;
+		fgetc (fp);                   /* skip the '#' char on the first line */
+		fgets (recipients, 1024, fp); /* read the rest of the line. */
+		fclose (fp);
+
+		/*
+		 * Read in the hostname to place it in the message.
+		 */
+		if ((fp = fopen ("/etc/hostname", "r"))) {
+			fgets (hostname, 64, fp);
+			len = strlen (hostname);
+			if (hostname[--len] == '\n') {
+				hostname[len] = '\0';
+			}
+			fclose (fp);
+		}
+
+		/*
+		 * Ought to check the formatting of the recipients here, as well as
+		 * checking for some file length.. (WRITEME).
+		 */
+		len = strlen (recipients);
+		if (len == 0) {
+			/* Zero length recipients simply means "no alerts please" */
+			syslog (LOG_DEBUG, "%s: Zero length recipients", __FUNCTION__);
+			return 0;
+		} else {
+			/* remove the trailing newline */
+			recipients[--len] = '\0';
+		}
+
+		/*
+		 * Remove the path of the attachment
+		 */
+		ptr = strrchr (attachfile, '/');
+		if (ptr) {
+			ptr++;
+			if (*ptr != '\0') {
+				snprintf (attachment, 255, "%s", ptr);
+			} else {
+				snprintf (attachment, 255, "%s", "unknown");
+			}
+		} else {
+			snprintf (attachment, 255, "%s", "unknown");
+		}
+
+		/*
+		 * Now we build the email file and the system command line up.
+		 */
+		if (!(fp = fopen ("/tmp/email.txt", "w"))) {
+			syslog (LOG_DEBUG,
+				"%s: Failed to open email.txt for writing",
+				__FUNCTION__);
+			return -1;
+		}
+		fprintf (fp, "From:wmlpp@wmltd.co.uk\n");
+		fprintf (fp, "To:%s\n", recipients);
+		fprintf (fp, "Subject: %s (from %s)\n", subject, hostname);
+		/* Add mime stuff */
+		fprintf (fp, "MIME-Version: 1.0\n");
+		fprintf (fp, "Content-Type: multipart/mixed;");
+		fprintf (fp, " boundary=\"kWDUIHP984GTHIWOEF8WAHGAWERGF\"\n\n");
+		fprintf (fp, "--kWDUIHP984GTHIWOEF8WAHGAWERGF\n");
+		fprintf (fp, "Content-Type: text/plain; charset=US-ASCII\n\n");
+		fprintf (fp, "%s\n\n", message);
+		fprintf (fp, "--kWDUIHP984GTHIWOEF8WAHGAWERGF\n");
+		fprintf (fp, "Content-Type: application/octet-stream\n");
+		fprintf (fp, "Content-Transfer-Encoding: base64\n");
+		fprintf (fp, "Content-Disposition: attachment;\n");
+		fprintf (fp, " filename=\"%s\"\n\n", attachment);
+		/* Stop, close the file, run base64 to append encoded file */
+		fclose (fp);
+
+		/*
+		 * base64 encode the attachment. This is a hacked base64 which
+		 * appends data.
+		 */
+		snprintf (cmd, 1024, "/usr/bin/base64 -e -n %s /tmp/email.txt", attachfile);
+		syslog (LOG_DEBUG, "%s: cmd is '%s'", __FUNCTION__, cmd);
+		system (cmd);
+
+		/* re-open file for appending */
+		if (!(fp = fopen ("/tmp/email.txt", "a"))) {
+			syslog (LOG_DEBUG,
+				"%s: failed to open email.txt for appending",
+				__FUNCTION__);
+			return -1;
+		}
+		fprintf (fp, "--kWDUIHP984GTHIWOEF8WAHGAWERGF--\n\n");
+		fclose (fp);
+
+		snprintf (cmd, 1064, "/usr/sbin/ssmtp %s </tmp/email.txt", recipients);
+		system (cmd);
+
+		return 0;
+	}
+
+	/*
+	 * 'emailMsg()' Send an email to certain recipients. Right now
+	 * the recipients are pulled out of ssmtp.conf but they would be
+	 * better specified in cupsd.conf.
+	 *
+	 * The function expects to get a line of recipients in comma-separated
+	 * format starting from the 2nd character of the first line up to the
+	 * '\n' character.
+	 *
+	 * For example:
+	 *
+	 * #seb@wmltd.co.uk,test@somewhere.else
+	 * #
+	 * # The rest of the ssmtp.conf file follows..
+	 * #
+	 *
+	 */
+	int emailMsg (const char* subject, const char *message)
+	{
+		FILE *fp = NULL;
+		char recipients[1024];
+		char hostname[64];
+		char cmd[1064];
+		unsigned int len = 0;
+
+		/*
+		 * Read the ssmtp.conf file to get email recipients.
+		 */
+		if (!(fp = fopen ("/etc/ssmtp/ssmtp.conf", "r"))) return -1;
+		fgetc (fp);                   /* skip the '#' char on the first line */
+		fgets (recipients, 1024, fp); /* read the rest of the line. */
+		fclose (fp);
+
+		/*
+		 * Read in the hostname to place it in the message.
+		 */
+		if ((fp = fopen ("/etc/hostname", "r"))) {
+			fgets (hostname, 64, fp);
+			len = strlen (hostname);
+			if (hostname[--len] == '\n') {
+				hostname[len] = '\0';
+			}
+			fclose (fp);
+		}
+
+		/*
+		 * Ought to check the formatting of the recipients here, as well as
+		 * checking for some file length.. (WRITEME).
+		 */
+		len = strlen (recipients);
+		if (len == 0) {
+			/* Zero length recipients simply means "no alerts please" */
+			return 0;
+		} else {
+			/* remove the trailing newline */
+			recipients[--len] = '\0';
+		}
+
+		/*
+		 * Now we build the email file and the system command line up.
+		 */
+		if (!(fp = fopen ("/tmp/email.txt", "w"))) return -1;
+		fprintf (fp, "From:wmlpp@wmltd.co.uk\n");
+		fprintf (fp, "To:%s\n", recipients);
+		fprintf (fp, "Subject: %s (from %s)\n", subject, hostname);
+		fprintf (fp, "%s\n\n", message);
+		fclose (fp);
+  
+		snprintf (cmd, 1064, "/usr/sbin/ssmtp %s </tmp/email.txt", recipients);
+		system (cmd);
+
+		return 0;
+	}
+
+} // extern "C"
+
+/*
+ * The rest of the file is C++
+ */
 
 using namespace std;
 
