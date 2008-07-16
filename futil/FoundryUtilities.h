@@ -22,6 +22,7 @@ extern "C" {
 	int emailMsgPlusAttachment (const char *subject,
 				    const char *message,
 				    const char *attachfile);
+	int get_system_mac (unsigned int * mac);
 #ifdef __cplusplus
 }
 #endif

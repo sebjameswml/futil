@@ -211,6 +211,49 @@ extern "C" {
 		return 0;
 	}
 
+	/*
+	 * Pass pointer to array of 2 * unsigned ints
+	 */
+	int get_system_mac (unsigned int * mac)
+	{
+		struct ifreq ifr;
+		int sd;
+
+		/* Set up network socket to get mac address */
+		strcpy(ifr.ifr_name, "eth0");
+
+		sd = socket (AF_INET, SOCK_DGRAM, 0);
+		if (sd == -1) {
+			syslog (LOG_ERR, 
+				"%s: Error in call to socket() '%s'",
+				__FUNCTION__, strerror (errno));		
+			return -1;
+		}
+
+
+		if (ioctl (sd, SIOCGIFHWADDR, &ifr) < 0) {
+			syslog (LOG_ERR, 
+				"%s: Error in call to ioctl() '%s'",
+				__FUNCTION__, strerror (errno));
+
+			// Clean up
+			close (sd);
+			return -1;
+		}
+
+		mac[1] = (((ifr.ifr_hwaddr.sa_data[0]<<8) & 0x00000000ff00) |
+			  ((ifr.ifr_hwaddr.sa_data[1])    & 0x0000000000ff)   );
+
+		mac[0] = (((ifr.ifr_hwaddr.sa_data[2]<<24) & 0x0000ff000000) |
+			  ((ifr.ifr_hwaddr.sa_data[3]<<16) & 0x000000ff0000) |
+			  ((ifr.ifr_hwaddr.sa_data[4]<<8)  & 0x00000000ff00) |
+			  ((ifr.ifr_hwaddr.sa_data[5])     & 0x0000000000ff)   );
+	
+		// Clean up
+		close (sd);
+		return 0;
+	}
+
 } // extern "C"
 
 /*
