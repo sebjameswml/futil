@@ -2,6 +2,8 @@
 #  pragma implementation
 #endif
 
+#include "config.h"
+
 #include <iostream>
 #include <fstream>
 #include <sstream> 
@@ -13,6 +15,7 @@
 #include "FoundryUtilities.h"
 
 extern "C" {
+#include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/file.h>
@@ -21,7 +24,14 @@ extern "C" {
 #include <net/if.h>
 #include <dirent.h>
 #include <syslog.h>
+#include "debuglog.h"
 }
+
+/*!
+ * A single global variable to hold the value of the file we need to
+ * unlock
+ */
+int lock_fd_glob = 0;
 
 extern "C" {
 
@@ -254,6 +264,31 @@ extern "C" {
 		return 0;
 	}
 
+#ifdef LOCKING_SORTED_AND_READY_TO_MOVE_THIS_FROM_WMLPP_CPP
+	/* Used by cups-lpd.c and rawprint.c so must be available externally */
+	void wait_for_wmlpp_lock (void)
+	{
+		// Check lock
+		struct stat * buf = NULL;
+		int locked = 1; // assume locked
+
+		buf = (struct stat*) malloc (sizeof (struct stat));
+		if (!buf) {
+			//throw runtime_error ("Malloc error");
+		}
+		while (locked) {
+			memset (buf, 0, sizeof(struct stat));
+			if (stat ("/tmp/wmlpp_lock", buf)) {
+				// stat returned non-zero so no file, no lock
+				locked = 0;
+			}
+		}
+		if (buf) { free (buf); }
+
+		return;
+	}
+#endif
+
 } // extern "C"
 
 /*
@@ -391,33 +426,58 @@ foundryWebUI::FoundryUtilities::fileModDatestamp (const char* filename)
 	return dstr;
 }
 
-// Same as get_lock() in wmlppctrl (libwmlppfilt())
+// Same as get_lock() in wmlppctrl (libwmlppfilt)
 void
-foundryWebUI::FoundryUtilities::getLock (FILE * f)
+foundryWebUI::FoundryUtilities::getLock (int fd)
 {
-	int fd, theError;
-
-	fd = fileno (f);
-	
-	if (flock (fd, LOCK_EX)) {
-		theError = errno;
-		//LOGLN ("flock returned errno " << theError);
+	if (fd > 0) {
+		lock_fd_glob = fd;
+	} else {
+		throw runtime_error ("Can't lock fd < 1");
 	}
+	
+	debuglog2 (LOG_DEBUG,
+		   "%s: about to call flock(fd=%d, LOCK_EX)",
+		   __FUNCTION__, fd);
+
+	if (flock (fd, LOCK_EX)) {
+		int e = errno;
+		stringstream msg;
+		msg << "Error: getLock(): flock set errno:" << e;
+		throw runtime_error (msg.str());
+	}
+
+	debuglog2 (LOG_DEBUG,
+		   "%s: flock(fd=%d, LOCK_EX) returned",
+		   __FUNCTION__, fd);
 
 	return;
 }
 
 void
-foundryWebUI::FoundryUtilities::releaseLock (FILE * f)
+foundryWebUI::FoundryUtilities::releaseLock (int fd)
 {
-	int fd, theError;
-
-	fd = fileno (f);
-
-	if (flock (fd, LOCK_UN)) {
-		theError = errno;
-		//LOGLN ("flock returned errno " << theError);
+	debuglog2 (LOG_DEBUG, "%s: Called", __FUNCTION__);
+	
+	if (fd < 1) {
+		debuglog2 (LOG_DEBUG, "%s: Can't unlock fd=0, returning", __FUNCTION__);
+		return;
 	}
+
+	debuglog2 (LOG_DEBUG,
+		   "%s: about to call flock(fd=%d, LOCK_UN)",
+		   __FUNCTION__, fd);
+	
+	if (flock (fd, LOCK_UN)) {
+		int e = errno;
+		stringstream msg;
+		msg << "Error: releaseLock(): flock set errno:" << e;
+		throw runtime_error (msg.str());
+	}
+
+	debuglog2 (LOG_DEBUG,
+		   "%s: flock(fd=%d, LOCK_UN) returned",
+		   __FUNCTION__, fd);
 
 	return;
 }
@@ -811,9 +871,13 @@ foundryWebUI::FoundryUtilities::containsOnlyNumerals (std::string& str)
 bool
 foundryWebUI::FoundryUtilities::getWmlppLock (void)
 {
+	debuglog2 (LOG_DEBUG, "%s: called", __FUNCTION__);
+
 	// Check lock
 	struct stat * buf = NULL;
 	bool locked = true; // assume locked
+
+	int fd = 0;
 
 	buf = (struct stat*) malloc (sizeof (struct stat));
 	if (!buf) {
@@ -821,52 +885,161 @@ foundryWebUI::FoundryUtilities::getWmlppLock (void)
 	}
 	unsigned int tcount = 0;
 	while (locked && tcount < WMLPPLOCK_TIMEOUT) {
+
 		memset (buf, 0, sizeof(struct stat));
+
 		if (stat ("/tmp/wmlpp_lock", buf)) {
 			// stat returned non-zero so no file, no lock
-			locked = false;
+			int e = errno;
+			stringstream emsg;
+			emsg << "getWmlppLock(): stat() set error: ";
+			switch (e) {
+			case EACCES:
+				emsg << "Search permission is denied";
+				break;
+			case EBADF:
+				emsg << "Bad file descriptor";
+				break;
+			case EFAULT:
+				emsg << "Bad address";
+				break;
+			case ELOOP:
+				emsg << "Too many symlinks";
+				break;
+			case ENAMETOOLONG:
+				emsg << "File name too long";
+				break;
+			case ENOENT:
+				// Path invalid (part or all of it
+				// doesn't exist) THIS means that we
+				// can get the lock.
+				locked = false;
+				// Re-get the lock.
+				fd = open ("/tmp/wmlpp_lock", O_RDONLY|O_CREAT);
+				if (fd == -1) {
+					int e = errno;
+					stringstream msg;
+					msg << "Error: fopen (\"/tmp/wmlpp_lock\", \"w\") "
+						"set errno:" << e;
+					throw runtime_error (msg.str());
+				} else {
+					lock_fd_glob = fd;
+					FoundryUtilities::getLock (fd);
+					debuglog2 (LOG_DEBUG,
+						   "%s: Opened platform lock /tmp/wmlpp_lock",
+						   __FUNCTION__);
+				}
+				break;
+
+			case ENOMEM:
+				emsg << "Out of kernel memory";
+				break;
+			case ENOTDIR:
+				emsg << "A component of the path is not a directory.";
+				break;
+			default:
+				break;
+			}
+			if (locked == false) {
+				break; // out of the while loop
+			} else {
+				throw runtime_error (emsg.str());
+			}
 		}
 		usleep (1000); // 1 ms
 		tcount++;
+
 	}
 	if (buf) { free (buf); }
 
 	if (locked == true) {
 		// We failed to get a lock within the timeout, so:
+		debuglog2 (LOG_DEBUG, "%s: no lock obtained, returning false", __FUNCTION__);
 		return false;
 	}
 
-	// If we get here, then we have the lock, so we can re-lock by
-	// creating the lock file.
-	FILE * f = NULL;
-	f = fopen ("/tmp/wmlpp_lock", "w");
-	if (f == NULL) {
-		//LOGLN ("Failed to create /tmp/wmlpp_lock");
-	} else {
-		//LOGLN ("Created platform lock /tmp/wmlpp_lock");
-		FoundryUtilities::getLock (f);
-		fclose (f);
-	}
-
+	debuglog2 (LOG_DEBUG, "%s: returning true", __FUNCTION__);
 	return true;
 }
+
 
 void
 foundryWebUI::FoundryUtilities::releaseWmlppLock (void)
 {
-	FILE * f = NULL;
-	f = fopen ("/tmp/wmlpp_lock", "r");
-	if (f == NULL) {
-		//LOGLN ("Failed to find /tmp/wmlpp_lock");
+	debuglog2 (LOG_DEBUG, "%s: called", __FUNCTION__);
+
+	// Use stat to find the file!
+	bool haveFile = true;
+	struct stat* buf = NULL;
+	buf = (struct stat*) malloc (sizeof(struct stat));
+	memset (buf, 0, sizeof(struct stat));
+	if (stat ("/tmp/wmlpp_lock", buf)) {
+		// Error, no file.
+		// stat returned non-zero so no file, no lock
+		int e = errno;
+		stringstream emsg;
+		emsg << "releaseWmlppLock(): stat() set error: ";
+		switch (e) {
+		case EACCES:
+			emsg << "Search permission is denied";
+			break;
+		case EBADF:
+			emsg << "Bad file descriptor";
+			break;
+		case EFAULT:
+			emsg << "Bad address";
+			break;
+		case ELOOP:
+			emsg << "Too many symlinks";
+			break;
+		case ENAMETOOLONG:
+			emsg << "File name too long";
+			break;
+		case ENOENT:
+			// Path invalid (part or all of it
+			// doesn't exist) THIS means that we
+			// can get the lock.
+			haveFile = false;			
+			break;
+
+		case ENOMEM:
+			emsg << "Out of kernel memory";
+			break;
+		case ENOTDIR:
+			emsg << "A component of the path is not a directory.";
+			break;
+		default:
+			break;
+		}
+	}
+
+	if (haveFile == false) {
+		// No lock to release.
+		debuglog2 (LOG_DEBUG, "%s: no lock to release, returning", __FUNCTION__);
+		lock_fd_glob = 0;
 		return;
 	} else {
-		FoundryUtilities::releaseLock (f);
-		fclose (f);
+		debuglog2 (LOG_DEBUG, "%s: about to releaseLock(f)", __FUNCTION__);
+		FoundryUtilities::releaseLock (lock_fd_glob);
+		debuglog2 (LOG_DEBUG, "%s: releaseLock(f) returned", __FUNCTION__);
+		close (lock_fd_glob);
+		lock_fd_glob = 0;
 	}
 
 	// release simply by unlinking the file.
 	if (unlink ("/tmp/wmlpp_lock") == 0) {
-		//LOGLN ("Removed platform lock file /tmp/wmlpp_lock");
+		debuglog2 (LOG_DEBUG,
+			   "%s: Removed platform lock file /tmp/wmlpp_lock",
+			   __FUNCTION__);
+	} else {
+		int e = errno;
+		stringstream msg;
+		msg << "Error: unlink (\"/tmp/wmlpp_lock\") set errno:" << e;
+		debuglog2 (LOG_DEBUG,
+			   "%s: unlink (\"/tmp/wmlpp_lock\") set errno:%d",
+			   __FUNCTION__, e);
+		throw runtime_error (msg.str());
 	}
-}
 
+	debuglog2 (LOG_DEBUG, "%s: returning", __FUNCTION__);
+}

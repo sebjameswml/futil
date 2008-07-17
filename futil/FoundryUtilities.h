@@ -10,6 +10,7 @@
 # pragma interface
 #endif
 
+#include <vector>
 
 /*
  * First come functions which may be #included by C code.
@@ -132,12 +133,12 @@ namespace foundryWebUI {
 		/*!
 		 * get an flock on the given file.
 		 */
-		static void getLock (FILE * f);
+		static void getLock (int fd);
 
 		/*!
-		 * release an flock on the given file.
+		 * release an flock on the locked fd.
 		 */
-		static void releaseLock (FILE * f);
+		static void releaseLock (int fd);
 
 		/*!
 		 * Obtain a "WMLPP Platform lock"
