@@ -10,8 +10,6 @@
 # pragma interface
 #endif
 
-#include <vector>
-
 /*
  * First come functions which may be #included by C code.
  */
@@ -33,6 +31,8 @@ extern "C" {
  * Remaining code is available to C++ programs only.
  */
 #ifdef __cplusplus
+
+#include <vector>
 
 /*! \file FoundryUtilities.h
  * \brief Declares the class \c FoundryUtilities
