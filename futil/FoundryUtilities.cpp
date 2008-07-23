@@ -1043,3 +1043,24 @@ foundryWebUI::FoundryUtilities::releaseWmlppLock (void)
 
 	debuglog2 (LOG_DEBUG, "%s: returning", __FUNCTION__);
 }
+
+void
+foundryWebUI::FoundryUtilities::coutFile (const char* filePath)
+{
+	ifstream f;
+	f.open (filePath, ios::in);
+
+	if (!f.is_open()) {
+		stringstream msg;
+		msg << "Couldn't open file '" << filePath << "'";
+		throw runtime_error (msg.str());
+	}
+
+	string line;
+	while (getline (f, line, '\n')) {
+	        cout << line << endl;
+	}
+
+	f.close();
+	return;
+}

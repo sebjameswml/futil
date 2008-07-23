@@ -279,6 +279,12 @@ namespace foundryWebUI {
 		 * else return false.
 		 */
 		static bool containsOnlyNumerals (std::string& str);
+
+		/*!
+		 * Read filePath and output to stdout. Useful for
+		 * outputting static html.
+		 */
+		static void coutFile (const char* filePath);
 	};
 
 } // namespace foundryWebUI
