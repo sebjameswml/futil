@@ -649,6 +649,38 @@ foundryWebUI::FoundryUtilities::getMacAddr (void)
 }
 
 void
+foundryWebUI::FoundryUtilities::getMacAddr (unsigned int* mac)
+{
+	struct ifreq ifr;
+	int sd;
+
+	/* Set up network socket to get mac address */
+	strcpy(ifr.ifr_name, "eth0");
+
+	sd = socket(AF_INET, SOCK_DGRAM, 0);
+
+	if (sd == -1) {
+		throw runtime_error ("Error in call to socket()");		
+	}
+
+	if (ioctl (sd, SIOCGIFHWADDR, &ifr) < 0) {
+		throw runtime_error ("Error in call to ioctl()");		
+
+	} else {
+		mac[1] = (((ifr.ifr_hwaddr.sa_data[0]<<8) & 0x00000000ff00) |
+			  ((ifr.ifr_hwaddr.sa_data[1])    & 0x0000000000ff)   );
+
+		mac[0] = (((ifr.ifr_hwaddr.sa_data[2]<<24) & 0x0000ff000000) |
+			  ((ifr.ifr_hwaddr.sa_data[3]<<16) & 0x000000ff0000) |
+			  ((ifr.ifr_hwaddr.sa_data[4]<<8)  & 0x00000000ff00) |
+			  ((ifr.ifr_hwaddr.sa_data[5])     & 0x0000000000ff)   );
+	}
+
+	close (sd);
+	return;
+}
+
+void
 foundryWebUI::FoundryUtilities::readDirectoryTree (vector<string>& vec,
 						   const char* baseDirPath,
 						   const char* subDirPath)
