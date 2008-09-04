@@ -10,6 +10,62 @@
 # pragma interface
 #endif
 
+#include "config.h"
+
+/* The WML Base 52 definitions */
+#define WMLBASE52_CHAR00 'a'
+#define WMLBASE52_CHAR01 'b'
+#define WMLBASE52_CHAR02 'c'
+#define WMLBASE52_CHAR03 'd'
+#define WMLBASE52_CHAR04 'e'
+#define WMLBASE52_CHAR05 'f'
+#define WMLBASE52_CHAR06 'g'
+#define WMLBASE52_CHAR07 'h'
+#define WMLBASE52_CHAR08 'i'
+#define WMLBASE52_CHAR09 'j'
+#define WMLBASE52_CHAR10 'k'
+#define WMLBASE52_CHAR11 'l'
+#define WMLBASE52_CHAR12 'm'
+#define WMLBASE52_CHAR13 'n'
+#define WMLBASE52_CHAR14 'o'
+#define WMLBASE52_CHAR15 'p'
+#define WMLBASE52_CHAR16 'q'
+#define WMLBASE52_CHAR17 'r'
+#define WMLBASE52_CHAR18 's'
+#define WMLBASE52_CHAR19 't'
+#define WMLBASE52_CHAR20 'u'
+#define WMLBASE52_CHAR21 'v'
+#define WMLBASE52_CHAR22 'w'
+#define WMLBASE52_CHAR23 'x'
+#define WMLBASE52_CHAR24 'y'
+#define WMLBASE52_CHAR25 'z'
+#define WMLBASE52_CHAR26 'A'
+#define WMLBASE52_CHAR27 'B'
+#define WMLBASE52_CHAR28 'C'
+#define WMLBASE52_CHAR29 'D'
+#define WMLBASE52_CHAR30 'E'
+#define WMLBASE52_CHAR31 'F'
+#define WMLBASE52_CHAR32 'G'
+#define WMLBASE52_CHAR33 'H'
+#define WMLBASE52_CHAR34 'I'
+#define WMLBASE52_CHAR35 'J'
+#define WMLBASE52_CHAR36 'K'
+#define WMLBASE52_CHAR37 'L'
+#define WMLBASE52_CHAR38 'M'
+#define WMLBASE52_CHAR39 'N'
+#define WMLBASE52_CHAR40 'O'
+#define WMLBASE52_CHAR41 'P'
+#define WMLBASE52_CHAR42 'Q'
+#define WMLBASE52_CHAR43 'R'
+#define WMLBASE52_CHAR44 'S'
+#define WMLBASE52_CHAR45 'T'
+#define WMLBASE52_CHAR46 'U'
+#define WMLBASE52_CHAR47 'V'
+#define WMLBASE52_CHAR48 'W'
+#define WMLBASE52_CHAR49 'X'
+#define WMLBASE52_CHAR50 'Y'
+#define WMLBASE52_CHAR51 'Z'
+
 /*
  * First come functions which may be #included by C code.
  */
@@ -296,6 +352,71 @@ namespace foundryWebUI {
 		 * outputting static html.
 		 */
 		static void coutFile (const char* filePath);
+
+		/*!
+		 * A group of functions to carry out baseN conversions.
+		 */
+		//@{
+
+		/*!
+		 * Return the zero character for the given base. For
+		 * decimal or hex, it returns '0', for WML Base 52,
+		 * WMLBASE52_CHAR00, and throws an exception if it
+		 * doesn't know the representation character for zero
+		 * in the given base.
+		 *
+		 * @param[in] base The base, or radix for which the
+		 * zero character is required.
+		 * @return The zero character for the base @base.
+		 */
+		static char zeroChar (int base);
+
+		/*!
+		 * Add the number n to the string str, represented in
+		 * the given base.
+		 *
+		 * @param[in] n The number of add to the string @str.
+		 * @param[out] str The string to which the number @n
+		 * should be appended.
+		 * @param[in] base The base or radix in which the 
+		 * number should be represented when added to string @str.
+		 */
+		static void addChar (int n, std::string& str, int base);
+
+		/*!
+		 * Convert the character c, which is represented with
+		 * the radix base into an integer, which is returned.
+		 *
+		 * @param[in] c The character to convert into an int.
+		 * @param[in] base The radix in which the character
+		 * @c represents the number.
+		 * @return The number @c as an integer.
+		 */
+		static int baseNToInt (char c, int base);
+
+		/*!
+		 * Convert the string @str into a number, placing it
+		 * into the array @num, which is @numlen in length.
+		 *
+		 * Separate hex function because hex can be done faster than an
+		 * arbitrary base because there are 8 hex numerals ("4 bit nibbles")
+		 * per 32 bit uint32.
+		 */
+		static void hexToUint32s (const std::string& str,
+					  UINT32_TYPE * num,
+					  UINT32_TYPE numlen);
+
+		/*!
+		 * Convert the string @str, represented in base @base
+		 * into a number, placing it into the array @num,
+		 * which is @numlen in length.
+		 */
+		static void baseNToUint32s (const std::string& str,
+					    UINT32_TYPE * num,
+					    UINT32_TYPE numlen,
+					    int base);
+	
+		//@}
 	};
 
 } // namespace foundryWebUI
