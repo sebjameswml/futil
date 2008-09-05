@@ -127,6 +127,14 @@ namespace foundryWebUI {
 		}
 	};
 
+	/*! A 128 bit number structure. */
+	typedef struct {
+		UINT64_TYPE lo;
+		UINT64_TYPE hi;
+		bool neg;
+		bool big; /* true if hi is >0 */
+	} wmlint128;
+
 	/*! \class foundryutilities foundryutilities.h foundryWebUI/foundryutilities.h 
 	 * \brief Class that deals with authorizing access to a foundryWebUI system
 	 *
@@ -380,8 +388,10 @@ namespace foundryWebUI {
 		 * should be appended.
 		 * @param[in] base The base or radix in which the 
 		 * number should be represented when added to string @str.
+		 * @param[in] at_start If true, the numeral should be
+		 * inserted at the start of the string @str.
 		 */
-		static void addChar (int n, std::string& str, int base);
+		static void addChar (int n, std::string& str, int base, bool at_start);
 
 		/*!
 		 * Convert the character c, which is represented with
@@ -415,6 +425,39 @@ namespace foundryWebUI {
 					    UINT32_TYPE * num,
 					    UINT32_TYPE numlen,
 					    int base);
+	
+		/*!
+		 * Output the number @num represented in base @base.
+		 */
+		static std::string formatUint64InBaseN (UINT64_TYPE num, int base);
+
+	
+		/*!
+		 * Output the number @num which can be up to 4 32 bit
+		 * bytes wide, represented in base @base.
+		 */
+		static std::string formatUint128InBaseN (UINT32_TYPE * num, UINT32_TYPE numlen, int base);
+
+		/*!
+		 * Multiply two UINT64_TYPE numbers and return the
+		 * result in a wmlint128.
+		 */
+		static wmlint128 bigMultUnsigned (UINT64_TYPE a, UINT64_TYPE b);
+
+		/*!
+		 * Divide @numerator by @denom, returning result as wmlint128.
+		 */
+		static wmlint128 bigDiv (wmlint128 numerator, UINT64_TYPE denom);
+
+		/*!
+		 * Divide @numerator by @denom, returning modulus as UINT64_TYPE.
+		 */
+		static UINT64_TYPE bigModUnsigned (wmlint128 numerator, UINT64_TYPE denom);
+
+		/*!
+		 * return true if a is greater than or equal to b.
+		 */
+		static bool bigGTE (wmlint128 a, UINT64_TYPE b);
 	
 		//@}
 	};

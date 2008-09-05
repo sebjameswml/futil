@@ -1104,6 +1104,7 @@ char
 foundryWebUI::FoundryUtilities::zeroChar (int base)
 {
 	switch (base) {
+	case 2:
 	case 10:
 	case 16:
 		return '0';
@@ -1125,11 +1126,25 @@ foundryWebUI::FoundryUtilities::zeroChar (int base)
  * Add the number n to the string str, represented in the given base.
  */
 void
-foundryWebUI::FoundryUtilities::addChar (int n, string& str, int base)
+foundryWebUI::FoundryUtilities::addChar (int n, string& str, int base, bool at_start)
 {
 	char c;
 
 	switch (base) {
+
+	case 2:
+		switch (n) {
+		case 0:
+			c = '0';
+			break;
+		case 1:
+			c = '1';
+			break;
+		default:
+			// whoop whoop
+			throw runtime_error ("Error: n > 1!");
+		}
+		break;
 
 	case 10:
 		switch (n) {
@@ -1398,7 +1413,11 @@ foundryWebUI::FoundryUtilities::addChar (int n, string& str, int base)
 	}
 
 	// Add the new number to str.
-	str += c;
+	if (at_start == true) {
+		str.insert (str.begin(), c);
+	} else {
+		str += c;
+	}
 
 	return;
 }
@@ -1805,7 +1824,7 @@ foundryWebUI::FoundryUtilities::baseNToUint32s (const string& str,
 			}
 
 			if (posn>0) {
-				addChar (last_result, halfstr, base);
+				addChar (last_result, halfstr, base, false);
 			}
 
 			last_result = result;
@@ -1820,7 +1839,7 @@ foundryWebUI::FoundryUtilities::baseNToUint32s (const string& str,
 		}
 		// Do the last character here.
 		if (posn>0) {
-			addChar (last_result, halfstr, base);
+			addChar (last_result, halfstr, base, false);
 		}
 		
 		// Copy halfstr back into strcopy
@@ -1839,4 +1858,231 @@ foundryWebUI::FoundryUtilities::baseNToUint32s (const string& str,
 	}
 
 	return;
+}
+
+string
+foundryWebUI::FoundryUtilities::formatUint64InBaseN (UINT64_TYPE num, int base)
+{
+	string outNum = "";
+
+	UINT64_TYPE n = num;
+	UINT64_TYPE quotient = 0;
+	UINT64_TYPE remainder;
+		
+	while (n>=(UINT64_TYPE)base) {
+		//cerr << "quotient: " << quotient << ", dividing by: " << base << endl;
+		quotient = n/(UINT64_TYPE)base;
+		remainder = n%(UINT64_TYPE)base;
+		//cerr << "quotient now: " << quotient << " remainder: " << remainder << endl;
+
+		addChar ((unsigned int)remainder, outNum, base, true);
+		n = quotient;
+	}
+	addChar (quotient, outNum, base, true);
+
+	return outNum;
+}
+
+string
+foundryWebUI::FoundryUtilities::formatUint128InBaseN (UINT32_TYPE * num, UINT32_TYPE numlen, int base)
+{
+	if (numlen>4) {
+		throw runtime_error ("Can only do 128 bit algebra, "
+				     "so numlen must be 4 or less.");
+	}
+
+	string outNum = "";
+	wmlint128 n;
+
+	// Set up the 128 bit data structure
+	n.lo = (UINT64_TYPE)num[0] | (UINT64_TYPE)num[1]<<32;
+	n.hi = (UINT64_TYPE)num[2] | (UINT64_TYPE)num[3]<<32;
+	n.neg = false;
+	n.big = true;
+	//cerr << "n.lo=" << n.lo << " n.hi=" << n.hi << endl;
+
+	wmlint128 quotient;
+	quotient.lo = 0;
+	quotient.hi = 0;
+	quotient.neg = false;
+	quotient.big = false;
+
+	UINT64_TYPE remainder;
+
+	while (bigGTE(n, (UINT64_TYPE)base) == true) {
+		//cerr << "n: hi:" << n.hi << " lo:" << n.lo << ", dividing by: " << base << endl;
+
+		quotient = bigDiv (n, (INT64_TYPE)base);
+		remainder = bigModUnsigned (n, (UINT64_TYPE)base);
+
+		//cerr << "quotient: hi:" << quotient.hi << " lo:" << quotient.lo << endl;
+		//cerr << "remainder: " << remainder << endl;
+
+
+		addChar ((unsigned int)remainder, outNum, base, true);
+		n = quotient;
+	}
+	//cerr << "n: hi:" << n.hi << " lo:" << n.lo << " not gte " << base << endl;
+	addChar ((unsigned int)quotient.lo, outNum, base, true);
+
+	return outNum;
+}
+
+foundryWebUI::wmlint128
+foundryWebUI::FoundryUtilities::bigMultUnsigned (UINT64_TYPE a, UINT64_TYPE b)
+{
+	if (a == 0xffffffffffffffffULL &&
+	    b == 0xffffffffffffffffULL) {
+		throw runtime_error ("Multiplication will overflow.");
+	}
+
+	wmlint128 prod;
+	prod.neg = false;
+
+	//cerr << "bigMultUnsigned: a is " << a << " b is " << b << endl;
+
+	UINT64_TYPE a1 = a >> 32;
+	UINT64_TYPE a0 = a - (a1<<32);
+
+	UINT64_TYPE b1 = b >> 32;
+	UINT64_TYPE b0 = b - (b1<<32);
+
+	UINT64_TYPE d = a0*b0;
+	UINT64_TYPE d1 = d >> 32;
+	UINT64_TYPE d0 = d - (d1<<32);
+
+	UINT64_TYPE e = a0*b1;
+	UINT64_TYPE e1 = e >> 32;
+	UINT64_TYPE e0 = e - (e1<<32);
+
+	UINT64_TYPE f = a1*b0;
+	UINT64_TYPE f1 = f >> 32;
+	UINT64_TYPE f0 = f - (f1<<32);
+
+	UINT64_TYPE g = a1*b1;
+	UINT64_TYPE g1 = g >> 32;
+	UINT64_TYPE g0 = g - (g1<<32);
+
+	UINT64_TYPE sum = d1+e0+f0;
+	UINT64_TYPE carry = 0;
+	/* split <<32 left shift up because cpp will mess it up. */
+	UINT64_TYPE roll = 1<<30;
+	roll <<= 2;
+
+	UINT64_TYPE pmax = roll-1;
+	while (pmax < sum) {
+		sum -= roll;
+		carry++;
+	}
+
+	prod.lo = d0 + (sum<<32);
+	prod.hi = carry + e1 + f1 + g0 + (g1<<32);
+
+	if (prod.hi || (prod.lo >> 63)) {
+		prod.big = true;
+	} else {
+		prod.big = false;
+	}
+
+	return prod;
+}
+
+foundryWebUI::wmlint128
+foundryWebUI::FoundryUtilities::bigDiv (wmlint128 numerator, UINT64_TYPE denom)
+{
+	wmlint128 quotient;
+	UINT64_TYPE hirem;   /* hi remainder */
+	UINT64_TYPE qlo;
+
+	//cerr << "bigDiv: numerator.neg:" << numerator.neg << endl;
+	quotient.neg = numerator.neg;
+	if (0 > denom) {
+		denom = -denom;
+		quotient.neg = !quotient.neg;
+	}
+	//cerr << "bigDiv: quotient.neg:" << quotient.neg << endl;
+
+	quotient.hi = numerator.hi / denom;
+	hirem = numerator.hi - quotient.hi * denom;
+  
+	UINT64_TYPE lo = 1<<30;
+	lo <<= 33;
+	lo /= denom;
+	lo <<= 1;
+
+	lo *= hirem; 
+	quotient.lo = lo + numerator.lo/denom;
+
+	/* Deal with low remainder bits.
+	 * Is there a more efficient way of doing this?
+	 */
+	//cerr << "call bigMultUnsigned (" << quotient.lo << ", " << denom << ")" << endl;
+	wmlint128 mu = bigMultUnsigned (quotient.lo, denom);
+
+	INT64_TYPE nn = 0x7fffffffffffffffULL & numerator.lo;
+	INT64_TYPE rr = 0x7fffffffffffffffULL & mu.lo;
+	INT64_TYPE rnd = nn - rr;
+	rnd /= denom;
+
+	/* ?? will this ever overflow ? */
+	qlo = quotient.lo;
+	quotient.lo += rnd;
+	if (qlo > quotient.lo) {
+		quotient.hi += 1;
+	}
+
+	/* compute the carry situation */
+	if ((quotient.hi || (quotient.lo >> 63))) {
+		quotient.big = true;
+	} else {
+		quotient.big = false;
+	}
+
+	return quotient;
+}
+
+
+UINT64_TYPE
+foundryWebUI::FoundryUtilities::bigModUnsigned (wmlint128 numerator, UINT64_TYPE denom)
+{
+	wmlint128 quotient;
+
+	quotient = bigDiv (numerator, denom);
+	//cerr << "bigMod(): after bigDiv, quotient: lo:" << quotient.lo << " hi:" << quotient.hi << endl;
+	wmlint128 mu = bigMultUnsigned (quotient.lo, denom);
+	//cerr << "bigMod(): mu(q*d): lo:" << hex << mu.lo << " hi:" << mu.hi << endl;
+
+	UINT64_TYPE nn = 0x7fffffffffffffffULL & numerator.lo;
+	UINT64_TYPE rr = 0x7fffffffffffffffULL & mu.lo;
+	return nn - rr;
+}
+
+/* Greater Than or Equal */
+bool
+foundryWebUI::FoundryUtilities::bigGTE (wmlint128 a, UINT64_TYPE b)
+{
+	if (a.neg == false && a.big == true) {
+		return true;
+	} else if (a.neg == true && a.big == true) {
+		return false;
+	}
+
+	/* big is false */
+	if (a.neg == false) {
+		if (a.lo >= b) {
+			return true;
+		} else {
+			return false;
+		}
+
+	} else if (a.neg == true) {
+		if (a.lo == 0 && b==0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	throw runtime_error ("bigGTE: Error, should already have returned.");
+	return false;
 }
