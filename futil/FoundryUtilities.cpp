@@ -707,7 +707,7 @@ foundryWebUI::FoundryUtilities::getMacAddr (std::string& macStr, unsigned int* m
 		} else {
 			int shift = 5-i;
 			if (shift<0) {
-				throw runtime_error ("example getMacAddr(string& unsigned int*)");
+				throw runtime_error ("error; examine getMacAddr(string& unsigned int*)");
 			}
 			mac[0] |= (n&0xff) << (shift<<3);
 		}
