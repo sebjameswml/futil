@@ -681,6 +681,53 @@ foundryWebUI::FoundryUtilities::getMacAddr (unsigned int* mac)
 }
 
 void
+foundryWebUI::FoundryUtilities::getMacAddr (std::string& macStr, unsigned int* mac)
+{
+	// Initialise mac
+	mac[0] = 0;
+	mac[1] = 0;
+
+	unsigned int i = 0;
+	string::size_type posn = macStr.find (":", 0);
+	string nibble ("");
+	while (posn != string::npos) {
+		nibble = macStr.substr (posn-2, 2);
+		stringstream ss;
+		unsigned int n;
+		ss << nibble;
+		ss << hex;
+		ss >> n;
+		if (i < 2) {
+			// then we're reading first two nibbles of data
+			if (i==0) {
+				mac[1] |= (n&0xff) << 8;
+			} else {
+				mac[1] |= n&0xff;
+			}
+		} else {
+			int shift = 5-i;
+			if (shift<0) {
+				throw runtime_error ("example getMacAddr(string& unsigned int*)");
+			}
+			mac[0] |= (n&0xff) << (shift<<3);
+		}
+		i++;
+		posn = macStr.find (":", posn+1);
+	}
+	posn = macStr.find_last_of (":");
+	nibble = macStr.substr (posn+1, 2);
+	stringstream sss;
+	unsigned int nn;
+	sss << nibble;
+	sss << hex;
+	sss >> nn;
+	mac[0] |= (nn&0xff);
+
+	return;
+}
+
+
+void
 foundryWebUI::FoundryUtilities::readDirectoryTree (vector<string>& vec,
 						   const char* baseDirPath,
 						   const char* subDirPath)
