@@ -292,7 +292,14 @@ namespace foundryWebUI {
 		 * @param[out] mac A buffer of 2 * 32 bit unsigned
 		 * ints in which to place the mac address
 		 */
-		static void getMacAddr (std::string& macStr, unsigned int* mac);
+		static void strToMacAddr (std::string& macStr, unsigned int* mac);
+
+		/*!
+		 * Convert @mac, a buffer of 2 * 32 bit unsigned ints
+		 * into a string representation in the form
+		 * "aa:bb:cc:aa:bb:cc".
+		 */
+		static std::string macAddrToStr (unsigned int* mac);
 
 		/*!
 		 * Return the list of all possible alias addresses in

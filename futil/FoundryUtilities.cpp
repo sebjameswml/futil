@@ -681,7 +681,7 @@ foundryWebUI::FoundryUtilities::getMacAddr (unsigned int* mac)
 }
 
 void
-foundryWebUI::FoundryUtilities::getMacAddr (std::string& macStr, unsigned int* mac)
+foundryWebUI::FoundryUtilities::strToMacAddr (std::string& macStr, unsigned int* mac)
 {
 	// Initialise mac
 	mac[0] = 0;
@@ -725,6 +725,29 @@ foundryWebUI::FoundryUtilities::getMacAddr (std::string& macStr, unsigned int* m
 	return;
 }
 
+std::string
+foundryWebUI::FoundryUtilities::macAddrToStr (unsigned int* mac)
+{
+	stringstream ss;
+	int i = 0;
+	// macHi
+	for (i=1; i>=0; i--) {
+		ss << hex;
+		ss.fill ('0');
+		if (i<1) { ss << ":"; }
+		ss.width (2);
+		ss << ((mac[1] >> (i<<3)) & 0xff); // i<<3 == i*8
+	}
+	// macLo
+	for (i=3; i>=0; i--) {
+		ss << ":";
+		ss << hex;
+		ss.width (2);
+		ss.fill ('0');
+		ss << ((mac[0] >> (i<<3)) & 0xff); // i<<3 == i*8
+	}
+	return ss.str();
+}
 
 void
 foundryWebUI::FoundryUtilities::readDirectoryTree (vector<string>& vec,
