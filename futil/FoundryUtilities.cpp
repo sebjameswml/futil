@@ -688,12 +688,12 @@ foundryWebUI::FoundryUtilities::getMacAddr (std::string& macStr, unsigned int* m
 	mac[1] = 0;
 
 	unsigned int i = 0;
+	unsigned int n = 0;
 	string::size_type posn = macStr.find (":", 0);
 	string nibble ("");
 	while (posn != string::npos) {
 		nibble = macStr.substr (posn-2, 2);
 		stringstream ss;
-		unsigned int n;
 		ss << nibble;
 		ss << hex;
 		ss >> n;
@@ -717,11 +717,10 @@ foundryWebUI::FoundryUtilities::getMacAddr (std::string& macStr, unsigned int* m
 	posn = macStr.find_last_of (":");
 	nibble = macStr.substr (posn+1, 2);
 	stringstream sss;
-	unsigned int nn;
 	sss << nibble;
 	sss << hex;
-	sss >> nn;
-	mac[0] |= (nn&0xff);
+	sss >> n;
+	mac[0] |= (n&0xff);
 
 	return;
 }
