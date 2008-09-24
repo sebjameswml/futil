@@ -300,17 +300,17 @@ using namespace std;
 ofstream pdfDbgFile;
 
 // Constructor
-foundryWebUI::FoundryUtilities::FoundryUtilities (void)
+wml::FoundryUtilities::FoundryUtilities (void)
 {
 }
 
 // Destructor
-foundryWebUI::FoundryUtilities::~FoundryUtilities (void)
+wml::FoundryUtilities::~FoundryUtilities (void)
 {
 }
 
 int
-foundryWebUI::FoundryUtilities::ensureUnixNewlines (std::string& input)
+wml::FoundryUtilities::ensureUnixNewlines (std::string& input)
 {
 	int num = 0;
 
@@ -325,7 +325,7 @@ foundryWebUI::FoundryUtilities::ensureUnixNewlines (std::string& input)
 }
 
 int
-foundryWebUI::FoundryUtilities::stripTrailingCarriageReturn (std::string& input)
+wml::FoundryUtilities::stripTrailingCarriageReturn (std::string& input)
 {
 	if (input[input.size()-1] == '\r') {
 		input.erase(input.size()-1, 1);
@@ -335,7 +335,7 @@ foundryWebUI::FoundryUtilities::stripTrailingCarriageReturn (std::string& input)
 }
 
 unsigned int
-foundryWebUI::FoundryUtilities::getMemory (void)
+wml::FoundryUtilities::getMemory (void)
 {
 	ifstream f ("/proc/meminfo");
 
@@ -376,7 +376,7 @@ foundryWebUI::FoundryUtilities::getMemory (void)
 }
 
 bool
-foundryWebUI::FoundryUtilities::fileExists (std::string& path)
+wml::FoundryUtilities::fileExists (std::string& path)
 {
 	struct stat * buf = NULL;
 
@@ -398,14 +398,14 @@ foundryWebUI::FoundryUtilities::fileExists (std::string& path)
 }
 
 bool
-foundryWebUI::FoundryUtilities::fileExists (const char * path)
+wml::FoundryUtilities::fileExists (const char * path)
 {
 	string thePath = path;
 	return fileExists (thePath);
 }
 
 std::string
-foundryWebUI::FoundryUtilities::fileModDatestamp (const char* filename)
+wml::FoundryUtilities::fileModDatestamp (const char* filename)
 {
 	struct stat * buf = NULL;
 	stringstream datestamp;
@@ -428,7 +428,7 @@ foundryWebUI::FoundryUtilities::fileModDatestamp (const char* filename)
 
 // Same as get_lock() in wmlppctrl (libwmlppfilt)
 void
-foundryWebUI::FoundryUtilities::getLock (int fd)
+wml::FoundryUtilities::getLock (int fd)
 {
 	if (fd > 0) {
 		lock_fd_glob = fd;
@@ -455,7 +455,7 @@ foundryWebUI::FoundryUtilities::getLock (int fd)
 }
 
 void
-foundryWebUI::FoundryUtilities::releaseLock (int fd)
+wml::FoundryUtilities::releaseLock (int fd)
 {
 	debuglog2 (LOG_DEBUG, "%s: Called", __FUNCTION__);
 	
@@ -483,7 +483,7 @@ foundryWebUI::FoundryUtilities::releaseLock (int fd)
 }
 
 void
-foundryWebUI::FoundryUtilities::backSlashEscape (std::string& str)
+wml::FoundryUtilities::backSlashEscape (std::string& str)
 {
 	for (unsigned int i=0; i<str.size(); i++) {
 		if (str[i] == '\\') {
@@ -493,7 +493,7 @@ foundryWebUI::FoundryUtilities::backSlashEscape (std::string& str)
 }
 
 void
-foundryWebUI::FoundryUtilities::slashEscape (std::string& str)
+wml::FoundryUtilities::slashEscape (std::string& str)
 {
 	for (unsigned int i=0; i<str.size(); i++) {
 
@@ -527,7 +527,7 @@ foundryWebUI::FoundryUtilities::slashEscape (std::string& str)
 }
 
 void
-foundryWebUI::FoundryUtilities::stripDosPath (std::string& dosPath)
+wml::FoundryUtilities::stripDosPath (std::string& dosPath)
 {
 	string tmp;
 	string::size_type pos;
@@ -543,7 +543,7 @@ foundryWebUI::FoundryUtilities::stripDosPath (std::string& dosPath)
 }
 
 bool
-foundryWebUI::FoundryUtilities::vectorContains (std::vector<unsigned int>& v, unsigned int i)
+wml::FoundryUtilities::vectorContains (std::vector<unsigned int>& v, unsigned int i)
 {
 	for (unsigned int k = 0; k<v.size(); k++) {
 		if (v[k] == i) {
@@ -554,7 +554,7 @@ foundryWebUI::FoundryUtilities::vectorContains (std::vector<unsigned int>& v, un
 }
 
 int
-foundryWebUI::FoundryUtilities::strVectorContains (std::vector<string>& v, string s)
+wml::FoundryUtilities::strVectorContains (std::vector<string>& v, string s)
 {
 	for (unsigned int k = 0; k<v.size(); k++) {
 		if (v[k] == s) {
@@ -565,7 +565,7 @@ foundryWebUI::FoundryUtilities::strVectorContains (std::vector<string>& v, strin
 }
 
 int
-foundryWebUI::FoundryUtilities::strVectorMatches (std::vector<string>& v, string s)
+wml::FoundryUtilities::strVectorMatches (std::vector<string>& v, string s)
 {
 	for (unsigned int k = 0; k<v.size(); k++) {
 		if (s.find (v[k], 0) != string::npos) {
@@ -576,7 +576,7 @@ foundryWebUI::FoundryUtilities::strVectorMatches (std::vector<string>& v, string
 }
 
 int
-foundryWebUI::FoundryUtilities::firstNotMatching (std::vector<string>& v, string s)
+wml::FoundryUtilities::firstNotMatching (std::vector<string>& v, string s)
 {
 	for (unsigned int k = 0; k<v.size(); k++) {
 		if (v[k] != s) {
@@ -587,7 +587,7 @@ foundryWebUI::FoundryUtilities::firstNotMatching (std::vector<string>& v, string
 }
 
 bool
-foundryWebUI::FoundryUtilities::pidLoaded (int pid)
+wml::FoundryUtilities::pidLoaded (int pid)
 {
 	stringstream path;
 	ifstream f;
@@ -612,7 +612,7 @@ foundryWebUI::FoundryUtilities::pidLoaded (int pid)
 }
 
 std::string
-foundryWebUI::FoundryUtilities::getMacAddr (void)
+wml::FoundryUtilities::getMacAddr (void)
 {
 	char mac[32] = "";
 	struct ifreq ifr;
@@ -649,7 +649,7 @@ foundryWebUI::FoundryUtilities::getMacAddr (void)
 }
 
 void
-foundryWebUI::FoundryUtilities::getMacAddr (unsigned int* mac)
+wml::FoundryUtilities::getMacAddr (unsigned int* mac)
 {
 	struct ifreq ifr;
 	int sd;
@@ -681,7 +681,7 @@ foundryWebUI::FoundryUtilities::getMacAddr (unsigned int* mac)
 }
 
 void
-foundryWebUI::FoundryUtilities::strToMacAddr (std::string& macStr, unsigned int* mac)
+wml::FoundryUtilities::strToMacAddr (std::string& macStr, unsigned int* mac)
 {
 	// Initialise mac
 	mac[0] = 0;
@@ -726,7 +726,7 @@ foundryWebUI::FoundryUtilities::strToMacAddr (std::string& macStr, unsigned int*
 }
 
 std::string
-foundryWebUI::FoundryUtilities::macAddrToStr (unsigned int* mac)
+wml::FoundryUtilities::macAddrToStr (unsigned int* mac)
 {
 	stringstream ss;
 	int i = 0;
@@ -750,7 +750,7 @@ foundryWebUI::FoundryUtilities::macAddrToStr (unsigned int* mac)
 }
 
 void
-foundryWebUI::FoundryUtilities::readDirectoryTree (vector<string>& vec,
+wml::FoundryUtilities::readDirectoryTree (vector<string>& vec,
 						   const char* baseDirPath,
 						   const char* subDirPath)
 {
@@ -804,7 +804,7 @@ foundryWebUI::FoundryUtilities::readDirectoryTree (vector<string>& vec,
 }
 
 std::string
-foundryWebUI::FoundryUtilities::readHostname (void)
+wml::FoundryUtilities::readHostname (void)
 {
 	ifstream f;
 	string hname("(unknown)");
@@ -817,7 +817,7 @@ foundryWebUI::FoundryUtilities::readHostname (void)
 }
 
 unsigned int
-foundryWebUI::FoundryUtilities::yearNow (void)
+wml::FoundryUtilities::yearNow (void)
 {
 	time_t curtime; // Current time
 	struct tm * t;
@@ -828,7 +828,7 @@ foundryWebUI::FoundryUtilities::yearNow (void)
 }
 
 unsigned int
-foundryWebUI::FoundryUtilities::monthNow (void)
+wml::FoundryUtilities::monthNow (void)
 {
 	time_t curtime; // Current time
 	struct tm * t;
@@ -839,7 +839,7 @@ foundryWebUI::FoundryUtilities::monthNow (void)
 }
 
 unsigned int
-foundryWebUI::FoundryUtilities::getMonthFromLog (std::string& filePath,
+wml::FoundryUtilities::getMonthFromLog (std::string& filePath,
 						 unsigned int lineNum)
 {
 	unsigned int month = 0;
@@ -904,7 +904,7 @@ foundryWebUI::FoundryUtilities::getMonthFromLog (std::string& filePath,
 }
 
 void
-foundryWebUI::FoundryUtilities::getJavascript (std::stringstream& rJavascript,
+wml::FoundryUtilities::getJavascript (std::stringstream& rJavascript,
 					       std::string jsFile)
 {
 	ifstream f;
@@ -931,7 +931,7 @@ foundryWebUI::FoundryUtilities::getJavascript (std::stringstream& rJavascript,
 }
 
 void
-foundryWebUI::FoundryUtilities::unicodeize (std::string& str)
+wml::FoundryUtilities::unicodeize (std::string& str)
 {
 	stringstream utf8;
 
@@ -956,7 +956,7 @@ foundryWebUI::FoundryUtilities::unicodeize (std::string& str)
 }
 
 bool
-foundryWebUI::FoundryUtilities::containsOnlyNumerals (std::string& str)
+wml::FoundryUtilities::containsOnlyNumerals (std::string& str)
 {
 	for (unsigned int i=0; i<str.size(); i++) {
 		if (static_cast<unsigned int>(str[i]) < 48 ||
@@ -970,7 +970,7 @@ foundryWebUI::FoundryUtilities::containsOnlyNumerals (std::string& str)
 
 #define WMLPPLOCK_TIMEOUT 5000 // ms
 bool
-foundryWebUI::FoundryUtilities::getWmlppLock (void)
+wml::FoundryUtilities::getWmlppLock (void)
 {
 	debuglog2 (LOG_DEBUG, "%s: called", __FUNCTION__);
 
@@ -1065,7 +1065,7 @@ foundryWebUI::FoundryUtilities::getWmlppLock (void)
 
 
 void
-foundryWebUI::FoundryUtilities::releaseWmlppLock (void)
+wml::FoundryUtilities::releaseWmlppLock (void)
 {
 	debuglog2 (LOG_DEBUG, "%s: called", __FUNCTION__);
 
@@ -1146,7 +1146,7 @@ foundryWebUI::FoundryUtilities::releaseWmlppLock (void)
 }
 
 void
-foundryWebUI::FoundryUtilities::coutFile (const char* filePath)
+wml::FoundryUtilities::coutFile (const char* filePath)
 {
 	ifstream f;
 	f.open (filePath, ios::in);
@@ -1170,7 +1170,7 @@ foundryWebUI::FoundryUtilities::coutFile (const char* filePath)
  * Return the zero character for the given base.
  */
 char
-foundryWebUI::FoundryUtilities::zeroChar (int base)
+wml::FoundryUtilities::zeroChar (int base)
 {
 	switch (base) {
 	case 2:
@@ -1195,7 +1195,7 @@ foundryWebUI::FoundryUtilities::zeroChar (int base)
  * Add the number n to the string str, represented in the given base.
  */
 void
-foundryWebUI::FoundryUtilities::addChar (int n, string& str, int base, bool at_start)
+wml::FoundryUtilities::addChar (int n, string& str, int base, bool at_start)
 {
 	char c;
 
@@ -1496,7 +1496,7 @@ foundryWebUI::FoundryUtilities::addChar (int n, string& str, int base, bool at_s
  * into an integer, which is returned.
  */
 int
-foundryWebUI::FoundryUtilities::baseNToInt (char c, int base)
+wml::FoundryUtilities::baseNToInt (char c, int base)
 {
 	int rtn;
 	switch (base) {
@@ -1793,7 +1793,7 @@ foundryWebUI::FoundryUtilities::baseNToInt (char c, int base)
  * per 32 bit uint32
  */
 void
-foundryWebUI::FoundryUtilities::hexToUint32s (const string& str,
+wml::FoundryUtilities::hexToUint32s (const string& str,
 					      UINT32_TYPE * num,
 					      UINT32_TYPE numlen)
 {	
@@ -1824,7 +1824,7 @@ foundryWebUI::FoundryUtilities::hexToUint32s (const string& str,
 }
 
 void
-foundryWebUI::FoundryUtilities::baseNToUint32s (const string& str,
+wml::FoundryUtilities::baseNToUint32s (const string& str,
 						UINT32_TYPE * num,
 						UINT32_TYPE numlen,
 						int base)
@@ -1930,7 +1930,7 @@ foundryWebUI::FoundryUtilities::baseNToUint32s (const string& str,
 }
 
 string
-foundryWebUI::FoundryUtilities::formatUint64InBaseN (UINT64_TYPE num, int base)
+wml::FoundryUtilities::formatUint64InBaseN (UINT64_TYPE num, int base)
 {
 	string outNum = "";
 
@@ -1953,7 +1953,7 @@ foundryWebUI::FoundryUtilities::formatUint64InBaseN (UINT64_TYPE num, int base)
 }
 
 string
-foundryWebUI::FoundryUtilities::formatUint128InBaseN (UINT32_TYPE * num, UINT32_TYPE numlen, int base)
+wml::FoundryUtilities::formatUint128InBaseN (UINT32_TYPE * num, UINT32_TYPE numlen, int base)
 {
 	if (numlen>4) {
 		throw runtime_error ("Can only do 128 bit algebra, "
@@ -1997,8 +1997,8 @@ foundryWebUI::FoundryUtilities::formatUint128InBaseN (UINT32_TYPE * num, UINT32_
 	return outNum;
 }
 
-foundryWebUI::wmlint128
-foundryWebUI::FoundryUtilities::bigMultUnsigned (UINT64_TYPE a, UINT64_TYPE b)
+wml::wmlint128
+wml::FoundryUtilities::bigMultUnsigned (UINT64_TYPE a, UINT64_TYPE b)
 {
 	if (a == 0xffffffffffffffffULL &&
 	    b == 0xffffffffffffffffULL) {
@@ -2056,8 +2056,8 @@ foundryWebUI::FoundryUtilities::bigMultUnsigned (UINT64_TYPE a, UINT64_TYPE b)
 	return prod;
 }
 
-foundryWebUI::wmlint128
-foundryWebUI::FoundryUtilities::bigDiv (wmlint128 numerator, UINT64_TYPE denom)
+wml::wmlint128
+wml::FoundryUtilities::bigDiv (wmlint128 numerator, UINT64_TYPE denom)
 {
 	wmlint128 quotient;
 	UINT64_TYPE hirem;   /* hi remainder */
@@ -2112,7 +2112,7 @@ foundryWebUI::FoundryUtilities::bigDiv (wmlint128 numerator, UINT64_TYPE denom)
 
 
 UINT64_TYPE
-foundryWebUI::FoundryUtilities::bigModUnsigned (wmlint128 numerator, UINT64_TYPE denom)
+wml::FoundryUtilities::bigModUnsigned (wmlint128 numerator, UINT64_TYPE denom)
 {
 	wmlint128 quotient;
 
@@ -2128,7 +2128,7 @@ foundryWebUI::FoundryUtilities::bigModUnsigned (wmlint128 numerator, UINT64_TYPE
 
 /* Greater Than or Equal */
 bool
-foundryWebUI::FoundryUtilities::bigGTE (wmlint128 a, UINT64_TYPE b)
+wml::FoundryUtilities::bigGTE (wmlint128 a, UINT64_TYPE b)
 {
 	if (a.neg == false && a.big == true) {
 		return true;

@@ -96,7 +96,7 @@ extern "C" {
  * \c FoundryUtilities contains some generally useful static member functions.
  */
 
-namespace foundryWebUI {
+namespace wml {
 
 
 	/*!
@@ -135,12 +135,12 @@ namespace foundryWebUI {
 		bool big; /* true if hi is >0 */
 	} wmlint128;
 
-	/*! \class foundryutilities foundryutilities.h foundryWebUI/foundryutilities.h 
-	 * \brief Class that deals with authorizing access to a foundryWebUI system
+	/*! \class foundryutilities foundryutilities.h futil/foundryutilities.h 
+	 * \brief Class that deals with authorizing access to a wml system
 	 *
 	 * The \c foundryutilities class provides methods to generate a password entry box, authenticate
 	 * the password and to check sessions. An object of this class is required
-	 * for every access of a foundryWebUI system. 
+	 * for every access of a wml system. 
 	 */
 
 	class FoundryUtilities
@@ -480,7 +480,7 @@ namespace foundryWebUI {
 		//@}
 	};
 
-} // namespace foundryWebUI
+} // namespace wml
 
 #endif // __cplusplus
 
