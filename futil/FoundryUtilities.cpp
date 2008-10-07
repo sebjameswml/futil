@@ -334,6 +334,28 @@ wml::FoundryUtilities::stripTrailingCarriageReturn (std::string& input)
 	return 0;
 }
 
+int
+wml::FoundryUtilities::stripTrailingSpaces (std::string& input)
+{
+	int i = 0;
+	while (input.size()>0 && input[input.size()-1] == ' ') {
+		input.erase (input.size()-1, 1);
+		i++;
+	}
+	return i;
+}
+
+int
+wml::FoundryUtilities::stripLeadingSpaces (std::string& input)
+{
+	int i = 0;
+	while (input.size()>0 && input[0] == ' ') {
+		input.erase (0, 1);
+		i++;
+	}
+	return i;
+}
+
 unsigned int
 wml::FoundryUtilities::getMemory (void)
 {

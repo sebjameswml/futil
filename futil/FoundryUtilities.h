@@ -173,6 +173,18 @@ namespace wml {
 		static int stripTrailingCarriageReturn (std::string& input);
 
 		/*!
+		 * Erase trailing spaces from from input. Return the
+		 * number of spaces removed.
+		 */
+		static int stripTrailingSpaces (std::string& input);
+
+		/*!
+		 * Erase leading spaces from from input. Return the
+		 * number of spaces removed.
+		 */
+		static int stripLeadingSpaces (std::string& input);
+
+		/*!
 		 * \brief Return the amount of RAM
 		 *
 		 * Returns RAM in bytes.
