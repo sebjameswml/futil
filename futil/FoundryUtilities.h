@@ -10,8 +10,6 @@
 # pragma interface
 #endif
 
-#include "config.h"
-
 /* The WML Base 52 definitions */
 #define WMLBASE52_CHAR00 's'
 #define WMLBASE52_CHAR01 'q'
