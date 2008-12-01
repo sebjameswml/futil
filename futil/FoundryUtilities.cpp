@@ -6,7 +6,7 @@
 
 #include <iostream>
 #include <fstream>
-#include <sstream> 
+#include <sstream>
 #include <pstream.h>
 #include <cstdlib>
 #include <stdexcept>
@@ -214,7 +214,7 @@ extern "C" {
 		fprintf (fp, "Subject: %s (from %s)\n", subject, hostname);
 		fprintf (fp, "%s\n\n", message);
 		fclose (fp);
-  
+
 		snprintf (cmd, 1064, "/usr/sbin/ssmtp %s </tmp/email.txt", recipients);
 		system (cmd);
 
@@ -234,15 +234,15 @@ extern "C" {
 
 		sd = socket (AF_INET, SOCK_DGRAM, 0);
 		if (sd == -1) {
-			syslog (LOG_ERR, 
+			syslog (LOG_ERR,
 				"%s: Error in call to socket() '%s'",
-				__FUNCTION__, strerror (errno));		
+				__FUNCTION__, strerror (errno));
 			return -1;
 		}
 
 
 		if (ioctl (sd, SIOCGIFHWADDR, &ifr) < 0) {
-			syslog (LOG_ERR, 
+			syslog (LOG_ERR,
 				"%s: Error in call to ioctl() '%s'",
 				__FUNCTION__, strerror (errno));
 
@@ -258,7 +258,7 @@ extern "C" {
 			  ((ifr.ifr_hwaddr.sa_data[3]<<16) & 0x000000ff0000) |
 			  ((ifr.ifr_hwaddr.sa_data[4]<<8)  & 0x00000000ff00) |
 			  ((ifr.ifr_hwaddr.sa_data[5])     & 0x0000000000ff)   );
-	
+
 		// Clean up
 		close (sd);
 		return 0;
@@ -320,7 +320,7 @@ wml::FoundryUtilities::ensureUnixNewlines (std::string& input)
 			num++;
 		}
 	}
-	
+
 	return num; // The number of \r characters we found in the string.
 }
 
@@ -372,7 +372,7 @@ wml::FoundryUtilities::getMemory (void)
 		return 0;
 	}
 	f.close();
-	
+
 	unsigned int i=0, j=0, k=0;
 	char c = line[0];
 	while (c != '\0') {
@@ -457,7 +457,7 @@ wml::FoundryUtilities::getLock (int fd)
 	} else {
 		throw runtime_error ("Can't lock fd < 1");
 	}
-	
+
 	debuglog2 (LOG_DEBUG,
 		   "%s: about to call flock(fd=%d, LOCK_EX)",
 		   __FUNCTION__, fd);
@@ -480,7 +480,7 @@ void
 wml::FoundryUtilities::releaseLock (int fd)
 {
 	debuglog2 (LOG_DEBUG, "%s: Called", __FUNCTION__);
-	
+
 	if (fd < 1) {
 		debuglog2 (LOG_DEBUG, "%s: Can't unlock fd=0, returning", __FUNCTION__);
 		return;
@@ -489,7 +489,7 @@ wml::FoundryUtilities::releaseLock (int fd)
 	debuglog2 (LOG_DEBUG,
 		   "%s: about to call flock(fd=%d, LOCK_UN)",
 		   __FUNCTION__, fd);
-	
+
 	if (flock (fd, LOCK_UN)) {
 		int e = errno;
 		stringstream msg;
@@ -646,19 +646,19 @@ wml::FoundryUtilities::getMacAddr (void)
 	sd = socket(AF_INET, SOCK_DGRAM, 0);
 
 	if (sd == -1) {
-		throw runtime_error ("Error in call to socket()");		
+		throw runtime_error ("Error in call to socket()");
 	}
 
 	if (ioctl (sd, SIOCGIFHWADDR, &ifr) < 0) {
-		throw runtime_error ("Error in call to ioctl()");		
+		throw runtime_error ("Error in call to ioctl()");
 
 	} else {
 
-		sprintf (mac, "%.2x:%.2x:%.2x:%.2x:%.2x:%.2x", 
-			 ifr.ifr_hwaddr.sa_data[0]&0xff, 
-			 ifr.ifr_hwaddr.sa_data[1]&0xff, 
-			 ifr.ifr_hwaddr.sa_data[2]&0xff, 
-			 ifr.ifr_hwaddr.sa_data[3]&0xff, 
+		sprintf (mac, "%.2x:%.2x:%.2x:%.2x:%.2x:%.2x",
+			 ifr.ifr_hwaddr.sa_data[0]&0xff,
+			 ifr.ifr_hwaddr.sa_data[1]&0xff,
+			 ifr.ifr_hwaddr.sa_data[2]&0xff,
+			 ifr.ifr_hwaddr.sa_data[3]&0xff,
 			 ifr.ifr_hwaddr.sa_data[4]&0xff,
 			 ifr.ifr_hwaddr.sa_data[5]&0xff);
 	}
@@ -682,11 +682,11 @@ wml::FoundryUtilities::getMacAddr (unsigned int* mac)
 	sd = socket(AF_INET, SOCK_DGRAM, 0);
 
 	if (sd == -1) {
-		throw runtime_error ("Error in call to socket()");		
+		throw runtime_error ("Error in call to socket()");
 	}
 
 	if (ioctl (sd, SIOCGIFHWADDR, &ifr) < 0) {
-		throw runtime_error ("Error in call to ioctl()");		
+		throw runtime_error ("Error in call to ioctl()");
 
 	} else {
 		mac[1] = (((ifr.ifr_hwaddr.sa_data[0]<<8) & 0x00000000ff00) |
@@ -793,17 +793,17 @@ wml::FoundryUtilities::readDirectoryTree (vector<string>& vec,
 	while ((ep = readdir (d))) {
 
 		if (ep->d_type == DT_DIR || ep->d_type == DT_LNK) {
-			
+
 			// Skip "." and ".." directories
 			if ( ((entry_len = strlen (ep->d_name)) > 0 && ep->d_name[0] == '.') &&
 			     (ep->d_name[1] == '\0' || ep->d_name[1] == '.') ) {
 				continue;
 			}
-			
+
 			// For all other links and directories, recurse.
 			string newPath;
 			if (sd.size() == 0) {
-				newPath = ep->d_name;				
+				newPath = ep->d_name;
 			} else {
 				newPath = sd + "/" + ep->d_name;
 			}
@@ -821,7 +821,7 @@ wml::FoundryUtilities::readDirectoryTree (vector<string>& vec,
 		}
 	}
 
-	(void) closedir (d);	
+	(void) closedir (d);
 	return;
 }
 
@@ -1122,7 +1122,7 @@ wml::FoundryUtilities::releaseWmlppLock (void)
 			// Path invalid (part or all of it
 			// doesn't exist) THIS means that we
 			// can get the lock.
-			haveFile = false;			
+			haveFile = false;
 			break;
 
 		case ENOMEM:
@@ -1561,7 +1561,7 @@ wml::FoundryUtilities::baseNToInt (char c, int base)
 			break;
 		}
 		break;
-		
+
 	case 16:
 		/* Base 16, Hexadecimal */
 		switch (c) {
@@ -1818,7 +1818,7 @@ void
 wml::FoundryUtilities::hexToUint32s (const string& str,
 					      UINT32_TYPE * num,
 					      UINT32_TYPE numlen)
-{	
+{
 	unsigned int len = str.size();
 	int posn = 0; // The position of n in the decimal str. For
 		      // "123", 3 is at posn 0, 2 at posn 1 and 1 at
@@ -1850,7 +1850,7 @@ wml::FoundryUtilities::baseNToUint32s (const string& str,
 						UINT32_TYPE * num,
 						UINT32_TYPE numlen,
 						int base)
-{	
+{
 	unsigned int len = str.size();
 	unsigned int i = 0;
 	string strcopy = ""; // A copy of str which we can modify
@@ -1863,13 +1863,13 @@ wml::FoundryUtilities::baseNToUint32s (const string& str,
 	int bit = 0; // The current active bit in num[iter];
 
 	// copy str into strcopy, but reversed - we work from the
-	// least significant numeral to the most	
+	// least significant numeral to the most
 	while (len) {
 		strcopy += str[--len];
 	}
 
-	//cout << "(reversed) string to convert: '" 
-	//     << strcopy << "' of length "<< strcopy.length() << endl;       
+	//cout << "(reversed) string to convert: '"
+	//     << strcopy << "' of length "<< strcopy.length() << endl;
 
 	int last_result = 0;
 	while ((len = strcopy.length()) > 0) {
@@ -1909,7 +1909,7 @@ wml::FoundryUtilities::baseNToUint32s (const string& str,
 					throw runtime_error ("Don't know what to do "
 							     "if base is not divisible by 2");
 				}
-				//cout << "  add " << halfbase 
+				//cout << "  add " << halfbase
 				//     << " to last_result (" << last_result << ")\n";
 				last_result += halfbase;
 			}
@@ -1922,7 +1922,7 @@ wml::FoundryUtilities::baseNToUint32s (const string& str,
 
 			if (bit>31) {
 				bit = 0;
-				iter++;				
+				iter++;
 			}
 
 			posn++;
@@ -1932,7 +1932,7 @@ wml::FoundryUtilities::baseNToUint32s (const string& str,
 		if (posn>0) {
 			addChar (last_result, halfstr, base, false);
 		}
-		
+
 		// Copy halfstr back into strcopy
 		strcopy = halfstr;
 
@@ -1959,7 +1959,7 @@ wml::FoundryUtilities::formatUint64InBaseN (UINT64_TYPE num, int base)
 	UINT64_TYPE n = num;
 	UINT64_TYPE quotient = 0;
 	UINT64_TYPE remainder;
-		
+
 	while (n>=(UINT64_TYPE)base) {
 		//cerr << "quotient: " << quotient << ", dividing by: " << base << endl;
 		quotient = n/(UINT64_TYPE)base;
@@ -2095,13 +2095,13 @@ wml::FoundryUtilities::bigDiv (wmlint128 numerator, UINT64_TYPE denom)
 
 	quotient.hi = numerator.hi / denom;
 	hirem = numerator.hi - quotient.hi * denom;
-  
+
 	UINT64_TYPE lo = 1<<30;
 	lo <<= 33;
 	lo /= denom;
 	lo <<= 1;
 
-	lo *= hirem; 
+	lo *= hirem;
 	quotient.lo = lo + numerator.lo/denom;
 
 	/* Deal with low remainder bits.
