@@ -1136,6 +1136,8 @@ wml::FoundryUtilities::releaseWmlppLock (void)
 		}
 	}
 
+	if (buf) { free (buf); }
+
 	if (haveFile == false) {
 		// No lock to release.
 		debuglog2 (LOG_DEBUG, "%s: no lock to release, returning", __FUNCTION__);
