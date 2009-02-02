@@ -133,12 +133,12 @@ namespace wml {
 		bool big; /* true if hi is >0 */
 	} wmlint128;
 
-	/*! \class foundryutilities foundryutilities.h futil/foundryutilities.h 
+	/*! \class foundryutilities foundryutilities.h futil/foundryutilities.h
 	 * \brief Class that deals with authorizing access to a wml system
 	 *
 	 * The \c foundryutilities class provides methods to generate a password entry box, authenticate
 	 * the password and to check sessions. An object of this class is required
-	 * for every access of a wml system. 
+	 * for every access of a wml system.
 	 */
 
 	class FoundryUtilities
@@ -293,7 +293,7 @@ namespace wml {
 		 */
 		static void getMacAddr (unsigned int* mac);
 
-		
+
 		/*!
 		 * Get the mac address from the string @macStr
 		 *
@@ -414,7 +414,7 @@ namespace wml {
 		 * @param[in] n The number of add to the string @str.
 		 * @param[out] str The string to which the number @n
 		 * should be appended.
-		 * @param[in] base The base or radix in which the 
+		 * @param[in] base The base or radix in which the
 		 * number should be represented when added to string @str.
 		 * @param[in] at_start If true, the numeral should be
 		 * inserted at the start of the string @str.
@@ -453,13 +453,13 @@ namespace wml {
 					    UINT32_TYPE * num,
 					    UINT32_TYPE numlen,
 					    int base);
-	
+
 		/*!
 		 * Output the number @num represented in base @base.
 		 */
 		static std::string formatUint64InBaseN (UINT64_TYPE num, int base);
 
-	
+
 		/*!
 		 * Output the number @num which can be up to 4 32 bit
 		 * bytes wide, represented in base @base.
@@ -486,7 +486,30 @@ namespace wml {
 		 * return true if a is greater than or equal to b.
 		 */
 		static bool bigGTE (wmlint128 a, UINT64_TYPE b);
-	
+
+		/*!
+		 * Increment the count stored in the file given by
+		 * filePath. Return the new value of the count, or -1
+		 * on error.
+		 */
+		static int incFileCount (const char * filePath);
+
+		/*!
+		 * Increment the count stored in the file given by
+		 * filePath. Return the new value of the count, or -1
+		 * on error.
+		 */
+		static int decFileCount (const char * filePath);
+
+		/*!
+		 * Zero the file count in filePath, ENSURING that the
+		 * file access time is reset to the current time. For
+		 * this reason, the file is first unlinked, then
+		 * re-created, then "0" is inserted into it. Return
+		 * the new value of the count (0), or -1 on error.
+		 */
+		static int zeroFileCount (const char * filePath);
+
 		//@}
 	};
 

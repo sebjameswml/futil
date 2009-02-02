@@ -2179,3 +2179,61 @@ wml::FoundryUtilities::bigGTE (wmlint128 a, UINT64_TYPE b)
 	throw runtime_error ("bigGTE: Error, should already have returned.");
 	return false;
 }
+
+int
+wml::FoundryUtilities::incFileCount (const char * filePath)
+{
+	fstream f;
+	f.open (filePath, ios::in);
+	if (!f.is_open()) {
+		return -1;
+	}
+	int n;
+	f >> n;
+	f.close();
+	n++;
+	f.open (filePath, ios::out|ios::trunc);
+	if (!f.is_open()) {
+		return -1;
+	}
+	f << n << endl;
+	f.close();
+	return n;
+}
+
+int
+wml::FoundryUtilities::decFileCount (const char * filePath)
+{
+	fstream f;
+	f.open (filePath, ios::in);
+	if (!f.is_open()) {
+		return -1;
+	}
+	int n;
+	f >> n;
+	f.close();
+	n--;
+	// This is intended for unsigned file counts only:
+	if (n<0) { n=0; }
+	f.open (filePath, ios::out|ios::trunc);
+	if (!f.is_open()) {
+		return -1;
+	}
+	f << n << endl;
+	f.close();
+	return n;
+}
+
+int
+wml::FoundryUtilities::zeroFileCount (const char * filePath)
+{
+	unlink (filePath);
+	fstream f;
+	f.open (filePath, ios::out|ios::trunc);
+	if (!f.is_open()) {
+		return -1;
+	}
+	f << "0" << endl;
+	f.close();
+	return 0;
+}
