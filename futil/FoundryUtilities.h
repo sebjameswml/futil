@@ -87,6 +87,7 @@ extern "C" {
 #ifdef __cplusplus
 
 #include <vector>
+#include <list>
 
 /*! \file FoundryUtilities.h
  * \brief Declares the class \c FoundryUtilities
@@ -267,6 +268,18 @@ namespace wml {
 		 * match s. Return -1 if all members of v match s.
 		 */
 		static int firstNotMatching (std::vector<std::string>& v, std::string s);
+
+		/*!
+		 * This could be a template. Return true if l contains
+		 * i.
+		 */
+		static bool listContains (std::list<unsigned int>& l, unsigned int i);
+
+		/*!
+		 * This could be a template. Return true if l contains
+		 * i.
+		 */
+		static bool listContains (std::list<std::string>& l, std::string& s);
 
 		/*!
 		 * Return true if the given pid is in the sleeping or

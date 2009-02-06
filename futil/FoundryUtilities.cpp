@@ -609,6 +609,32 @@ wml::FoundryUtilities::firstNotMatching (std::vector<string>& v, string s)
 }
 
 bool
+wml::FoundryUtilities::listContains (std::list<unsigned int>& l, unsigned int i)
+{
+	list<unsigned int>::iterator it = l.begin();
+	while (it != l.end()) {
+		if ((*it) == i) {
+			return true;
+		}
+		it++;
+	}
+	return false;
+}
+
+bool
+wml::FoundryUtilities::listContains (std::list<std::string>& l, std::string& s)
+{
+	list<string>::iterator it = l.begin();
+	while (it != l.end()) {
+		if ((*it) == s) {
+			return true;
+		}
+		it++;
+	}
+	return false;
+}
+
+bool
 wml::FoundryUtilities::pidLoaded (int pid)
 {
 	stringstream path;
