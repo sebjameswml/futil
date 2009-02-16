@@ -539,6 +539,25 @@ namespace wml {
 		 */
 		static int zeroFileCount (const char * filePath);
 
+		/*!
+		 * split csv into a vector
+		 */
+		static std::vector<std::string> csvToVector (std::string& csvList, char separator = ',');
+
+		/*!
+		 * split csv into a list
+		 */
+		static std::list<std::string> csvToList (std::string& csvList, char separator = ',');
+
+		/*!
+		 * Output a vector of strings as a csv string.
+		 */
+		static std::string vectorToCsv (std::vector<std::string>& vecList, char separator = ',');
+
+		/*!
+		 * Output a list of strings as a csv string.
+		 */
+		static std::string listToCsv (std::list<std::string>& listList, char separator = ',');
 		//@}
 	};
 

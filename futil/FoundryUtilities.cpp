@@ -2373,3 +2373,86 @@ wml::FoundryUtilities::zeroFileCount (const char * filePath)
 	f.close();
 	return 0;
 }
+
+std::vector<std::string>
+wml::FoundryUtilities::csvToVector (std::string& csvList, char separator)
+{
+	vector<string> theVec;
+	string csvl (csvList);
+	string entry("");
+	string::size_type a=0, b=0;
+	while (a < csvl.size()
+	       && (b = csvl.find (separator, a)) != string::npos) {
+		entry = csvl.substr (a, b-a);
+		theVec.push_back (entry);
+		a=b+1;
+	}
+	// Last one has no ','
+	if (a < csvl.size()) {
+		b = csvl.size();
+		entry = csvl.substr (a, b-a);
+		theVec.push_back (entry);
+	}
+
+	return theVec;
+}
+
+std::list<std::string>
+wml::FoundryUtilities::csvToList (std::string& csvList, char separator)
+{
+	list<string> theList;
+	string csvl (csvList);
+	string entry("");
+	string::size_type a=0, b=0;
+	while (a < csvl.size()
+	       && (b = csvl.find (separator, a)) != string::npos) {
+		entry = csvl.substr (a, b-a);
+		theList.push_back (entry);
+		a=b+1;
+	}
+	// Last one has no ','
+	if (a < csvl.size()) {
+		b = csvl.size();
+		entry = csvl.substr (a, b-a);
+		theList.push_back (entry);
+	}
+
+	return theList;
+}
+
+std::string
+wml::FoundryUtilities::vectorToCsv (std::vector<std::string>& vecList, char separator)
+{
+	vector<string>::iterator i = vecList.begin();
+	bool first = true;
+	stringstream ss;
+	while (i != vecList.end()) {
+		if (first) {
+			first = false;
+		} else {
+			ss << separator;
+		}
+		ss << *i;
+		i++;
+	}
+	return ss.str();
+}
+
+std::string
+wml::FoundryUtilities::listToCsv (std::list<std::string>& listList, char separator)
+{
+	list<string>::iterator i = listList.begin();
+	bool first = true;
+	stringstream ss;
+	while (i != listList.end()) {
+		if (first) {
+			first = false;
+		} else {
+			ss << separator;
+		}
+		ss << *i;
+		i++;
+	}
+	return ss.str();
+}
+
