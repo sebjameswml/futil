@@ -799,8 +799,8 @@ wml::FoundryUtilities::macAddrToStr (unsigned int* mac)
 
 void
 wml::FoundryUtilities::readDirectoryTree (vector<string>& vec,
-						   const char* baseDirPath,
-						   const char* subDirPath)
+					  const char* baseDirPath,
+					  const char* subDirPath)
 {
 	DIR* d;
 	struct dirent *ep;
@@ -884,6 +884,116 @@ wml::FoundryUtilities::monthNow (void)
 	t = localtime (&curtime);
 	unsigned int theMonth = static_cast<unsigned int>(t->tm_mon+1);
 	return theMonth;
+}
+
+time_t
+wml::FoundryUtilities::dateToNum (std::string& dateStr)
+{
+	char separator = '\0';
+
+	if (dateStr.empty()) {
+		return -2;
+	}
+
+	if (dateStr.size() < 8) {
+		return -3;
+	}
+
+	if (dateStr[4] < '0'
+	    || dateStr[4] > '9') {
+		separator = dateStr[4];
+		if (dateStr.size() < 10) {
+			return -4;
+		}
+	}
+
+	string year;
+	string month;
+	string day;
+	unsigned int yearN=0, monthN=0, dayN=0;
+
+	year = dateStr.substr (0,4);
+
+	if (separator == '\0') {
+		month = dateStr.substr (4,2);
+		day = dateStr.substr (6,2);
+	} else {
+		month = dateStr.substr (5,2);
+		day = dateStr.substr (8,2);
+	}
+
+	stringstream yearss, monthss, dayss;
+	yearss << year;
+	yearss.width(4);
+	yearss.fill ('0');
+	yearss >> yearN;
+
+	monthss << month;
+	monthss.width(2);
+	monthss.fill ('0');
+	monthss >> monthN;
+
+	dayss << day;
+	dayss.width(2);
+	dayss.fill ('0');
+	dayss >> dayN;
+
+	struct tm * t;
+	t = (struct tm*) malloc (sizeof (struct tm));
+	t->tm_year = yearN-1900;
+	t->tm_mon = monthN-1;
+	t->tm_mday = dayN;
+	t->tm_hour = 0;
+	t->tm_min = 0;
+	t->tm_sec = 0;
+	t->tm_isdst = -1;
+	time_t rtnTime = mktime (t);
+	if (rtnTime == -1) {
+		throw runtime_error ("mktime() returned -1");
+	}
+	free (t);
+
+	return rtnTime;
+}
+
+
+std::string
+wml::FoundryUtilities::numToDate (time_t epochSeconds,
+				  char separator)
+{
+	struct tm * t;
+	time_t es = epochSeconds;
+	t = (struct tm*) malloc (sizeof (struct tm));
+	t = localtime_r (&es, t);
+	int theDay = t->tm_mday;
+	int theMonth = t->tm_mon+1;
+	int theYear = t->tm_year+1900;
+	free (t);
+
+	stringstream rtn;
+	if (separator == '\0') {
+		rtn.width(4);
+		rtn.fill('0');
+		rtn << theYear;
+		rtn.width(2);
+		rtn.fill('0');
+		rtn << theMonth;
+		rtn.width(2);
+		rtn.fill('0');
+		rtn << theDay;
+	} else {
+		rtn.width(4);
+		rtn.fill('0');
+		rtn << theYear << separator;
+		rtn.width(2);
+		rtn.fill('0');
+		rtn << theMonth << separator;
+		rtn.width(2);
+		rtn.fill('0');
+		rtn << theDay;
+	}
+
+	return rtn.str();
 }
 
 unsigned int

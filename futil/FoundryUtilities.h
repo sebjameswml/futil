@@ -368,6 +368,22 @@ namespace wml {
 		static unsigned int monthNow (void);
 
 		/*!
+		 * Convert a date of form 2009-02-16 to the unix epoch
+		 * number. The fifth character of the string is
+		 * examined, and if it is not a numeral, it is used as
+		 * teh separator. If the fifth character IS a numeral,
+		 * then the date format is read in as YYYYMMDD.
+		 */
+		static time_t dateToNum (std::string& dateStr);
+
+		/*!
+		 * Convert a unix epoch number to a date of form
+		 * 2009-02-16, using separator to delimit the date.
+		 */
+		static std::string numToDate (time_t epochSeconds,
+					      char separator = '\0');
+
+		/*!
 		 * Read the lineNum'th line of the syslog file and
 		 * obtain the month, returning it. (1==Jan, 12==Dec).
 		 */
