@@ -337,8 +337,14 @@ wml::FoundryUtilities::stripTrailingCarriageReturn (std::string& input)
 int
 wml::FoundryUtilities::stripTrailingSpaces (std::string& input)
 {
+	return FoundryUtilities::stripTrailingChars (input);
+}
+
+int
+wml::FoundryUtilities::stripTrailingChars (std::string& input, char c)
+{
 	int i = 0;
-	while (input.size()>0 && input[input.size()-1] == ' ') {
+	while (input.size()>0 && input[input.size()-1] == c) {
 		input.erase (input.size()-1, 1);
 		i++;
 	}
@@ -348,8 +354,14 @@ wml::FoundryUtilities::stripTrailingSpaces (std::string& input)
 int
 wml::FoundryUtilities::stripLeadingSpaces (std::string& input)
 {
+	return FoundryUtilities::stripLeadingChars (input);
+}
+
+int
+wml::FoundryUtilities::stripLeadingChars (std::string& input, char c)
+{
 	int i = 0;
-	while (input.size()>0 && input[0] == ' ') {
+	while (input.size()>0 && input[0] == c) {
 		input.erase (0, 1);
 		i++;
 	}

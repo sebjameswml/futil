@@ -178,10 +178,22 @@ namespace wml {
 		static int stripTrailingSpaces (std::string& input);
 
 		/*!
+		 * Erase trailing chars c from from input. Return the
+		 * number of chars removed.
+		 */
+		static int stripTrailingChars (std::string& input, char c = ' ');
+
+		/*!
 		 * Erase leading spaces from from input. Return the
 		 * number of spaces removed.
 		 */
 		static int stripLeadingSpaces (std::string& input);
+
+		/*!
+		 * Erase any leading character c from from input. Return the
+		 * number of chars removed.
+		 */
+		static int stripLeadingChars (std::string& input, char c = ' ');
 
 		/*!
 		 * \brief Return the amount of RAM
