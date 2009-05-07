@@ -898,6 +898,100 @@ wml::FoundryUtilities::monthNow (void)
 	return theMonth;
 }
 
+string
+wml::FoundryUtilities::monthStr (int month, bool shortFormat)
+{
+	string rtn("");
+
+	if (shortFormat == true) {
+		switch (month) {
+		case 1:
+			rtn = "Jan";
+			break;
+		case 2:
+			rtn = "Feb";
+			break;
+		case 3:
+			rtn = "Mar";
+			break;
+		case 4:
+			rtn = "Apr";
+			break;
+		case 5:
+			rtn = "May";
+			break;
+		case 6:
+			rtn = "Jun";
+			break;
+		case 7:
+			rtn = "Jul";
+			break;
+		case 8:
+			rtn = "Aug";
+			break;
+		case 9:
+			rtn = "Sep";
+			break;
+		case 10:
+			rtn = "Oct";
+			break;
+		case 11:
+			rtn = "Nov";
+			break;
+		case 12:
+			rtn = "Dec";
+			break;
+		default:
+			rtn = "unk";
+			break;
+		}
+	} else {
+		switch (month) {
+		case 1:
+			rtn = "January";
+			break;
+		case 2:
+			rtn = "February";
+			break;
+		case 3:
+			rtn = "March";
+			break;
+		case 4:
+			rtn = "April";
+			break;
+		case 5:
+			rtn = "May";
+			break;
+		case 6:
+			rtn = "June";
+			break;
+		case 7:
+			rtn = "July";
+			break;
+		case 8:
+			rtn = "August";
+			break;
+		case 9:
+			rtn = "September";
+			break;
+		case 10:
+			rtn = "October";
+			break;
+		case 11:
+			rtn = "November";
+			break;
+		case 12:
+			rtn = "December";
+			break;
+		default:
+			rtn = "unknown";
+			break;
+		}
+	}
+
+	return rtn;
+}
+
 time_t
 wml::FoundryUtilities::dateToNum (std::string& dateStr)
 {
@@ -1010,7 +1104,7 @@ wml::FoundryUtilities::numToDate (time_t epochSeconds,
 
 unsigned int
 wml::FoundryUtilities::getMonthFromLog (std::string& filePath,
-						 unsigned int lineNum)
+					unsigned int lineNum)
 {
 	unsigned int month = 0;
 
@@ -1075,7 +1169,7 @@ wml::FoundryUtilities::getMonthFromLog (std::string& filePath,
 
 void
 wml::FoundryUtilities::getJavascript (std::stringstream& rJavascript,
-					       std::string jsFile)
+				      std::string jsFile)
 {
 	ifstream f;
 	f.open (jsFile.c_str(), ios::in);
@@ -1966,8 +2060,8 @@ wml::FoundryUtilities::baseNToInt (char c, int base)
  */
 void
 wml::FoundryUtilities::hexToUint32s (const string& str,
-					      UINT32_TYPE * num,
-					      UINT32_TYPE numlen)
+				     UINT32_TYPE * num,
+				     UINT32_TYPE numlen)
 {
 	unsigned int len = str.size();
 	int posn = 0; // The position of n in the decimal str. For
@@ -1997,9 +2091,9 @@ wml::FoundryUtilities::hexToUint32s (const string& str,
 
 void
 wml::FoundryUtilities::baseNToUint32s (const string& str,
-						UINT32_TYPE * num,
-						UINT32_TYPE numlen,
-						int base)
+				       UINT32_TYPE * num,
+				       UINT32_TYPE numlen,
+				       int base)
 {
 	unsigned int len = str.size();
 	unsigned int i = 0;
@@ -2468,3 +2562,58 @@ wml::FoundryUtilities::listToCsv (std::list<std::string>& listList, char separat
 	return ss.str();
 }
 
+std::string
+wml::FoundryUtilities::suffix (int n)
+{
+	string suf("th"); // Most numbers end in "th" (in English)
+
+	// Lazy, dumb programmer version of finding least significant
+	// decimal numeral in a number:
+	stringstream ss1, ss2;
+	int leastSig = 0; // Right most, least significant numeral
+	int leastSigTwo = 0; // Right most pair. For example, "12" for 112
+
+	ss1 << n;
+	string numStr = ss1.str();
+	if (!numStr.empty()) {
+		// right most numeral
+		ss2 << numStr[numStr.size()-1];
+		ss2 >> leastSig;
+		if (numStr.size()>1) {
+			ss2.str("");
+			ss2.clear();
+			ss2 << numStr.substr (numStr.size()-2);
+			ss2 >> leastSigTwo;
+		}
+	}
+
+	switch (leastSig) {
+	case 0:
+		break;
+	case 1:
+		if (leastSigTwo != 11) {
+			suf = "st";
+		}
+		break;
+	case 2:
+		if (leastSigTwo != 12) {
+			suf = "nd";
+		}
+		break;
+	case 3:
+		if (leastSigTwo != 13) {
+			suf = "rd";
+		}
+		break;
+	case 4:
+	case 5:
+	case 6:
+	case 7:
+	case 8:
+	case 9:
+	default:
+		break;
+	}
+
+	return suf;
+}

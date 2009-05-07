@@ -380,6 +380,20 @@ namespace wml {
 		static unsigned int monthNow (void);
 
 		/*!
+		 * Given the month as an int, where 1==Jan, 12==Dec,
+		 * return the month as a string. If shortFormat is true,
+		 * return "Jan", "Dec", etc., otherwise "January",
+		 * "December" etc.
+		 */
+		static std::string monthStr (int month, bool shortFormat=false);
+
+		/*!
+		 * Give the number n, return the suitable (english)
+		 * suffix. E.g. "st" for 1, "nd" for 22 etc.
+		 */
+		static std::string suffix (int n);
+
+		/*!
 		 * Convert a date of form 2009-02-16 to the unix epoch
 		 * number. The fifth character of the string is
 		 * examined, and if it is not a numeral, it is used as
