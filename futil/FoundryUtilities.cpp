@@ -2566,30 +2566,10 @@ std::string
 wml::FoundryUtilities::suffix (int n)
 {
 	string suf("th"); // Most numbers end in "th" (in English)
-
-	// Lazy, dumb programmer version of finding least significant
-	// decimal numeral in a number:
-	stringstream ss1, ss2;
-	int leastSig = 0; // Right most, least significant numeral
-	int leastSigTwo = 0; // Right most pair. For example, "12" for 112
-
-	ss1 << n;
-	string numStr = ss1.str();
-	if (!numStr.empty()) {
-		// right most numeral
-		ss2 << numStr[numStr.size()-1];
-		ss2 >> leastSig;
-		if (numStr.size()>1) {
-			ss2.str("");
-			ss2.clear();
-			ss2 << numStr.substr (numStr.size()-2);
-			ss2 >> leastSigTwo;
-		}
-	}
+	int leastSig = n%10;     // Right most, least significant numeral
+	int leastSigTwo = n%100; // Right most pair of numerals
 
 	switch (leastSig) {
-	case 0:
-		break;
 	case 1:
 		if (leastSigTwo != 11) {
 			suf = "st";
@@ -2605,12 +2585,6 @@ wml::FoundryUtilities::suffix (int n)
 			suf = "rd";
 		}
 		break;
-	case 4:
-	case 5:
-	case 6:
-	case 7:
-	case 8:
-	case 9:
 	default:
 		break;
 	}
