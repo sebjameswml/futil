@@ -196,11 +196,29 @@ namespace wml {
 		static int stripLeadingChars (std::string& input, char c = ' ');
 
 		/*!
-		 * \brief Return the amount of RAM
+		 * \brief Return the amount of RAM installed on the system.
 		 *
 		 * Returns RAM in bytes.
 		 */
 		static unsigned int getMemory (void);
+
+		/*!
+		 * \brief Return the amount of RAM used as cache.
+		 *
+		 * Returns cached RAM in bytes.
+		 */
+		static unsigned int getCachedMemory (void);
+
+		/*!
+		 * \brief Return the amount of RAM used as buffers.
+		 *
+		 * Returns buffer RAM in bytes.
+		 */
+		static unsigned int getBufferedMemory (void);
+
+		static unsigned int getActiveMemory (void);
+
+		static unsigned int getInactiveMemory (void);
 
 		/*!
 		 * Stat a file, return true if the file exists and is
@@ -209,6 +227,15 @@ namespace wml {
 		//@{
 		static bool fileExists (std::string& path);
 		static bool fileExists (const char * path);
+		//@}
+
+		/*!
+		 * Stat a directory, return true if the directory
+		 * exists.
+		 */
+		//@{
+		static bool dirExists (std::string& path);
+		static bool dirExists (const char * path);
 		//@}
 
 		/*!

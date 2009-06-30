@@ -409,6 +409,188 @@ wml::FoundryUtilities::getMemory (void)
 	return memTotal<<10; // Left shift 10 to return bytes, not kbytes
 }
 
+unsigned int
+wml::FoundryUtilities::getCachedMemory (void)
+{
+	ifstream f ("/proc/meminfo");
+
+	if (!f.is_open()) {
+		return 0;
+	}
+
+	// Cached is the fourth line of meminfo and is first line with "Cached" in.
+	string line;
+	while (getline (f, line, '\n') != false) {
+		if (line.find ("Cached", 0) != string::npos) {
+			break;
+		}
+	}
+	f.close();
+
+	if (line.find ("Cached", 0) == string::npos) {
+		return 0;
+	}
+
+	unsigned int i=0, j=0, k=0;
+	char c = line[0];
+	while (c != '\0') {
+		if (c=='0' || c=='1' || c=='2' || c=='3' || c=='4' || c=='5' || c=='6' || c=='7' || c=='8' || c=='9') {
+			// It's a numeral
+			break;
+		}
+		c = line[++i];
+	}
+	j=i; // i at start of string
+
+	while (line[i] != ' ' && line[i] != '\t' && line[i] != '\0') {
+		k++; i++;
+	}
+	// k is length of string
+
+	stringstream ss;
+	unsigned int memCached = 0;
+	ss << line.substr (j, k);
+	ss >> memCached;
+
+	return memCached<<10; // Left shift 10 to return bytes, not kbytes
+}
+
+unsigned int
+wml::FoundryUtilities::getBufferedMemory (void)
+{
+	ifstream f ("/proc/meminfo");
+
+	if (!f.is_open()) {
+		return 0;
+	}
+
+	// Buffers is the 3rd line of meminfo and is first line with "Buffers" in.
+	string line;
+	while (getline (f, line, '\n') != false) {
+		if (line.find ("Buffers", 0) != string::npos) {
+			break;
+		}
+	}
+	f.close();
+
+	if (line.find ("Buffers", 0) == string::npos) {
+		return 0;
+	}
+
+	unsigned int i=0, j=0, k=0;
+	char c = line[0];
+	while (c != '\0') {
+		if (c=='0' || c=='1' || c=='2' || c=='3' || c=='4' || c=='5' || c=='6' || c=='7' || c=='8' || c=='9') {
+			// It's a numeral
+			break;
+		}
+		c = line[++i];
+	}
+	j=i; // i at start of string
+
+	while (line[i] != ' ' && line[i] != '\t' && line[i] != '\0') {
+		k++; i++;
+	}
+	// k is length of string
+
+	stringstream ss;
+	unsigned int memBuffered = 0;
+	ss << line.substr (j, k);
+	ss >> memBuffered;
+
+	return memBuffered<<10; // Left shift 10 to return bytes, not kbytes
+}
+
+unsigned int
+wml::FoundryUtilities::getActiveMemory (void)
+{
+	ifstream f ("/proc/meminfo");
+
+	if (!f.is_open()) {
+		return 0;
+	}
+
+	string line;
+	while (getline (f, line, '\n') != false) {
+		if (line.find ("Active", 0) != string::npos) {
+			break;
+		}
+	}
+	f.close();
+
+	if (line.find ("Active", 0) == string::npos) {
+		return 0;
+	}
+
+	unsigned int i=0, j=0, k=0;
+	char c = line[0];
+	while (c != '\0') {
+		if (c=='0' || c=='1' || c=='2' || c=='3' || c=='4' || c=='5' || c=='6' || c=='7' || c=='8' || c=='9') {
+			// It's a numeral
+			break;
+		}
+		c = line[++i];
+	}
+	j=i; // i at start of string
+
+	while (line[i] != ' ' && line[i] != '\t' && line[i] != '\0') {
+		k++; i++;
+	}
+	// k is length of string
+
+	stringstream ss;
+	unsigned int memActive = 0;
+	ss << line.substr (j, k);
+	ss >> memActive;
+
+	return memActive<<10; // Left shift 10 to return bytes, not kbytes
+}
+
+unsigned int
+wml::FoundryUtilities::getInactiveMemory (void)
+{
+	ifstream f ("/proc/meminfo");
+
+	if (!f.is_open()) {
+		return 0;
+	}
+
+	string line;
+	while (getline (f, line, '\n') != false) {
+		if (line.find ("Inactive", 0) != string::npos) {
+			break;
+		}
+	}
+	f.close();
+
+	if (line.find ("Inactive", 0) == string::npos) {
+		return 0;
+	}
+
+	unsigned int i=0, j=0, k=0;
+	char c = line[0];
+	while (c != '\0') {
+		if (c=='0' || c=='1' || c=='2' || c=='3' || c=='4' || c=='5' || c=='6' || c=='7' || c=='8' || c=='9') {
+			// It's a numeral
+			break;
+		}
+		c = line[++i];
+	}
+	j=i; // i at start of string
+
+	while (line[i] != ' ' && line[i] != '\t' && line[i] != '\0') {
+		k++; i++;
+	}
+	// k is length of string
+
+	stringstream ss;
+	unsigned int memInactive = 0;
+	ss << line.substr (j, k);
+	ss >> memInactive;
+
+	return memInactive<<10; // Left shift 10 to return bytes, not kbytes
+}
+
 bool
 wml::FoundryUtilities::fileExists (std::string& path)
 {
@@ -436,6 +618,27 @@ wml::FoundryUtilities::fileExists (const char * path)
 {
 	string thePath = path;
 	return fileExists (thePath);
+}
+
+bool
+wml::FoundryUtilities::dirExists (std::string& path)
+{
+	DIR* d;
+	if (!(d = opendir (path.c_str()))) {
+		// Dir doesn't exist.
+		return false;
+	} else {
+		// Dir does exist.
+		(void) closedir (d);
+		return true;
+	}
+}
+
+bool
+wml::FoundryUtilities::dirExists (const char * path)
+{
+	string thePath = path;
+	return dirExists (thePath);
 }
 
 std::string
