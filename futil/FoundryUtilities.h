@@ -64,6 +64,19 @@
 #define WMLBASE52_CHAR50 'w'
 #define WMLBASE52_CHAR51 'v'
 
+/*!
+ * Character sets useful when calling FoundryUtilities::sanitize().
+ *
+ * These are ordered so that the most common chars appear earliest.
+ */
+#define CHARS_NUMERIC            "0123456789"
+#define CHARS_ALPHA              "etaoinshrdlcumwfgypbvkjxqzETAOINSHRDLCUMWFGYPBVKJXQZ"
+#define CHARS_ALPHALOWER         "etaoinshrdlcumwfgypbvkjxqz"
+#define CHARS_ALPHAUPPER         "ETAOINSHRDLCUMWFGYPBVKJXQZ"
+#define CHARS_NUMERIC_ALPHA      "etaoinshrdlcumwfgypbvkjxqz0123456789ETAOINSHRDLCUMWFGYPBVKJXQZ"
+#define CHARS_NUMERIC_ALPHALOWER "etaoinshrdlcumwfgypbvkjxqz0123456789"
+#define CHARS_NUMERIC_ALPHAUPPER "0123456789ETAOINSHRDLCUMWFGYPBVKJXQZ"
+
 /*
  * First come functions which may be #included by C code.
  */
@@ -464,6 +477,25 @@ namespace wml {
 		 * else return false.
 		 */
 		static bool containsOnlyNumerals (std::string& str);
+
+		/*!
+		 * A general purpose sanitization function. This is a
+		 * "allow only a list of characters" sort of
+		 * sanitiser, so you call it with a different list of
+		 * characters in allowed, depending on whether you're
+		 * sanitising for html or sql. This function could
+		 * throw errors or simply erase disallowed chars. Try
+		 * former behaviour, but offer a bool to switch. If
+		 * eraseForbidden is true, then the function will
+		 * remove forbidden chars from the string rather than
+		 * throwing a runtime error.
+		 */
+		static void sanitize (std::string& str,
+				      const char* allowed,
+				      bool eraseForbidden = false);
+		static void sanitize (std::string& str,
+				      std::string& allowed,
+				      bool eraseForbidden = false);
 
 		/*!
 		 * Read filePath and output to stdout. Useful for

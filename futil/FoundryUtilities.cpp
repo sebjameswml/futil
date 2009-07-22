@@ -1435,6 +1435,37 @@ wml::FoundryUtilities::containsOnlyNumerals (std::string& str)
 	return true;
 }
 
+void
+wml::FoundryUtilities::sanitize (std::string& str,
+				 const char* allowed,
+				 bool eraseForbidden)
+{
+	string allowedStr(allowed);
+	FoundryUtilities::sanitize (str, allowedStr, eraseForbidden);
+}
+
+void
+wml::FoundryUtilities::sanitize (std::string& str,
+				 std::string& allowed,
+				 bool eraseForbidden)
+{
+	for (unsigned int i=0; i<str.size(); i++) {
+		if (allowed.find(str[i], 0) == string::npos) {
+			// str[i] is forbidden
+			if (eraseForbidden == true) {
+				str.erase (i);
+			} else {
+				stringstream ss;
+				ss << "Forbidden char '" << str[i]
+				   << "' found while sanitising input.";
+				throw runtime_error (ss.str());
+			}
+		} else {
+			i++;
+		}
+	}
+}
+
 #define WMLPPLOCK_TIMEOUT 5000 // ms
 bool
 wml::FoundryUtilities::getWmlppLock (void)
