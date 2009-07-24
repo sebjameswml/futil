@@ -657,11 +657,6 @@ wml::FoundryUtilities::copyFile (string& from, string& to)
 		throw runtime_error ("Couldn't open TO file");
 	}
 
-	// Very very simple character by character read/write:
-	//char c;
-	//while (in.get(c)) { out << c; }
-
-	// Better way reading into a buffer
 	char buf[64];
 	while (!in.eof()) {
 		in.read (buf, 64);
