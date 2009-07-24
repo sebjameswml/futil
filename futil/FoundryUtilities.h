@@ -256,6 +256,14 @@ namespace wml {
 		//@}
 
 		/*!
+		 * Copy a file. Throw exception on failure.
+		 */
+		//@{
+		static void copyFile (std::string& from, std::string& to);
+		static void copyFile (const char * from, const char * to);
+		//@}
+
+		/*!
 		 * Return a datestamp - st_mtime; the file
 		 * modification time for the given file.
 		 */

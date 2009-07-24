@@ -641,6 +641,45 @@ wml::FoundryUtilities::dirExists (const char * path)
 	return dirExists (thePath);
 }
 
+void
+wml::FoundryUtilities::copyFile (string& from, string& to)
+{
+	ifstream in;
+	ofstream out;
+
+	in.open (from.c_str(), ios::in);
+	if (!in.is_open()) {
+		throw runtime_error ("Couldn't open FROM file");
+	}
+
+	out.open (to.c_str(), ios::out|ios::trunc);
+	if (!out.is_open()) {
+		throw runtime_error ("Couldn't open TO file");
+	}
+
+	// Very very simple character by character read/write:
+	//char c;
+	//while (in.get(c)) { out << c; }
+
+	// Better way reading into a buffer
+	char buf[64];
+	while (!in.eof()) {
+		in.read (buf, 64);
+		out << buf;
+	}
+
+	in.close();
+	out.close();
+}
+
+void
+wml::FoundryUtilities::copyFile (const char * from, const char * to)
+{
+	string fromFile(from);
+	string toFile(to);
+	FoundryUtilities::copyFile (fromFile, toFile);
+}
+
 std::string
 wml::FoundryUtilities::fileModDatestamp (const char* filename)
 {
