@@ -1371,30 +1371,81 @@ wml::FoundryUtilities::getMonthFromLog (std::string& filePath,
 }
 
 void
-wml::FoundryUtilities::getJavascript (std::stringstream& rJavascript,
-				      std::string jsFile)
+wml::FoundryUtilities::getScript (SCRIPT_TYPE script,
+                                  std::stringstream& rScript,
+                                  std::string scriptFile,
+                                  bool inlineOutput)
 {
-	ifstream f;
-	f.open (jsFile.c_str(), ios::in);
+        if (inlineOutput == true) {
+                ifstream f;
+                f.open (scriptFile.c_str(), ios::in);
 
-	if (!f.is_open()) {
-		stringstream msg;
-		msg << "Couldn't open javascript file '" << jsFile << "'";
-		throw runtime_error (msg.str());
-	}
+                if (f.is_open()) {
+                        string openingTag;
+                        string closingTag;
+                        switch (script) {
+                        case SCRIPT_JAVASCRIPT:
+                                openingTag = "<script type=\"text/javascript\" >//<![CDATA[";
+                                closingTag = "//]]> */</script>";
+                                break;
+                        case SCRIPT_CSS:
+                                openingTag = "<style type=\"text/css\" >";
+                                closingTag = "</style>";
+                                break;
+                        default:
+                                openingTag = "<!--";
+                                closingTag = "-->";
+                        }
 
-	// Add the text which tells the browser this is javascript:
-	rJavascript << "<script type=\"text/javascript\" >" << endl;
+                        // Add the text which tells the browser this is script:
+                        rScript << "<!-- " << scriptFile << " -->" << openingTag << endl;
 
-	string line;
-	while (getline (f, line, '\n')) {
-		rJavascript << line << endl;
-	}
+                        string line;
+                        while (getline (f, line, '\n')) {
+                                rScript << line << endl;
+                        }
 
-	rJavascript << "</script>" << endl;
+                        rScript << closingTag << endl;
 
-	f.close();
-	return;
+                        f.close();
+                } else {
+                        rScript << "<!-- Could not open " << scriptFile << " -->" << endl;
+                }
+        } else {
+                string openingTag;
+                string closingTag;
+                switch (script) {
+                case SCRIPT_JAVASCRIPT:
+                        openingTag = "<script type=\"text/javascript\" src=\"";
+                        closingTag = "\"></script>";
+                        break;
+                case SCRIPT_CSS:
+                        openingTag = "<link type=\"text/script\" rel=\"stylesheet\" href=\"";
+                        closingTag = "\" />";
+                        break;
+                default:
+                        openingTag = "<!--";
+                        closingTag = "-->";
+                }
+                rScript << openingTag << scriptFile << closingTag << endl;
+        }
+        return;
+}
+
+void
+wml::FoundryUtilities::getCSS (std::stringstream& rCSS,
+                                      std::string cssFile,
+                                      bool inlineOutput)
+{
+        FoundryUtilities::getScript(SCRIPT_CSS, rCSS, cssFile, inlineOutput);
+}
+
+void
+wml::FoundryUtilities::getJavascript (std::stringstream& rJavascript,
+                                      std::string jsFile,
+                                      bool inlineOutput)
+{
+        FoundryUtilities::getScript(SCRIPT_JAVASCRIPT, rJavascript, jsFile, inlineOutput);
 }
 
 void

@@ -110,6 +110,10 @@ extern "C" {
 
 namespace wml {
 
+        /*!
+         * \brief The type of script file being passed
+         */
+        enum SCRIPT_TYPE {SCRIPT_JAVASCRIPT, SCRIPT_CSS};
 
 	/*!
 	 * Class to allow use of transform and tolower() on strings with GNU compiler
@@ -456,15 +460,38 @@ namespace wml {
 		static unsigned int getMonthFromLog (std::string& filePath,
 						     unsigned int lineNum);
 
-		/*!
-		 * Read a javascript file and output to
-		 * rJavascript. This is a function to use when you
-		 * want to read a javascript file and output it into
-		 * the html, so it adds \<script type="text/javascript"\>
-		 * at the start and \</script\> at the end.
-		 */
-		static void getJavascript (std::stringstream& rJavascript,
-					   std::string jsFile);
+                /*!
+                 * Read a script file and output to rScript. This is a
+                 * function to use when you want to read a script file
+                 * and output it into the html, so it adds the relevant
+                 *  opening and closing tags.
+                 */
+                static void getScript (SCRIPT_TYPE script,
+                                           std::stringstream& rScript,
+                                           std::string scriptFile,
+                                           bool inlineOutput = true);
+
+                /*!
+                 * Read a javascript file and output to
+                 * rJavascript. This is a function to use when you
+                 * want to read a javascript file and output it into
+                 * the html, so it adds \<script type="text/javascript"\>
+                 * at the start and \</script\> at the end.
+                 */
+                static void getJavascript (std::stringstream& rJavascript,
+                                           std::string jsFile,
+                                           bool inlineOutput = true);
+
+                /*!
+                 * Read a CSS file and output to
+                 * rCSS. This is a function to use when you
+                 * want to read a CSS file and output it into
+                 * the html, so it adds \<style type="text/css"\>
+                 * at the start and \</style\> at the end.
+                 */
+                static void getCSS (std::stringstream& rCSS,
+                                    std::string cssFile,
+                                    bool inlineOutput = true);
 
 		/*!
 		 * Take an ascii string and represent the characters
