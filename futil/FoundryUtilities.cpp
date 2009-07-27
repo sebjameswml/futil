@@ -659,7 +659,11 @@ wml::FoundryUtilities::copyFile (string& from, string& to)
 
 	char buf[64];
 	while (!in.eof()) {
-		in.read (buf, 64);
+		in.read (buf, 63);
+		// Terminate the buffer correctly:
+		unsigned int bytes = in.gcount();
+		buf[bytes] = '\0';
+		// And output to fout.
 		out << buf;
 	}
 
