@@ -105,7 +105,8 @@ extern "C" {
 /*! \file FoundryUtilities.h
  * \brief Declares the class \c FoundryUtilities
  *
- * \c FoundryUtilities contains some generally useful static member functions.
+ * \c FoundryUtilities contains some generally useful static member
+ * functions.
  */
 
 namespace wml {
@@ -152,13 +153,10 @@ namespace wml {
 	} wmlint128;
 
 	/*! \class foundryutilities foundryutilities.h futil/foundryutilities.h
-	 * \brief Class that deals with authorizing access to a wml system
 	 *
-	 * The \c foundryutilities class provides methods to generate a password entry box, authenticate
-	 * the password and to check sessions. An object of this class is required
-	 * for every access of a wml system.
+	 * The \c foundryutilities class provides numerous static
+	 * utility functions.
 	 */
-
 	class FoundryUtilities
 	{
 	public:
@@ -475,9 +473,9 @@ namespace wml {
                  *  opening and closing tags.
                  */
                 static void getScript (SCRIPT_TYPE script,
-                                           std::stringstream& rScript,
-                                           std::string scriptFile,
-                                           bool inlineOutput = true);
+				       std::stringstream& rScript,
+				       std::string scriptFile,
+				       bool inlineOutput = true);
 
                 /*!
                  * Read a javascript file and output to
@@ -613,23 +611,28 @@ namespace wml {
 		 * Output the number @num which can be up to 4 32 bit
 		 * bytes wide, represented in base @base.
 		 */
-		static std::string formatUint128InBaseN (UINT32_TYPE * num, UINT32_TYPE numlen, int base);
+		static std::string formatUint128InBaseN (UINT32_TYPE * num,
+							 UINT32_TYPE numlen,
+							 int base);
 
 		/*!
 		 * Multiply two UINT64_TYPE numbers and return the
 		 * result in a wmlint128.
 		 */
-		static wmlint128 bigMultUnsigned (UINT64_TYPE a, UINT64_TYPE b);
+		static wmlint128 bigMultUnsigned (UINT64_TYPE a,
+						  UINT64_TYPE b);
 
 		/*!
 		 * Divide @numerator by @denom, returning result as wmlint128.
 		 */
-		static wmlint128 bigDiv (wmlint128 numerator, UINT64_TYPE denom);
+		static wmlint128 bigDiv (wmlint128 numerator,
+					 UINT64_TYPE denom);
 
 		/*!
 		 * Divide @numerator by @denom, returning modulus as UINT64_TYPE.
 		 */
-		static UINT64_TYPE bigModUnsigned (wmlint128 numerator, UINT64_TYPE denom);
+		static UINT64_TYPE bigModUnsigned (wmlint128 numerator,
+						   UINT64_TYPE denom);
 
 		/*!
 		 * return true if a is greater than or equal to b.
@@ -662,22 +665,26 @@ namespace wml {
 		/*!
 		 * split csv into a vector
 		 */
-		static std::vector<std::string> csvToVector (std::string& csvList, char separator = ',');
+		static std::vector<std::string> csvToVector (std::string& csvList,
+							     char separator = ',');
 
 		/*!
 		 * split csv into a list
 		 */
-		static std::list<std::string> csvToList (std::string& csvList, char separator = ',');
+		static std::list<std::string> csvToList (std::string& csvList,
+							 char separator = ',');
 
 		/*!
 		 * Output a vector of strings as a csv string.
 		 */
-		static std::string vectorToCsv (std::vector<std::string>& vecList, char separator = ',');
+		static std::string vectorToCsv (std::vector<std::string>& vecList,
+						char separator = ',');
 
 		/*!
 		 * Output a list of strings as a csv string.
 		 */
-		static std::string listToCsv (std::list<std::string>& listList, char separator = ',');
+		static std::string listToCsv (std::list<std::string>& listList,
+					      char separator = ',');
 		//@}
 	};
 
