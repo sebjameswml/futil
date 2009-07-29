@@ -308,6 +308,13 @@ namespace wml {
 		static void stripDosPath (std::string& dosPath);
 
 		/*!
+		 * Given a path like /path/to/file in str, remove all
+		 * the preceding /path/to/ stuff to leave just the
+		 * filename.
+		 */
+		static void stripUnixPath (std::string& unixPath);
+
+		/*!
 		 * This could be a template. Return true if v contains
 		 * i.
 		 */

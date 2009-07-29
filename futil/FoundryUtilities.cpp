@@ -817,6 +817,22 @@ wml::FoundryUtilities::stripDosPath (std::string& dosPath)
 	return;
 }
 
+void
+wml::FoundryUtilities::stripUnixPath (std::string& unixPath)
+{
+	string tmp;
+	string::size_type pos;
+
+	if ((pos = unixPath.find_last_of ('/', unixPath.size())) == string::npos) {
+		// cerr << "No '/' character in path apparently" << endl;
+		return;
+	}
+
+	tmp = unixPath.substr (++pos);
+	unixPath = tmp;
+	return;
+}
+
 bool
 wml::FoundryUtilities::vectorContains (std::vector<unsigned int>& v, unsigned int i)
 {
