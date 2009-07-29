@@ -315,6 +315,16 @@ namespace wml {
 		static void stripUnixPath (std::string& unixPath);
 
 		/*!
+		 * Generate a uuid random string as a temporary random
+		 * filename. Pass in the path, and a prefix to
+		 * identify the way the file is to be used. prefixPath
+		 * might be, for example, "/tmp/xml-" ane the
+		 * resulting file could be:
+		 * /tmp/xml-814b3393-e55a-449e-b16b-b5241497b532
+		 */
+		static std::string generateRandomFilename (const char* prefixPath);
+
+		/*!
 		 * This could be a template. Return true if v contains
 		 * i.
 		 */

@@ -25,6 +25,7 @@ extern "C" {
 #include <dirent.h>
 #include <syslog.h>
 #include "debuglog.h"
+#include <uuid/uuid.h>
 }
 
 /*!
@@ -831,6 +832,24 @@ wml::FoundryUtilities::stripUnixPath (std::string& unixPath)
 	tmp = unixPath.substr (++pos);
 	unixPath = tmp;
 	return;
+}
+
+std::string
+wml::FoundryUtilities::generateRandomFilename (const char* prefixPath)
+{
+	string rtn(prefixPath);
+
+	// Create unique file name for temporary XML file
+	unsigned char uuid[50];
+	char uuid_unparsed[37];
+
+	uuid_generate (uuid);
+	uuid_unparse (uuid, uuid_unparsed);
+	uuid_clear (uuid);
+
+	rtn.append (uuid_unparsed);
+
+	return rtn;
 }
 
 bool
