@@ -1601,7 +1601,7 @@ wml::FoundryUtilities::sanitize (std::string& str,
 		if (allowed.find(str[i], 0) == string::npos) {
 			// str[i] is forbidden
 			if (eraseForbidden == true) {
-				str.erase (i);
+				str.erase (i,1);
 			} else {
 				stringstream ss;
 				ss << "Forbidden char '" << str[i]
