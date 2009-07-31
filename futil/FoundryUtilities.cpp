@@ -1105,8 +1105,33 @@ wml::FoundryUtilities::readDirectoryTree (vector<string>& vec,
 	}
 
 	while ((ep = readdir (d))) {
+	        unsigned char fileType;
+	        string fileName = dirPath + "/" + (string)ep->d_name;
+	        if (ep->d_type == DT_LNK) {
+	                // Is it a link to a directory or a file?
+		        struct stat * buf = NULL;
+		        buf = (struct stat*) malloc (sizeof (struct stat));
+		        if (!buf) { // Malloc error.
+		                throw runtime_error ("Failed to malloc buf; could not stat link " + fileName);
+		        }
+		        memset (buf, 0, sizeof(struct stat));
+		        if (stat (fileName.c_str(), buf)) {
+		                throw runtime_error ("Failed to stat link " + fileName);
+		        } else {
+		                if (S_ISREG(buf->st_mode)) {
+		                        fileType = DT_REG;
+		                } else if (S_ISDIR(buf->st_mode)) {
+		                        fileType = DT_DIR;
+		                } else {
+		                        fileType = DT_UNKNOWN;
+		                }
+		        }
+		        if (buf) { free (buf); }
+	        } else {
+	                fileType = ep->d_type;
+	        }
 
-		if (ep->d_type == DT_DIR || ep->d_type == DT_LNK) {
+		if (ep->d_type == DT_DIR) {
 
 			// Skip "." and ".." directories
 			if ( ((entry_len = strlen (ep->d_name)) > 0 && ep->d_name[0] == '.') &&
@@ -1114,7 +1139,7 @@ wml::FoundryUtilities::readDirectoryTree (vector<string>& vec,
 				continue;
 			}
 
-			// For all other links and directories, recurse.
+			// For all other directories, recurse.
 			string newPath;
 			if (sd.size() == 0) {
 				newPath = ep->d_name;
@@ -1122,9 +1147,8 @@ wml::FoundryUtilities::readDirectoryTree (vector<string>& vec,
 				newPath = sd + "/" + ep->d_name;
 			}
 			FoundryUtilities::readDirectoryTree (vec, baseDirPath, newPath.c_str());
-
 		} else {
-			// Non-directories/links are simply added to the vector
+			// Non-directories are simply added to the vector
 			string newEntry;
 			if (sd.size() == 0) {
 				newEntry = ep->d_name;
