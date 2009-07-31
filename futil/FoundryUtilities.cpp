@@ -1131,7 +1131,7 @@ wml::FoundryUtilities::readDirectoryTree (vector<string>& vec,
 	                fileType = ep->d_type;
 	        }
 
-		if (ep->d_type == DT_DIR) {
+		if (fileType == DT_DIR) {
 
 			// Skip "." and ".." directories
 			if ( ((entry_len = strlen (ep->d_name)) > 0 && ep->d_name[0] == '.') &&
