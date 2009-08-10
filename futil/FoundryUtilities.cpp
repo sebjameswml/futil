@@ -645,30 +645,15 @@ wml::FoundryUtilities::dirExists (const char * path)
 void
 wml::FoundryUtilities::copyFile (string& from, string& to)
 {
-	ifstream in;
 	ofstream out;
-
-	in.open (from.c_str(), ios::in);
-	if (!in.is_open()) {
-		throw runtime_error ("Couldn't open FROM file");
-	}
 
 	out.open (to.c_str(), ios::out|ios::trunc);
 	if (!out.is_open()) {
 		throw runtime_error ("Couldn't open TO file");
 	}
 
-	char buf[64];
-	while (!in.eof()) {
-		in.read (buf, 63);
-		// Terminate the buffer correctly:
-		unsigned int bytes = in.gcount();
-		buf[bytes] = '\0';
-		// And output to fout.
-		out << buf;
-	}
+	FoundryUtilities::copyFile (from, out);
 
-	in.close();
 	out.close();
 }
 
@@ -678,6 +663,40 @@ wml::FoundryUtilities::copyFile (const char * from, const char * to)
 	string fromFile(from);
 	string toFile(to);
 	FoundryUtilities::copyFile (fromFile, toFile);
+}
+
+void
+wml::FoundryUtilities::copyFile (string& from, ofstream& to)
+{
+	ifstream in;
+
+	in.open (from.c_str(), ios::in);
+	if (!in.is_open()) {
+		throw runtime_error ("Couldn't open FROM file");
+	}
+
+	if (!to.is_open()) {
+		throw runtime_error ("TO file is not open");
+	}
+
+	char buf[64];
+	while (!in.eof()) {
+		in.read (buf, 63);
+		// Terminate the buffer correctly:
+		unsigned int bytes = in.gcount();
+		buf[bytes] = '\0';
+		// And output to fout.
+		to << buf;
+	}
+
+	in.close();
+}
+
+void
+wml::FoundryUtilities::copyFile (const char * from, ofstream& to)
+{
+	string fromFile(from);
+	FoundryUtilities::copyFile (fromFile, to);
 }
 
 std::string
