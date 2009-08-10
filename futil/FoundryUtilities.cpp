@@ -369,6 +369,47 @@ wml::FoundryUtilities::stripLeadingChars (std::string& input, char c)
 	return i;
 }
 
+int
+wml::FoundryUtilities::searchReplace (const char* searchTerm,
+				      const char* replaceTerm,
+				      std::string& data,
+				      bool replaceAll)
+{
+	int count = 0;
+	string::size_type pos = 0;
+	string::size_type ptr = string::npos;
+
+	if (replaceAll) {
+		pos = data.size();
+		while ((ptr = data.rfind (searchTerm, pos)) != string::npos) {
+			data.erase (ptr, strlen(searchTerm));
+			data.insert (ptr, replaceTerm);
+			pos = ptr;
+			count++;
+		}
+	} else {
+		// Replace first only
+		if ((ptr = data.find (searchTerm, pos)) != string::npos) {
+			data.erase (ptr, strlen(searchTerm));
+			data.insert (ptr, replaceTerm);
+			count++;
+		}
+	}
+
+	return count;
+}
+
+int
+wml::FoundryUtilities::searchReplace (std::string& searchTerm,
+				      std::string& replaceTerm,
+				      std::string& data,
+				      bool replaceAll)
+{
+	const char* st = searchTerm.c_str();
+	const char* rt = replaceTerm.c_str();
+	return FoundryUtilities::searchReplace (st, rt, data, replaceAll);
+}
+
 unsigned int
 wml::FoundryUtilities::getMemory (void)
 {
@@ -682,13 +723,16 @@ wml::FoundryUtilities::copyFile (string& from, ofstream& to)
 	char buf[64];
 	while (!in.eof()) {
 		in.read (buf, 63);
-		// Terminate the buffer correctly:
+		// Find out how many were read
 		unsigned int bytes = in.gcount();
-		buf[bytes] = '\0';
-		// And output to fout.
-		to << buf;
+		// and write that many to the output stream
+		to.write (buf, bytes);
 	}
 
+	// Make sure output buffer is flushed.
+	to.flush();
+
+	// Finally, close the input.
 	in.close();
 }
 

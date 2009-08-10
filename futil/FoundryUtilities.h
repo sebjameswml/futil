@@ -211,6 +211,22 @@ namespace wml {
 		static int stripLeadingChars (std::string& input, char c = ' ');
 
 		/*!
+		 * Do a search and replace, search for searchTerm,
+		 * replacing with replaceTerm. if replaceAll is true,
+		 * replace all occurrences of searchTerm, otherwise
+		 * just replace the first occurrence of searchTerm
+		 * with replaceTerm.
+		 */
+		static int searchReplace (const char* searchTerm,
+					  const char* replaceTerm,
+					  std::string& data,
+					  bool replaceAll = true);
+		static int searchReplace (std::string& searchTerm,
+					  std::string& replaceTerm,
+					  std::string& data,
+					  bool replaceAll = true);
+
+		/*!
 		 * \brief Return the amount of RAM installed on the system.
 		 *
 		 * Returns RAM in bytes.
