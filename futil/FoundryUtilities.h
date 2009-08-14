@@ -720,6 +720,13 @@ namespace wml {
 		 */
 		static std::string listToCsv (std::list<std::string>& listList,
 					      char separator = ',');
+
+		/*!
+		 * Creates jpeg(s) from a pdf file. To create a jpeg for each page
+		 * use %d in the output path in place of the page number.
+		 */
+		static void pdfToJpeg (std::string inputPath, std::string outputPath,
+		                       unsigned int width, unsigned int height);
 		//@}
 	};
 

@@ -13,6 +13,7 @@
 #include <list>
 
 #include "FoundryUtilities.h"
+#include "Process.h"
 
 extern "C" {
 #include <errno.h>
@@ -3035,4 +3036,28 @@ wml::FoundryUtilities::suffix (int n)
 	}
 
 	return suf;
+}
+
+void
+wml::FoundryUtilities::pdfToJpeg (string inputPath, string outputPath, unsigned int width, unsigned int height) {
+        string widthS, heightS;
+        stringstream tempSS, returnSS;
+
+        tempSS << width;
+        widthS = tempSS.str();
+        tempSS.str("");
+        tempSS << height;
+        heightS = tempSS.str();
+        tempSS.str("");
+
+        Process ghostScript;
+        string processPath = "/usr/bin/gs";
+        list<string> args;
+        args.push_back("-dNOPAUSE");
+        args.push_back("-dBATCH");
+        args.push_back("-g" + widthS + "x" + heightS);
+        args.push_back("-sDEVICE=jpeg");
+        args.push_back("-sOutputFile=" + outputPath);
+        args.push_back(inputPath);
+        ghostScript.start(processPath, args);
 }
