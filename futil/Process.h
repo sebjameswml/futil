@@ -13,6 +13,7 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <cstdlib>
 extern "C" {
 #include <sys/poll.h>
 }

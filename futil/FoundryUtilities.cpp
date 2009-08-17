@@ -7,7 +7,6 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <pstream.h>
 #include <cstdlib>
 #include <stdexcept>
 #include <list>
@@ -27,6 +26,7 @@ extern "C" {
 #include <syslog.h>
 #include "debuglog.h"
 #include <uuid/uuid.h>
+#include <string.h>
 }
 
 /*!
