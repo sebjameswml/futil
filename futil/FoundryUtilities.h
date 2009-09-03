@@ -721,12 +721,33 @@ namespace wml {
 		static std::string listToCsv (std::list<std::string>& listList,
 					      char separator = ',');
 
-		/*!
-		 * Creates jpeg(s) from a pdf file. To create a jpeg for each page
-		 * use %d in the output path in place of the page number.
-		 */
-		static void pdfToJpeg (std::string inputPath, std::string outputPath,
-		                       unsigned int width, unsigned int height);
+                /*!
+                 * Converts pdf files to a ghostscript device specified.
+                 */
+                static void pdfConversion (std::string inputPath, std::string outputDevice,
+                                           std::string outputPath, unsigned int width,
+                                           unsigned int height);
+
+                /*!
+                 * Creates jpeg(s) from a pdf file. To create a jpeg for each page
+                 * use %d in the output path in place of the page number.
+                 */
+                static void pdfToJpeg (std::string inputPath, std::string outputPath,
+                                       unsigned int width, unsigned int height) {
+                        pdfConversion(inputPath, "jpeg", outputPath, width, height);
+                }
+
+                /*!
+                 * Creates png(s) from a pdf file. To create a png for each page
+                 * use %d in the output path in place of the page number. The png(s)
+                 * contain an alpha channel. PDF 1.4 transparent files do not give a
+                 * transparent background with this device. Text and graphics anti-aliasing
+                 * are enabled by default.
+                 */
+                static void pdfToPng (std::string inputPath, std::string outputPath,
+                                       unsigned int width, unsigned int height) {
+                        pdfConversion(inputPath, "pngalpha", outputPath, width, height);
+                }
 		//@}
 	};
 

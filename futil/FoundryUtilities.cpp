@@ -1547,7 +1547,7 @@ wml::FoundryUtilities::getScript (SCRIPT_TYPE script,
                         switch (script) {
                         case SCRIPT_JAVASCRIPT:
                                 openingTag = "<script type=\"text/javascript\" >//<![CDATA[";
-                                closingTag = "//]]> */</script>";
+                                closingTag = "//]]></script>";
                                 break;
                         case SCRIPT_CSS:
                                 openingTag = "<style type=\"text/css\" >";
@@ -3039,7 +3039,7 @@ wml::FoundryUtilities::suffix (int n)
 }
 
 void
-wml::FoundryUtilities::pdfToJpeg (string inputPath, string outputPath, unsigned int width, unsigned int height) {
+wml::FoundryUtilities::pdfConversion (string inputPath, string outputDevice, string outputPath, unsigned int width, unsigned int height) {
         string widthS, heightS;
         stringstream tempSS, returnSS;
 
@@ -3056,7 +3056,7 @@ wml::FoundryUtilities::pdfToJpeg (string inputPath, string outputPath, unsigned 
         args.push_back("-dNOPAUSE");
         args.push_back("-dBATCH");
         args.push_back("-g" + widthS + "x" + heightS);
-        args.push_back("-sDEVICE=jpeg");
+        args.push_back("-sDEVICE=" + outputDevice);
         args.push_back("-sOutputFile=" + outputPath);
         args.push_back(inputPath);
         ghostScript.start(processPath, args);
