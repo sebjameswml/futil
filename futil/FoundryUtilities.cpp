@@ -27,6 +27,7 @@ extern "C" {
 #include "debuglog.h"
 #include <uuid/uuid.h>
 #include <string.h>
+#include <iconv.h>
 }
 
 /*!
@@ -3060,4 +3061,85 @@ wml::FoundryUtilities::pdfConversion (string inputPath, string outputDevice, str
         args.push_back("-sOutputFile=" + outputPath);
         args.push_back(inputPath);
         ghostScript.start(processPath, args);
+}
+
+// Probably "doIconv8to8" cf "doIconv8to16" etc.
+#define ICONV_INBUF_SIZE 128
+#define ICONV_OUTBUF_SIZE 256
+void
+wml::FoundryUtilities::doIconv (const char * fromEncoding,
+				const char * toEncoding,
+				std::string& fromString,
+				std::string& toString)
+{
+	// We'll read ICONV_INBUF_SIZE bytes at a time from fromString into inbuf...
+	char inbuf[ICONV_INBUF_SIZE];
+	char* ibp = inbuf;
+	// ...and write the transcoded output into outbuf, which is
+	// twice as big, in case the output encoding is twice as wide.
+	char outbuf[ICONV_OUTBUF_SIZE];
+	char* obp = outbuf;
+
+	stringstream ss;
+
+	iconv_t cd = iconv_open (toEncoding, fromEncoding);
+	if (cd == (iconv_t)-1) {
+		stringstream ee;
+		ee << __FUNCTION__ << ": iconv initialization error for conversion from "
+		   << fromEncoding << " to " << toEncoding;
+		throw runtime_error (ee.str());
+	}
+
+	string::size_type pos = 0;
+	while (pos < fromString.size()) {
+
+		// Zero buffers and reset pointers
+		memset (inbuf, 0, ICONV_INBUF_SIZE);
+		memset (outbuf, 0, ICONV_OUTBUF_SIZE);
+		ibp = inbuf;
+		obp = outbuf;
+
+		string subs = fromString.substr (pos, ICONV_INBUF_SIZE);
+		pos += subs.size();
+		strncpy (inbuf, subs.c_str(), ICONV_INBUF_SIZE);
+
+		size_t inbufleft = subs.size();
+		size_t outbufleft = ICONV_OUTBUF_SIZE;
+
+		//cerr << "Before iconv() call, inbuf is '" << inbuf << "' outbuf is '" << outbuf
+		//     << "' inbufleft is " << inbufleft << " and outbufleft is " << outbufleft << endl;
+
+		size_t iconv_rtn = 0;
+		iconv_rtn = iconv (cd, &ibp, &inbufleft, &obp, &outbufleft);
+		if (iconv_rtn == (size_t)-1) {
+
+			int theE = errno;
+
+			if (theE == EINVAL) {
+				throw runtime_error ("Need to deal with this... (memmove?)");
+			} else {
+				stringstream ee;
+				ee << __FUNCTION__ << ": Error in iconv(), errno: " << theE;
+				throw runtime_error (ee.str());
+			}
+
+		} else {
+			// cerr << "iconv() returned " << iconv_rtn << endl;
+		}
+		//cerr << "After iconv call, outbuf is '" << obp << "' and bytes used is "
+		//     << ICONV_OUTBUF_SIZE - outbufleft << "\n";
+
+		size_t i = 0;
+		while (i<ICONV_OUTBUF_SIZE-outbufleft) {
+			//cerr << "outbuf["<<i<<"]=" << (int)outbuf[i] << "(" << outbuf[i] << ")" << endl;
+			// Seems to be necessary to fill ss char by char (at least after first call to iconv()):
+			ss << outbuf[i];
+			i++;
+		}
+	}
+
+	toString = ss.str();
+
+	iconv_close (cd);
+	return;
 }

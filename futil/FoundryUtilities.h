@@ -403,7 +403,6 @@ namespace wml {
 		 */
 		static void getMacAddr (unsigned int* mac);
 
-
 		/*!
 		 * Get the mac address from the string @macStr
 		 *
@@ -673,6 +672,7 @@ namespace wml {
 		 * return true if a is greater than or equal to b.
 		 */
 		static bool bigGTE (wmlint128 a, UINT64_TYPE b);
+		//@}
 
 		/*!
 		 * Increment the count stored in the file given by
@@ -748,7 +748,28 @@ namespace wml {
                                        unsigned int width, unsigned int height) {
                         pdfConversion(inputPath, "pngalpha", outputPath, width, height);
                 }
-		//@}
+
+		/*!
+		 * A wrapper around the iconv() call from glibc.
+		 *
+		 * @param fromEncoding The iconv-style encoding
+		 * specifier from which the string needs to be
+		 * transcoded. You can get a list of possible values
+		 * using iconv --list on any normal system. Examples
+		 * might be UTF-8, UTF-16BE, ISO8859-1
+		 *
+		 * @param toEncoding The iconv-style encoding specifer
+		 * into which the string should be converted.
+		 *
+		 * @param fromString The string in its existing format.
+		 *
+		 * @param toString A container into which the
+		 * transcoded string will be placed.
+		 */
+		static void doIconv (const char * fromEncoding,
+				     const char * toEncoding,
+				     std::string& fromString,
+				     std::string& toString);
 	};
 
 } // namespace wml

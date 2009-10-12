@@ -3,6 +3,11 @@ AUTOMAKE_OPTIONS = check-news dist-bzip2
 
 SUBDIRS = futil doc
 
+bin_PROGRAMS = testDoIconv
+
+testDoIconv_SOURCES = testDoIconv.cpp
+testDoIconv_LDADD = futil/libfutil.la -luuid
+
 INCLUDES = -I./futil
 
 CLEANFILES = *~
