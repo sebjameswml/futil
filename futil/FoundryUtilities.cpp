@@ -10,6 +10,7 @@
 #include <cstdlib>
 #include <stdexcept>
 #include <list>
+#include <algorithm>
 
 #include "FoundryUtilities.h"
 #include "Process.h"
@@ -399,6 +400,42 @@ wml::FoundryUtilities::searchReplace (const char* searchTerm,
 	}
 
 	return count;
+}
+
+void
+wml::FoundryUtilities::conditionAsXmlTag (std::string& str)
+{
+	// 1) Replace chars which are disallowed in an XML tag
+	string::size_type ptr = string::npos;
+
+	// We allow numeric and alpha chars, the underscore and the
+	// hyphen. colon strictly allowed, but best avoided.
+	while ((ptr = str.find_last_not_of (CHARS_NUMERIC_ALPHA"_-", ptr)) != string::npos) {
+		// Replace the char with an underscore:
+		str[ptr] = '_';
+		ptr--;
+	}
+
+	// 2) Check first 3 chars don't spell xml (in any case)
+	string firstThree = str.substr (0,3);
+	transform (firstThree.begin(), firstThree.end(),
+		   firstThree.begin(), wml::to_lower());
+	if (firstThree == "xml") {
+		// Prepend 'A'
+		string newStr("_");
+		newStr += str;
+		str = newStr;
+	}
+
+	// 3) Prepend an 'N' if initial char begins with a numeral or hyphen
+	if (str[0] > 0x29 && str[0] < 0x3a) {
+		// Prepend 'N'
+		string newStr("_");
+		newStr += str;
+		str = newStr;
+	}
+
+	return;
 }
 
 int

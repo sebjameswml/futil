@@ -227,6 +227,14 @@ namespace wml {
 					  bool replaceAll = true);
 
 		/*!
+		 * Take the string str and condition it, so that it
+		 * makes a valid XML tag. replace disallowed
+		 * characters with '_' and make sure it doesn't start
+		 * with a numeral.
+		 */
+		static void conditionAsXmlTag (std::string& str);
+
+		/*!
 		 * \brief Return the amount of RAM installed on the system.
 		 *
 		 * Returns RAM in bytes.

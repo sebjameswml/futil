@@ -19,7 +19,7 @@ int main ()
 		return -1;
 	}
 
-	cout << "Transcoded: '" << outputString << "'\n";
+	cerr << "Transcoded: '" << outputString << "'\n";
 
 
 
@@ -33,13 +33,15 @@ int main ()
 		return -1;
 	}
 
-	cout << "Transcoded: '" << outputString2 << "'\n";
+	cerr << "Transcoded: '" << outputString2 << "'\n";
 
 	string::size_type i = 0;
 	while (i<outputString2.size()) {
-		cout << "char " << i << " is " << (int)outputString2[i] << "(" << (char)outputString2[i] << ")" << endl;
+		cerr << "char " << i << " is " << (int)outputString2[i] << "(" << (char)outputString2[i] << ")" << endl;
 		i++;
 	}
+
+	cout << outputString2;
 
 	return 0;
 }
