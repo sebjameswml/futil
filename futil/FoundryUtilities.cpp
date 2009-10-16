@@ -3180,3 +3180,73 @@ wml::FoundryUtilities::doIconv (const char * fromEncoding,
 	iconv_close (cd);
 	return;
 }
+
+void
+wml::FoundryUtilities::openFilestreamForAppend (fstream& f, const char * filepath)
+{
+	stringstream errss;
+
+	closeFilestream (f);
+
+	try {
+		f.open (filepath, ios::out|ios::app);
+	} catch (ios_base::failure& e) {
+		errss << "exception opening for append: " << e.what();
+		throw runtime_error (errss.str());
+	}
+
+	if (!f.is_open()) {
+		throw runtime_error ("Failed to open file for appending");
+	}
+	return;
+}
+
+void
+wml::FoundryUtilities::openFilestreamForAppend (fstream& f, const string& filepath)
+{
+	openFilestreamForAppend (f, filepath.c_str());
+	return;
+}
+
+void
+wml::FoundryUtilities::openFilestreamForOverwrite (fstream& f, const char * filepath)
+{
+	stringstream errss;
+
+	closeFilestream (f);
+
+	try {
+		f.open (filepath, ios::out|ios::trunc);
+	} catch (ios_base::failure& e) {
+		errss << "exception opening for overwrite: " << e.what();
+		throw runtime_error (errss.str());
+	}
+
+	if (!f.is_open()) {
+		throw runtime_error ("Failed to open file for overwriting");
+	}
+	return;
+}
+
+void
+wml::FoundryUtilities::openFilestreamForOverwrite (fstream& f, const string& filepath)
+{
+	openFilestreamForOverwrite (f, filepath.c_str());
+	return;
+}
+
+void
+wml::FoundryUtilities::closeFilestream (fstream& f)
+{
+	stringstream errss;
+	if (f.is_open()) {
+		try {
+			f.clear();
+			f.close();
+		} catch (ios_base::failure& e) {
+			errss << "exception closing filestream: " << e.what();
+			throw runtime_error (errss.str());
+		}
+	}
+	return;
+}

@@ -778,6 +778,40 @@ namespace wml {
 				     const char * toEncoding,
 				     std::string& fromString,
 				     std::string& toString);
+
+		/*!
+		 * Opens (or re-opens) the referenced filestream in the
+		 * correct state for overwriting.
+		 */
+		static void openFilestreamForOverwrite (std::fstream& f,
+							const char * filepath);
+
+		/*!
+		 * Opens (or re-opens) the referenced filestream in the
+		 * correct state for overwriting.
+		 */
+		static void openFilestreamForOverwrite (std::fstream& f,
+							const std::string& filepath);
+
+		/*!
+		 * Opens (or re-opens) the referenced filestream in the
+		 * correct state for appending.
+		 */
+		static void openFilestreamForAppend (std::fstream& f,
+						     const char * filepath);
+
+		/*!
+		 * Opens (or re-opens) the referenced filestream in the
+		 * correct state for appending.
+		 */
+		static void openFilestreamForAppend (std::fstream& f,
+						     const std::string& filepath);
+
+		/*!
+		 * Close the filestream if necessary
+		 */
+		static void closeFilestream (std::fstream& f);
+
 	};
 
 } // namespace wml
