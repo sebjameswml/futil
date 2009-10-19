@@ -39,6 +39,10 @@
  * You then call ./configure with
  * --enable-debug-logging if you want DEBUG defined.
  *
+ * Note that futil DOESN'T itself need to be compiled with
+ * --enable-debug-logging for some other module to generate debug
+ * logging using futil/WmlDbg.h.
+ *
  * How it works:
  *
  * All debug messages are sent to the DBGSTREAM ofstream. The client
