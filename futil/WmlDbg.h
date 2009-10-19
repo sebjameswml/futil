@@ -74,12 +74,10 @@
 #ifndef _WMLDBG_H_
 #define _WMLDBG_H_
 
-#ifdef DEBUG
-# ifndef DBGSTREAM
-#  define DBGSTREAM wmlDbg
-#  include <fstream>
-   extern std::ofstream DBGSTREAM;
-# endif
+#ifndef DBGSTREAM
+# define DBGSTREAM wmlDbg
+# include <fstream>
+  extern std::ofstream DBGSTREAM;
 #endif
 
 /*
