@@ -1,27 +1,65 @@
 /*!
- * The standard WML debugging scheme. include this file, WmlDbg.h, in
- * your program, make sure it links to libfutil, and early in the
- * main() function, open the DBGSTREAM ofstream. Then, if you have
- * DEBUG defined, then you can use DBG() and debuglog() macros in your
- * code.
+ * The standard WML debugging scheme.
+ *
+ * Instructions:
+ *
+ * Include this file, WmlDbg.h, in
+ * each .cpp file in your module. Then, if you have DEBUG defined,
+ * then you can use DBG() and debuglog() macros in your code.
+ *
+ * To actually get the DBG messages into a file, any executables built
+ * must be linked to libfutil and include these lines:
+ *
+ * #include <futil/WmlDbg.h>
+ * std::ofstream DBGSTREAM;
+ *
+ * Then, early in the main() function, open
+ * the DBGSTREAM ofstream like this:
+ *
+ * DBGOPEN ("/tmp/debug.log");
  *
  * The standard way to have DEBUG defined is to have a configure.ac
  * stanza in your client module, which #defines DEBUG in
- * mymodule/mymodule/config.h. You then
+ * mymodule/mymodule/config.h:
  *
- * All debug messages are sent to the DBGSTREAM ofstream.
+ * dnl enable/disable debug logging, if specified
+ * AC_ARG_ENABLE(debug-logging,
+ *   [  --enable-debug-logging  enable debug logging for mymodule [default=no]],
+ *   [case "${enableval}" in
+ *     yes) mymodule_debug=yes ;;
+ *     no)  mymodule_debug=no ;;
+ *     *) AC_MSG_ERROR(bad value ${enableval} for --enable-debug-logging) ;;
+ *   esac], mymodule_debug=no)
+ * AC_MSG_CHECKING(whether to enable debug logging)
+ * AC_MSG_RESULT($mymodule_debug)
+ * if test "$mymodule_debug" = yes; then
+ *   AC_DEFINE(DEBUG, 1, [Define if debug logging is enabled])
+ * fi
  *
- * wmlDbg is a global and is compiled into futil.
+ * You then call ./configure with
+ * --enable-debug-logging if you want DEBUG defined.
  *
- * Macros are available - DBG, DBG2 and so on. modules can define
- * specialised versions of the macros, DBGOUTPUT and so on, which
- * generate a useful prefix, but all output to the wmlDbg
- * ofstream. Client programs have to open a file into which to send
- * the ofstream data. The name of that file is up to the program to
- * decide.
+ * How it works:
  *
- * Where we have previously used the cgicc LOGLN() macro we need to
- * move to the DBG() macro.
+ * All debug messages are sent to the DBGSTREAM ofstream. The client
+ * code should open this ofstream so that debug messages end up in a
+ * file, or sent to stderr, as required.
+ *
+ * The DBGSTREAM ofstream needs to be declared globally in the same
+ * file as the main() function for the executable.
+ *
+ * Macros are available to open the debug ofstream (DBGOPEN) and to
+ * close it (DBGCLOSE). DBG and DBG2 are macros to actually emit a
+ * debug message. The argument to DBG() can be used like a stream, so
+ * this works:
+ *
+ * int i = 1;
+ * DBG ("The integer is " << i);
+ *
+ * NB: Where we have previously used the cgicc LOGLN() macro (in our
+ * webui stuff) we need to move to the DBG() macro.
+ *
+ * Extending:
  *
  * If you want to extend the debugging messages, then, as well as
  * #including WmlDbg.h, #include a new file, moduleDbg.h which adds
@@ -30,16 +68,17 @@
  * #define DBGNEWFEATURE(s)  DBGSTREAM << "NEWFEATURE: "
  *                                     << __FUNCTION__ << ": "
  *                                     << s << endl;
+ *
  */
 
 #ifndef _WMLDBG_H_
 #define _WMLDBG_H_
 
 #ifdef DEBUG
-# include <fstream>
 # ifndef DBGSTREAM
 #  define DBGSTREAM wmlDbg
-extern std::ofstream DBGSTREAM;
+#  include <fstream>
+   extern std::ofstream DBGSTREAM;
 # endif
 #endif
 
