@@ -1,6 +1,11 @@
 
 AUTOMAKE_OPTIONS = check-news dist-bzip2
 
+bin_PROGRAMS = testfutil
+
+testfutil_SOURCES = testfutil.cpp
+testfutil_LDADD = futil/libfutil.la -luuid
+
 SUBDIRS = futil doc
 
 bin_PROGRAMS = testDoIconv testXmlCondition

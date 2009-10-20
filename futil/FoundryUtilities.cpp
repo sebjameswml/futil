@@ -381,13 +381,21 @@ wml::FoundryUtilities::searchReplace (const char* searchTerm,
 	int count = 0;
 	string::size_type pos = 0;
 	string::size_type ptr = string::npos;
-
+	string::size_type stl = strlen (searchTerm);
 	if (replaceAll) {
 		pos = data.size();
 		while ((ptr = data.rfind (searchTerm, pos)) != string::npos) {
-			data.erase (ptr, strlen(searchTerm));
+			data.erase (ptr, stl);
 			data.insert (ptr, replaceTerm);
-			pos = ptr;
+			if (ptr >= stl) {
+				// This is a move backwards along the
+				// string far enough that we don't
+				// match a substring of the last
+				// replaceTerm in the next search.
+				pos = ptr - stl;
+			} else {
+				break;
+			}
 			count++;
 		}
 	} else {
