@@ -954,6 +954,15 @@ wml::FoundryUtilities::generateRandomFilename (const char* prefixPath)
 	return rtn;
 }
 
+std::string
+wml::FoundryUtilities::generateRandomFilename (const char* prefixPath, unsigned int numChars)
+{
+	unsigned int length = numChars + strlen (prefixPath);
+	string rtn = generateRandomFilename (prefixPath);
+	return rtn.substr (0, length);
+}
+
+
 bool
 wml::FoundryUtilities::vectorContains (std::vector<unsigned int>& v, unsigned int i)
 {

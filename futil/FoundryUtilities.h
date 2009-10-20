@@ -344,11 +344,23 @@ namespace wml {
 		 * Generate a uuid random string as a temporary random
 		 * filename. Pass in the path, and a prefix to
 		 * identify the way the file is to be used. prefixPath
-		 * might be, for example, "/tmp/xml-" ane the
+		 * might be, for example, "/tmp/xml-" and the
 		 * resulting file could be:
 		 * /tmp/xml-814b3393-e55a-449e-b16b-b5241497b532
 		 */
 		static std::string generateRandomFilename (const char* prefixPath);
+
+		/*!
+		 * Generate a uuid random string as a temporary random
+		 * filename. Pass in the path, including a prefix to
+		 * identify the way the file is to be used, and the
+		 * number of characters of the uuid string to
+		 * include. For example with prefixPath "/tmp/xml-"
+		 * and numChars equal to 8, the resulting file could
+		 * be: /tmp/xml-814b3393
+		 */
+		static std::string generateRandomFilename (const char* prefixPath,
+							   unsigned int numChars);
 
 		/*!
 		 * This could be a template. Return true if v contains
