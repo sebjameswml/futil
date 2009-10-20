@@ -114,8 +114,10 @@
 
 #ifdef DEBUG2
 # define DBG2(s)  DBGSTREAM << "DBG2: " << __FUNCTION__ << ": " << s << endl;
+# define debuglog2(type, format, ...) syslog(type, format, __VA_ARGS__)
 #else
 # define DBG2(s)
+# define debuglog2(type, format, ...)
 #endif
 
 #endif // _WMLDBG_H_
