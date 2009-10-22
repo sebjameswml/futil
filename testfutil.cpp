@@ -11,6 +11,9 @@ using namespace wml;
 
 int main(int argc, char** argv)
 {
+	cout << "Running this program at time: "
+	     << FoundryUtilities::timeNow() << endl;
+
 	string s ("\\\\\\\\"); // Should be "\\\\" - 4 backslashes
 	cout << "s at beginning is         '" << s << "'\n";
 	FoundryUtilities::searchReplace ("\\\\", "\\", s, true);

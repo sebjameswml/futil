@@ -514,6 +514,11 @@ namespace wml {
 					      char separator = '\0');
 
 		/*!
+		 * Return the current time in neat string format.
+		 */
+		static std::string timeNow (void);
+
+		/*!
 		 * Read the lineNum'th line of the syslog file and
 		 * obtain the month, returning it. (1==Jan, 12==Dec).
 		 */

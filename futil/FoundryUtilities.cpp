@@ -1521,6 +1521,16 @@ wml::FoundryUtilities::numToDate (time_t epochSeconds,
 	return rtn.str();
 }
 
+string
+wml::FoundryUtilities::timeNow (void)
+{
+	time_t curtime;
+	struct tm *loctime;
+	curtime = time (NULL);
+	loctime = localtime (&curtime);
+	return asctime(loctime);
+}
+
 unsigned int
 wml::FoundryUtilities::getMonthFromLog (std::string& filePath,
 					unsigned int lineNum)
