@@ -14,6 +14,8 @@ int main(int argc, char** argv)
 	cout << "Running this program at time: "
 	     << FoundryUtilities::timeNow() << endl;
 
+	FoundryUtilities::createDir ("/tmp/seb/another");
+
 	string s ("\\\\\\\\"); // Should be "\\\\" - 4 backslashes
 	cout << "s at beginning is         '" << s << "'\n";
 	FoundryUtilities::searchReplace ("\\\\", "\\", s, true);

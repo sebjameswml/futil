@@ -3,6 +3,7 @@
 #endif
 
 #include "config.h"
+#include "WmlDbg.h"
 
 #include <iostream>
 #include <fstream>
@@ -720,6 +721,94 @@ wml::FoundryUtilities::dirExists (std::string& path)
 		// Dir does exist.
 		(void) closedir (d);
 		return true;
+	}
+}
+
+void
+wml::FoundryUtilities::createDir (std::string path)
+{
+	string::size_type pos, lastPos = path.size()-1;
+	vector<string> dirs;
+	while ((pos = path.find_last_of ('/', lastPos)) != 0) {
+		dirs.push_back (path.substr(pos+1, lastPos-pos));
+		DBG ("Push back directory " << path.substr(pos+1, lastPos-pos));
+		lastPos = pos-1;
+	}
+	DBG ("Push back directory " << path.substr(1, lastPos));
+	dirs.push_back (path.substr(1, lastPos));
+
+	vector<string>::reverse_iterator i = dirs.rbegin();
+	string prePath("");
+	while (i != dirs.rend()) {
+		prePath += "/" + *i;
+		DBG ("mkdir " << prePath.c_str());
+		int rtn = mkdir (prePath.c_str(), 0775);
+		if (rtn) {
+			int e = errno;
+			stringstream emsg;
+			emsg << "createDir(): mkdir() set error: ";
+			switch (e) {
+			case EACCES:
+				emsg << "Permission is denied";
+				break;
+			case EEXIST:
+				//emsg << "Path exists, maybe not as a directory";
+				i++;
+				continue;
+				break;
+			case EFAULT:
+				emsg << "Bad address";
+				break;
+			case ELOOP:
+				emsg << "Too many symlinks";
+				break;
+			case ENAMETOOLONG:
+				emsg << "File name too long";
+				break;
+			case ENOENT:
+				emsg << "Path invalid (part or all of it)";
+				break;
+			case ENOMEM:
+				emsg << "Out of kernel memory";
+				break;
+			case ENOSPC:
+				emsg << "Out of storage space/quota exceeded.";
+				break;
+			case ENOTDIR:
+				emsg << "component of the path is not a directory";
+				break;
+			case EPERM:
+				emsg << "file system doesn't support directory creation";
+				break;
+			case EROFS:
+				emsg << "path refers to location on read only filesystem";
+				break;
+			default:
+				emsg << "unknown error";
+				break;
+			}
+			throw runtime_error (emsg.str());
+		}
+		i++;
+	}
+}
+
+void
+wml::FoundryUtilities::touchFile (std::string path)
+{
+	ofstream f;
+	f.open (path.c_str(), ios::out|ios::app);
+	if (!f.is_open()) {
+		f.open (path.c_str(), ios::out|ios::trunc);
+		if (!f.is_open()) {
+			string emsg = "Failed to create file '" + path + "'";
+			throw runtime_error (emsg);
+		} else {
+			f.close();
+		}
+	} else {
+		// File is open, was already there
+		f.close();
 	}
 }
 
@@ -1743,6 +1832,7 @@ wml::FoundryUtilities::sanitize (std::string& str,
 	}
 }
 
+#ifdef WMLPPLOCK_REQUIRED
 #define WMLPPLOCK_TIMEOUT 5000 // ms
 bool
 wml::FoundryUtilities::getWmlppLock (void)
@@ -1838,7 +1928,6 @@ wml::FoundryUtilities::getWmlppLock (void)
 	return true;
 }
 
-
 void
 wml::FoundryUtilities::releaseWmlppLock (void)
 {
@@ -1921,6 +2010,7 @@ wml::FoundryUtilities::releaseWmlppLock (void)
 
 	debuglog2 (LOG_DEBUG, "%s: returning", __FUNCTION__);
 }
+#endif // WMLPPLOCK_REQUIRED
 
 void
 wml::FoundryUtilities::coutFile (const char* filePath)

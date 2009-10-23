@@ -278,6 +278,16 @@ namespace wml {
 		//@}
 
 		/*!
+		 * Create the directory. Wrapper around mkdir()
+		 */
+		static void createDir (std::string path);
+
+		/*!
+		 * Touch the file.
+		 */
+		static void touchFile (std::string path);
+
+		/*!
 		 * Copy a file. Throw exception on failure.
 		 */
 		//@{
@@ -303,6 +313,7 @@ namespace wml {
 		 */
 		static void releaseLock (int fd);
 
+#ifdef WMLPPLOCK_REQUIRED
 		/*!
 		 * Obtain a "WMLPP Platform lock"
 		 */
@@ -312,7 +323,7 @@ namespace wml {
 		 * Release a "WMLPP Platform lock"
 		 */
 		static void releaseWmlppLock (void);
-
+#endif
 		/*!
 		 * Replace '\' with '\\' so that str is suitable to be
 		 * placed in a shell script.
