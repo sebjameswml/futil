@@ -843,7 +843,7 @@ wml::FoundryUtilities::copyFile (const char * from, const char * to)
 }
 
 void
-wml::FoundryUtilities::copyFile (string& from, ofstream& to)
+wml::FoundryUtilities::copyFile (string& from, ostream& to)
 {
 	ifstream in;
 
@@ -852,8 +852,8 @@ wml::FoundryUtilities::copyFile (string& from, ofstream& to)
 		throw runtime_error ("Couldn't open FROM file");
 	}
 
-	if (!to.is_open()) {
-		throw runtime_error ("TO file is not open");
+	if (!to) {
+		throw runtime_error ("Error occurred in TO stream");
 	}
 
 	char buf[64];
@@ -873,7 +873,7 @@ wml::FoundryUtilities::copyFile (string& from, ofstream& to)
 }
 
 void
-wml::FoundryUtilities::copyFile (const char * from, ofstream& to)
+wml::FoundryUtilities::copyFile (const char * from, ostream& to)
 {
 	string fromFile(from);
 	FoundryUtilities::copyFile (fromFile, to);
