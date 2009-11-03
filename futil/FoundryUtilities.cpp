@@ -1572,6 +1572,64 @@ wml::FoundryUtilities::dateToNum (std::string& dateStr)
 
 
 std::string
+wml::FoundryUtilities::numToDateTime (time_t epochSeconds,
+				      char dateSeparator,
+				      char timeSeparator)
+{
+	struct tm * t;
+	time_t es = epochSeconds;
+	t = (struct tm*) malloc (sizeof (struct tm));
+	t = localtime_r (&es, t);
+	int theDay = t->tm_mday;
+	int theMonth = t->tm_mon+1;
+	int theYear = t->tm_year+1900;
+	int theHour = t->tm_hour;
+	int theMin = t->tm_min;
+	int theSec = t->tm_sec;
+	free (t);
+
+	stringstream rtn;
+
+	// Date part
+	rtn.width(4);
+	rtn.fill('0');
+	rtn << theYear;
+	if (dateSeparator != '\0') {
+		rtn << dateSeparator;
+	}
+	rtn.width(2);
+	rtn.fill('0');
+	rtn << theMonth;
+	if (dateSeparator != '\0') {
+		rtn << dateSeparator;
+	}
+	rtn.width(2);
+	rtn.fill('0');
+	rtn << theDay;
+
+	rtn << " ";
+
+	// Time part
+	rtn.width(2);
+	rtn.fill('0');
+	rtn << theHour;
+	if (timeSeparator != '\0') {
+		rtn << timeSeparator;
+	}
+	rtn.width(2);
+	rtn.fill('0');
+	rtn << theMin;
+	if (timeSeparator != '\0') {
+		rtn << timeSeparator;
+	}
+	rtn.width(2);
+	rtn.fill('0');
+	rtn << theSec;
+
+	return rtn.str();
+}
+
+std::string
 wml::FoundryUtilities::numToDate (time_t epochSeconds,
 				  char separator)
 {

@@ -518,6 +518,15 @@ namespace wml {
 		static time_t dateToNum (std::string& dateStr);
 
 		/*!
+		 * Convert a unix epoch number to a date/time of form
+		 * 2009-02-16 02:03:01, using dateSeparator to delimit
+		 * the date and timeSeparator to delimit the time.
+		 */
+		static std::string numToDateTime (time_t epochSeconds,
+						  char dateSeparator = '\0',
+						  char timeSeparator = '\0');
+
+		/*!
 		 * Convert a unix epoch number to a date of form
 		 * 2009-02-16, using separator to delimit the date.
 		 */
