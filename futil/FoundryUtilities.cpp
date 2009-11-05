@@ -2230,7 +2230,7 @@ wml::FoundryUtilities::addChar (int n, string& str, int base, bool at_start)
 			break;
 		default:
 			// whoop whoop
-			throw runtime_error ("Error: n > 9!");
+			throw runtime_error ("Error: n > 15!");
 		}
 		break;
 
@@ -3140,7 +3140,8 @@ wml::FoundryUtilities::zeroFileCount (const char * filePath)
 }
 
 std::vector<std::string>
-wml::FoundryUtilities::csvToVector (std::string& csvList, char separator)
+wml::FoundryUtilities::csvToVector (std::string& csvList, char separator,
+				    bool ignoreTrailingEmptyVal)
 {
 	vector<string> theVec;
 	string csvl (csvList);
@@ -3157,6 +3158,10 @@ wml::FoundryUtilities::csvToVector (std::string& csvList, char separator)
 		b = csvl.size();
 		entry = csvl.substr (a, b-a);
 		theVec.push_back (entry);
+	} else {
+		if (!ignoreTrailingEmptyVal) {
+			theVec.push_back ("");
+		}
 	}
 
 	return theVec;

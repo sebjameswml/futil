@@ -746,7 +746,8 @@ namespace wml {
 		 * split csv into a vector
 		 */
 		static std::vector<std::string> csvToVector (std::string& csvList,
-							     char separator = ',');
+							     char separator = ',',
+							     bool ignoreTrailingEmptyVal = true);
 
 		/*!
 		 * split csv into a list
