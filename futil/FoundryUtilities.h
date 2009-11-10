@@ -495,6 +495,11 @@ namespace wml {
 		static unsigned int monthNow (void);
 
 		/*!
+		 * Return the current date.
+		 */
+		static unsigned int dateNow (void);
+
+		/*!
 		 * Given the month as an int, where 1==Jan, 12==Dec,
 		 * return the month as a string. If shortFormat is true,
 		 * return "Jan", "Dec", etc., otherwise "January",
@@ -512,7 +517,7 @@ namespace wml {
 		 * Convert a date of form 2009-02-16 to the unix epoch
 		 * number. The fifth character of the string is
 		 * examined, and if it is not a numeral, it is used as
-		 * teh separator. If the fifth character IS a numeral,
+		 * the separator. If the fifth character IS a numeral,
 		 * then the date format is read in as YYYYMMDD.
 		 */
 		static time_t dateToNum (std::string& dateStr);

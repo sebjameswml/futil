@@ -1406,6 +1406,17 @@ wml::FoundryUtilities::monthNow (void)
 	return theMonth;
 }
 
+unsigned int
+wml::FoundryUtilities::dateNow (void)
+{
+	time_t curtime; // Current time
+	struct tm * t;
+	curtime = time(NULL);
+	t = localtime (&curtime);
+	unsigned int theDate = static_cast<unsigned int>(t->tm_mday);
+	return theDate;
+}
+
 string
 wml::FoundryUtilities::monthStr (int month, bool shortFormat)
 {
