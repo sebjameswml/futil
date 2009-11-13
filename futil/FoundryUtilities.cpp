@@ -436,9 +436,9 @@ wml::FoundryUtilities::conditionAsXmlTag (std::string& str)
 		str = newStr;
 	}
 
-	// 3) Prepend an 'N' if initial char begins with a numeral or hyphen
+	// 3) Prepend an '_' if initial char begins with a numeral or hyphen
 	if (str[0] > 0x29 && str[0] < 0x3a) {
-		// Prepend 'N'
+		// Prepend '_'
 		string newStr("_");
 		newStr += str;
 		str = newStr;
