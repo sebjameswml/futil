@@ -1804,7 +1804,7 @@ wml::FoundryUtilities::getScript (SCRIPT_TYPE script,
                         closingTag = "\"></script>";
                         break;
                 case SCRIPT_CSS:
-                        openingTag = "<link type=\"text/script\" rel=\"stylesheet\" href=\"";
+                        openingTag = "<link type=\"text/css\" rel=\"stylesheet\" href=\"";
                         closingTag = "\" />";
                         break;
                 default:
