@@ -1818,8 +1818,8 @@ wml::FoundryUtilities::getScript (SCRIPT_TYPE script,
 
 void
 wml::FoundryUtilities::getCSS (std::stringstream& rCSS,
-                                      std::string cssFile,
-                                      bool inlineOutput)
+			       std::string cssFile,
+			       bool inlineOutput)
 {
         FoundryUtilities::getScript(SCRIPT_CSS, rCSS, cssFile, inlineOutput);
 }
