@@ -727,21 +727,26 @@ wml::FoundryUtilities::dirExists (std::string& path)
 void
 wml::FoundryUtilities::createDir (std::string path)
 {
+	if (path.empty()) {
+		// Create no directory. Just return.
+		return;
+	}
+
 	string::size_type pos, lastPos = path.size()-1;
 	vector<string> dirs;
 	while ((pos = path.find_last_of ('/', lastPos)) != 0) {
 		dirs.push_back (path.substr(pos+1, lastPos-pos));
-		DBG ("Push back directory " << path.substr(pos+1, lastPos-pos));
+		DBG2 ("Push back directory " << path.substr(pos+1, lastPos-pos));
 		lastPos = pos-1;
 	}
-	DBG ("Push back directory " << path.substr(1, lastPos));
+	DBG2 ("Push back directory " << path.substr(1, lastPos));
 	dirs.push_back (path.substr(1, lastPos));
 
 	vector<string>::reverse_iterator i = dirs.rbegin();
 	string prePath("");
 	while (i != dirs.rend()) {
 		prePath += "/" + *i;
-		DBG ("mkdir " << prePath.c_str());
+		DBG2 ("mkdir " << prePath.c_str());
 		int rtn = mkdir (prePath.c_str(), 0775);
 		if (rtn) {
 			int e = errno;
@@ -877,6 +882,64 @@ wml::FoundryUtilities::copyFile (const char * from, ostream& to)
 {
 	string fromFile(from);
 	FoundryUtilities::copyFile (fromFile, to);
+}
+
+void
+wml::FoundryUtilities::moveFile (string from, string to)
+{
+	FoundryUtilities::copyFile (from, to);
+	FoundryUtilities::unlinkFile (from);
+}
+
+void
+wml::FoundryUtilities::unlinkFile (string fpath)
+{
+	int rtn = unlink (fpath.c_str());
+	if (rtn) {
+		int theError = errno;
+		string emsg;
+		switch (theError) {
+		case EPERM:
+		case EACCES:
+			emsg = "Write access to '" + fpath + "' is not allowed due to permissions";
+			break;
+		case EBUSY:
+			emsg = "'" + fpath + "' cannot be removed as it is in use by another process";
+			break;
+		case EFAULT:
+			emsg = "'" + fpath + "' points outside your accessible address space";
+			break;
+		case EIO:
+			emsg = "I/O error occurred reading '" + fpath + "'";
+			break;
+		case EISDIR:
+			emsg = "'" + fpath + "' is a directory";
+			break;
+		case ELOOP:
+			emsg = "Too many symlinks encountered in '" + fpath + "'";
+			break;
+		case ENAMETOOLONG:
+			emsg = "'" + fpath + "' is too long a name";
+			break;
+		case ENOENT:
+			emsg = "'" + fpath + "' does not exist or is a dangling symlink";
+			break;
+		case ENOMEM:
+			emsg = "In sufficient kernel memory to open '" + fpath + "'";
+			break;
+		case ENOTDIR:
+			emsg = "'" + fpath + "' contains a component that is not a directory";
+			break;
+		case EROFS:
+			emsg = "'" + fpath + "' is on a read-only filesystem";
+			break;
+		default:
+			emsg = "Unknown error unlinking file '" + fpath + "'";
+			break;
+		}
+
+		throw runtime_error (emsg);
+	}
 }
 
 std::string
@@ -2063,21 +2126,7 @@ wml::FoundryUtilities::releaseWmlppLock (void)
 	}
 
 	// release simply by unlinking the file.
-	if (unlink ("/tmp/wmlpp_lock") == 0) {
-		debuglog2 (LOG_DEBUG,
-			   "%s: Removed platform lock file /tmp/wmlpp_lock",
-			   __FUNCTION__);
-	} else {
-		int e = errno;
-		stringstream msg;
-		msg << "Error: unlink (\"/tmp/wmlpp_lock\") set errno:" << e;
-		debuglog2 (LOG_DEBUG,
-			   "%s: unlink (\"/tmp/wmlpp_lock\") set errno:%d",
-			   __FUNCTION__, e);
-		throw runtime_error (msg.str());
-	}
-
-	debuglog2 (LOG_DEBUG, "%s: returning", __FUNCTION__);
+	FoundryUtilities::unlinkFile ("/tmp/wmlpp_lock");
 }
 #endif // WMLPPLOCK_REQUIRED
 
@@ -3139,7 +3188,7 @@ wml::FoundryUtilities::decFileCount (const char * filePath)
 int
 wml::FoundryUtilities::zeroFileCount (const char * filePath)
 {
-	unlink (filePath);
+	FoundryUtilities::unlinkFile (filePath);
 	fstream f;
 	f.open (filePath, ios::out|ios::trunc);
 	if (!f.is_open()) {

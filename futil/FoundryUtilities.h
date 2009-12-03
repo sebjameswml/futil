@@ -298,6 +298,39 @@ namespace wml {
 		//@}
 
 		/*!
+		 * Move a file. Throw exception on failure.
+		 */
+		static void moveFile (std::string from, std::string to);
+
+		/*!
+		 * Call unlink() on the given file path fpath. If
+		 * unlinking fails, throw a descriptive error based on
+		 * the errno which was set on unlink's return.
+		 */
+		static void unlinkFile (std::string fpath);
+
+		/*!
+		 * This reads the contents of a directory tree, making
+		 * up a list of the contents in the vector vec. If the
+		 * directory tree has subdirectories, these are
+		 * reflected in the vector entries. So, a directory
+		 * structure might lead to the following entries in vec:
+		 *
+		 * file1
+		 * file2
+		 * dir1/file1
+		 * dir2/file1
+		 * dir2/file2
+		 *
+		 * The base directory path baseDirPath should have NO
+		 * TRAILING '/'. The subDirPath should have NO INITIAL
+		 * '/' character.
+		 */
+		static void readDirectoryTree (std::vector<std::string>& vec,
+					       const char* baseDirPath,
+					       const char* subDirPath);
+
+		/*!
 		 * Return a datestamp - st_mtime; the file
 		 * modification time for the given file.
 		 */
@@ -456,27 +489,6 @@ namespace wml {
 		 * a vector of strings.
 		 */
 		static std::vector<std::string> getAllAliases (void);
-
-		/*!
-		 * This reads the contents of a directory tree, making
-		 * up a list of the contents in the vector vec. If the
-		 * directory tree has subdirectories, these are
-		 * reflected in the vector entries. So, a directory
-		 * structure might lead to the following entries in vec:
-		 *
-		 * file1
-		 * file2
-		 * dir1/file1
-		 * dir2/file1
-		 * dir2/file2
-		 *
-		 * The base directory path baseDirPath should have NO
-		 * TRAILING '/'. The subDirPath should have NO INITIAL
-		 * '/' character.
-		 */
-		static void readDirectoryTree (std::vector<std::string>& vec,
-					       const char* baseDirPath,
-					       const char* subDirPath);
 
 		/*!
 		 * Read /etc/hostname to obtain the hostname of the
