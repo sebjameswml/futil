@@ -725,7 +725,7 @@ wml::FoundryUtilities::dirExists (std::string& path)
 }
 
 void
-wml::FoundryUtilities::createDir (std::string path)
+wml::FoundryUtilities::createDir (std::string path, mode_t mode)
 {
 	if (path.empty()) {
 		// Create no directory. Just return.
@@ -747,7 +747,7 @@ wml::FoundryUtilities::createDir (std::string path)
 	while (i != dirs.rend()) {
 		prePath += "/" + *i;
 		DBG2 ("mkdir " << prePath.c_str());
-		int rtn = mkdir (prePath.c_str(), 0775);
+		int rtn = mkdir (prePath.c_str(), mode);
 		if (rtn) {
 			int e = errno;
 			stringstream emsg;

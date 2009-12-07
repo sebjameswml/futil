@@ -10,6 +10,11 @@
 # pragma interface
 #endif
 
+extern "C" {
+#include <sys/stat.h>
+#include <sys/types.h>
+}
+
 /* The WML Base 52 definitions */
 #define WMLBASE52_CHAR00 's'
 #define WMLBASE52_CHAR01 'q'
@@ -280,7 +285,7 @@ namespace wml {
 		/*!
 		 * Create the directory. Wrapper around mkdir()
 		 */
-		static void createDir (std::string path);
+		static void createDir (std::string path, mode_t mode = 0775);
 
 		/*!
 		 * Touch the file.
