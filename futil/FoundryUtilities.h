@@ -240,6 +240,16 @@ namespace wml {
 		static void conditionAsXmlTag (std::string& str);
 
 		/*!
+		 * Remove any chars which would be invalid in an html
+		 * attribute value.
+		 *
+		 * For example in <img id="mystr_somefile.pdf">, this
+		 * function would modify mystr_somefile.pdf into
+		 * mystr_somefilepdf.
+		 */
+		static void conditionAsHtmlAttrVal (std::string& str);
+
+		/*!
 		 * \brief Return the amount of RAM installed on the system.
 		 *
 		 * Returns RAM in bytes.
@@ -630,6 +640,13 @@ namespace wml {
 		static void sanitize (std::string& str,
 				      std::string& allowed,
 				      bool eraseForbidden = false);
+		/*!
+		 * Modification of santize in which the offending
+		 * characters are replaced with replaceChar.
+		 */
+		static void sanitizeReplace (std::string& str,
+					     std::string allowed,
+					     char replaceChar = '_');
 
 		/*!
 		 * Read filePath and output to stdout. Useful for
@@ -867,6 +884,12 @@ namespace wml {
 		 * Close the filestream if necessary
 		 */
 		static void closeFilestream (std::fstream& f);
+
+		/*!
+		 * This does the opposite of the encodeURIComponent()
+		 * function in javascript.
+		 */
+		static void unencodeURIComponent (std::string& s);
 
 	};
 

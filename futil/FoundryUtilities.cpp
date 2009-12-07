@@ -447,6 +447,12 @@ wml::FoundryUtilities::conditionAsXmlTag (std::string& str)
 	return;
 }
 
+void
+wml::FoundryUtilities::conditionAsHtmlAttrVal (std::string& str)
+{
+	FoundryUtilities::sanitizeReplace (str, CHARS_NUMERIC_ALPHA"_", '_');
+}
+
 int
 wml::FoundryUtilities::searchReplace (std::string& searchTerm,
 				      std::string& replaceTerm,
@@ -1958,6 +1964,21 @@ wml::FoundryUtilities::sanitize (std::string& str,
 				   << "' found while sanitising input.";
 				throw runtime_error (ss.str());
 			}
+		} else {
+			i++;
+		}
+	}
+}
+
+void
+wml::FoundryUtilities::sanitizeReplace (std::string& str,
+					std::string allowed,
+					char replaceChar)
+{
+	for (unsigned int i=0; i<str.size(); i++) {
+		if (allowed.find(str[i], 0) == string::npos) {
+			// str[i] is forbidden
+			str[i] = replaceChar;
 		} else {
 			i++;
 		}
@@ -3506,5 +3527,32 @@ wml::FoundryUtilities::closeFilestream (fstream& f)
 			throw runtime_error (errss.str());
 		}
 	}
+	return;
+}
+
+void
+wml::FoundryUtilities::unencodeURIComponent (string& s)
+{
+	if (s.empty()) {
+		return;
+	}
+
+	stringstream ss;
+	// Decode %NN to ascii(0xNN)
+	for (string::iterator i = s.begin(); i != s.end(); i++) {
+		if (*i == '%') {
+			string hex ="";
+			hex += *(++i);
+			hex += *(++i);
+			unsigned long ascii = strtoul(hex.c_str(), NULL, 16);
+			if (ascii > 0 && ascii < 256) {
+				ss << (char)ascii;
+			}
+		} else {
+			ss << *i;
+		}
+	}
+	s = ss.str();
+
 	return;
 }
