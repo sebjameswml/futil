@@ -3317,7 +3317,10 @@ wml::FoundryUtilities::suffix (int n)
 }
 
 void
-wml::FoundryUtilities::pdfConversion (string inputPath, string outputDevice, string outputPath, unsigned int width, unsigned int height) {
+wml::FoundryUtilities::pdfConversion (string inputPath,
+				      string outputDevice, string outputPath,
+				      unsigned int width, unsigned int height)
+{
         string widthS, heightS;
         stringstream tempSS, returnSS;
 
@@ -3331,14 +3334,29 @@ wml::FoundryUtilities::pdfConversion (string inputPath, string outputDevice, str
         Process ghostScript;
         string processPath = "/usr/bin/gs";
         list<string> args;
-        args.push_back("-dNOPAUSE");
-        args.push_back("-dBATCH");
-        args.push_back("-g" + widthS + "x" + heightS);
-        args.push_back("-sDEVICE=" + outputDevice);
-        args.push_back("-sOutputFile=" + outputPath);
-        args.push_back(inputPath);
-        ghostScript.start(processPath, args);
+        args.push_back ("-dNOPAUSE");
+        args.push_back ("-dBATCH");
+        args.push_back ("-g" + widthS + "x" + heightS);
+        args.push_back ("-sDEVICE=" + outputDevice);
+        args.push_back ("-sOutputFile=" + outputPath);
+        args.push_back (inputPath);
+        ghostScript.start (processPath, args);
 }
+
+void
+wml::FoundryUtilities::pdfToJpeg (string inputPath, string outputPath,
+				  unsigned int width, unsigned int height)
+{
+	pdfConversion (inputPath, "jpeg", outputPath, width, height);
+}
+
+void
+wml::FoundryUtilities::pdfToPng (string inputPath, string outputPath,
+				 unsigned int width, unsigned int height)
+{
+	pdfConversion (inputPath, "pngalpha", outputPath, width, height);
+}
+
 
 // Probably "doIconv8to8" cf "doIconv8to16" etc.
 #define ICONV_INBUF_SIZE 128

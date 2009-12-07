@@ -801,9 +801,7 @@ namespace wml {
                  * use %d in the output path in place of the page number.
                  */
                 static void pdfToJpeg (std::string inputPath, std::string outputPath,
-                                       unsigned int width, unsigned int height) {
-                        pdfConversion(inputPath, "jpeg", outputPath, width, height);
-                }
+                                       unsigned int width, unsigned int height);
 
                 /*!
                  * Creates png(s) from a pdf file. To create a png for each page
@@ -813,9 +811,7 @@ namespace wml {
                  * are enabled by default.
                  */
                 static void pdfToPng (std::string inputPath, std::string outputPath,
-                                       unsigned int width, unsigned int height) {
-                        pdfConversion(inputPath, "pngalpha", outputPath, width, height);
-                }
+				      unsigned int width, unsigned int height);
 
 		/*!
 		 * A wrapper around the iconv() call from glibc.
