@@ -26,7 +26,6 @@ extern "C" {
 #include <net/if.h>
 #include <dirent.h>
 #include <syslog.h>
-#include "debuglog.h"
 #include <uuid/uuid.h>
 #include <string.h>
 #include <iconv.h>
@@ -1947,7 +1946,8 @@ wml::FoundryUtilities::sanitize (std::string& str,
 				 std::string& allowed,
 				 bool eraseForbidden)
 {
-	for (unsigned int i=0; i<str.size(); i++) {
+	unsigned int i=0;
+	while (i<str.size()) {
 		if (allowed.find(str[i], 0) == string::npos) {
 			// str[i] is forbidden
 			if (eraseForbidden == true) {
@@ -1969,13 +1969,13 @@ wml::FoundryUtilities::sanitizeReplace (std::string& str,
 					std::string allowed,
 					char replaceChar)
 {
-	for (unsigned int i=0; i<str.size(); i++) {
+	unsigned int i=0;
+	while (i<str.size()) {
 		if (allowed.find(str[i], 0) == string::npos) {
 			// str[i] is forbidden
 			str[i] = replaceChar;
-		} else {
-			i++;
 		}
+		i++;
 	}
 }
 

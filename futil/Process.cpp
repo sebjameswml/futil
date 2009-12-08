@@ -19,6 +19,7 @@ extern "C" {
 }
 
 #include "config.h"
+#include "WmlDbg.h"
 #include "Process.h"
 
 using namespace std;
@@ -107,11 +108,11 @@ Process::start (const string& program, const list<string>& args)
 		for (i=myargs.begin(); i!=myargs.end(); i++) {
 			argarray[j] = static_cast<char*>(malloc ( (1+(*i).size()) * sizeof (char) ));
 			snprintf (argarray[j++], 1+(*i).size(), "%s", (*i).c_str());
-			dbgln(*i);
+			DBG (*i);
 		}
 		argarray[j] = NULL;
 
-		dbgln ("About to execute '" + program + "' with those arguments..");
+		DBG ("About to execute '" + program + "' with those arguments..");
 
 		execv (program.c_str(), argarray);
 
@@ -159,7 +160,7 @@ Process::waitForStarted (void)
 		i++;
 	}
 	if (this->pid>0) {
-		dbgln ("The process started!");
+		DBG ("The process started!");
 		this->callbacks->startedSignal (this->progName);
 		this->signalledStart = true;
 		return true;
@@ -192,14 +193,14 @@ Process::probeProcess (void)
 		if (this->pid > 0) {
 			this->callbacks->startedSignal (this->progName);
 			this->signalledStart = true;
-			dbgln ("Process::probeProcess set signalledStart and signalled the start...");
+			DBG ("Process::probeProcess set signalledStart and signalled the start...");
 		}
 	}
 
 	// Check for error condition
 	if (this->error>0) {
 		this->callbacks->errorSignal (this->error);
-		dbgln ("have error in probeProcess, returning");
+		DBG ("have error in probeProcess, returning");
 		return;
 	}
 
@@ -221,7 +222,7 @@ Process::probeProcess (void)
 	poll (this->p, 2, 0);
 
 	if (this->p[0].revents & POLLNVAL || this->p[1].revents & POLLNVAL) {
-		dbgln ("Process::probeProcess: pipes closed, process must have crashed");
+		DBG ("Process::probeProcess: pipes closed, process must have crashed");
 		this->error = PROCESSCRASHED;
 		this->callbacks->errorSignal (this->error);
 		return;

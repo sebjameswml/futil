@@ -31,17 +31,6 @@ extern "C" {
 
 using namespace std;
 
-#ifdef DEBUG
-extern ofstream debugLogFile;
-# define dbgln(msg)  debugLogFile << __FUNCTION__ << ": " << msg << endl;
-# define dbglln(msg) debugLogFile << __PRETTY_FUNCTION__ << ": " << msg << endl;
-# define dbg(msg)    debugLogFile << msg;
-#else
-# define dbgln(msg)
-# define dbglln(msg)
-# define dbg(msg)
-#endif
-
 namespace wml {
 
 	/*!

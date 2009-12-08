@@ -1,12 +1,15 @@
 #include <iostream>
+#include <fstream>
 #include <sstream>
 
 #include "config.h"
-
+#include "WmlDbg.h"
 #include "FoundryUtilities.h"
 
 using namespace std;
 using namespace wml;
+
+std::ofstream DBGSTREAM;
 
 int main ()
 {
