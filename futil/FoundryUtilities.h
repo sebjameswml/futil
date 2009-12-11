@@ -266,7 +266,10 @@ namespace wml {
 
 		/*!
 		 * Stat a file, return true if the file exists and is
-		 * a regular file.
+		 * a regular file.  If file is a hanging symlink,
+		 * fileExists returns false, if file is a symlink
+		 * pointing to a regular file, fileExists returns
+		 * true.
 		 */
 		//@{
 		static bool fileExists (std::string& path);

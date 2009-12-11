@@ -830,7 +830,7 @@ wml::FoundryUtilities::copyFile (string& from, string& to)
 
 	out.open (to.c_str(), ios::out|ios::trunc);
 	if (!out.is_open()) {
-		throw runtime_error ("Couldn't open TO file");
+		throw runtime_error ("FoundryUtilities::copyFile(): Couldn't open TO file");
 	}
 
 	FoundryUtilities::copyFile (from, out);
@@ -853,11 +853,11 @@ wml::FoundryUtilities::copyFile (string& from, ostream& to)
 
 	in.open (from.c_str(), ios::in);
 	if (!in.is_open()) {
-		throw runtime_error ("Couldn't open FROM file");
+		throw runtime_error ("FoundryUtilities::copyFile(): Couldn't open FROM file");
 	}
 
 	if (!to) {
-		throw runtime_error ("Error occurred in TO stream");
+		throw runtime_error ("FoundryUtilities::copyFile(): Error occurred in TO stream");
 	}
 
 	char buf[64];
