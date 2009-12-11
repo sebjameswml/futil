@@ -21,6 +21,9 @@ int main(int argc, char** argv)
 	} else {
 		cout << "false" << endl;
 	}
+	// Answer: If it's a hanging symlink, fileExists returns
+	// false, if it's NOT a hanging symlink, fileExists returns
+	// true.
 
 	DBGCLOSE();
 
