@@ -81,6 +81,13 @@ extern "C" {
 #define CHARS_NUMERIC_ALPHA      "etaoinshrdlcumwfgypbvkjxqz0123456789ETAOINSHRDLCUMWFGYPBVKJXQZ"
 #define CHARS_NUMERIC_ALPHALOWER "etaoinshrdlcumwfgypbvkjxqz0123456789"
 #define CHARS_NUMERIC_ALPHAUPPER "0123456789ETAOINSHRDLCUMWFGYPBVKJXQZ"
+/*!
+ * These are the chars which are acceptable for use in both unix, mac
+ * AND windows file names. This doesn guarantee a safe Windows
+ * filename, it imposes some extra conditions (no . at end of name,
+ * some files such as NUL.txt AUX.txt disallowed).
+ */
+#define COMMON_FILE_SAFE_CHARS   CHARS_NUMERIC_ALPHA"_-.{}^[]`=,;"
 
 /*
  * First come functions which may be #included by C code.
@@ -303,6 +310,7 @@ namespace wml {
 		static void copyFile (const char * from, const char * to);
 		static void copyFile (std::string& from, std::ostream& to);
 		static void copyFile (const char * from, std::ostream& to);
+		static void copyFile (FILE* from, std::string to);
 		//@}
 
 		/*!

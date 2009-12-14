@@ -883,6 +883,34 @@ wml::FoundryUtilities::copyFile (const char * from, ostream& to)
 	FoundryUtilities::copyFile (fromFile, to);
 }
 
+#define COPYFILE_BUFFERSIZE    32768
+#define COPYFILE_BUFFERSIZE_MM 32767 // MM: Minus Minus
+void
+wml::FoundryUtilities::copyFile (FILE * from, string to)
+{
+	FILE * ofp = NULL;
+	long pos;
+	int bytes=0, output=0;
+	char inputBuffer[COPYFILE_BUFFERSIZE];
+
+	// Get posn of from as we will return the file pointer there when done
+	pos = ftell (from);
+
+	ofp = fopen (to.c_str(), "w");
+	if (!ofp) {
+		throw runtime_error ("FoundryUtilities::copyFile(): Can't open output for writing");
+	}
+	while ((bytes = fread (inputBuffer, 1, COPYFILE_BUFFERSIZE_MM, from)) > 0) {
+		output = fwrite (inputBuffer, 1, bytes, ofp);
+		if (output != bytes) {
+			fseek (from, pos, SEEK_SET); /* reset input */
+			throw runtime_error ("FoundryUtilities::copyFile(): Error writing data");
+		}
+	}
+	fclose (ofp); /* close output */
+	fseek (from, pos, SEEK_SET); /* reset input */
+}
+
 void
 wml::FoundryUtilities::moveFile (string from, string to)
 {
