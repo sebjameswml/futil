@@ -885,6 +885,11 @@ namespace wml {
 		 * Close the filestream if necessary
 		 */
 		static void closeFilestream (std::fstream& f);
+
+		/*!
+		 * Clear the filestream flags if necessary
+		 */
+		static void clearFilestreamFlags (std::fstream& f);
 	};
 
 } // namespace wml

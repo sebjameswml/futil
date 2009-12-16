@@ -3487,17 +3487,29 @@ wml::FoundryUtilities::openFilestreamForAppend (fstream& f, const char * filepat
 {
 	stringstream errss;
 
-	closeFilestream (f);
+	FoundryUtilities::closeFilestream (f);
+	FoundryUtilities::clearFilestreamFlags (f);
 
 	try {
+		if (access (filepath, R_OK | W_OK) != 0) {
+			int theError = errno;
+			gid_t myGid=getgid();
+			uid_t myUid=getuid();
+			errss << "File access error. access() caused errno=" << theError
+			      << ". This process has uid/gid: " << myUid << '/' << myGid;
+			throw runtime_error (errss.str());
+		}
+
 		f.open (filepath, ios::out|ios::app);
+
 	} catch (ios_base::failure& e) {
-		errss << "exception opening for append: " << e.what();
+		errss << "exception opening '" << filepath << "' for append: " << e.what();
 		throw runtime_error (errss.str());
 	}
 
 	if (!f.is_open()) {
-		throw runtime_error ("Failed to open file for appending");
+		errss << "Failed to open file '" << filepath << "' for appending.";
+		throw runtime_error (errss.str());
 	}
 	return;
 }
@@ -3505,7 +3517,7 @@ wml::FoundryUtilities::openFilestreamForAppend (fstream& f, const char * filepat
 void
 wml::FoundryUtilities::openFilestreamForAppend (fstream& f, const string& filepath)
 {
-	openFilestreamForAppend (f, filepath.c_str());
+	FoundryUtilities::openFilestreamForAppend (f, filepath.c_str());
 	return;
 }
 
@@ -3514,17 +3526,18 @@ wml::FoundryUtilities::openFilestreamForOverwrite (fstream& f, const char * file
 {
 	stringstream errss;
 
-	closeFilestream (f);
-
+	FoundryUtilities::closeFilestream (f);
+	FoundryUtilities::clearFilestreamFlags (f);
 	try {
 		f.open (filepath, ios::out|ios::trunc);
 	} catch (ios_base::failure& e) {
-		errss << "exception opening for overwrite: " << e.what();
+		errss << "exception opening '" << filepath << "' for overwrite: " << e.what();
 		throw runtime_error (errss.str());
 	}
 
 	if (!f.is_open()) {
-		throw runtime_error ("Failed to open file for overwriting");
+		errss << "Failed to open file '" << filepath << "' for overwriting";
+		throw runtime_error (errss.str());
 	}
 	return;
 }
@@ -3532,22 +3545,39 @@ wml::FoundryUtilities::openFilestreamForOverwrite (fstream& f, const char * file
 void
 wml::FoundryUtilities::openFilestreamForOverwrite (fstream& f, const string& filepath)
 {
-	openFilestreamForOverwrite (f, filepath.c_str());
+	FoundryUtilities::openFilestreamForOverwrite (f, filepath.c_str());
 	return;
 }
 
 void
 wml::FoundryUtilities::closeFilestream (fstream& f)
 {
-	stringstream errss;
 	if (f.is_open()) {
 		try {
 			f.clear();
 			f.close();
 		} catch (ios_base::failure& e) {
+			stringstream errss;
 			errss << "exception closing filestream: " << e.what();
 			throw runtime_error (errss.str());
 		}
+	}
+	return;
+}
+
+void
+wml::FoundryUtilities::clearFilestreamFlags (fstream& f)
+{
+	if (f.good()) {
+		return;
+	}
+	try {
+		f.clear (ios::goodbit);
+
+	} catch (ios_base::failure& e) {
+		stringstream errss;
+		errss << "exception clearing filestream flags: " << e.what();
+		throw runtime_error (errss.str());
 	}
 	return;
 }
