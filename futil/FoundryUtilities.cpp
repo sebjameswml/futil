@@ -1863,8 +1863,8 @@ wml::FoundryUtilities::getScript (SCRIPT_TYPE script,
                                 closingTag = "//]]></script>";
                                 break;
                         case SCRIPT_CSS:
-                                openingTag = "<style type=\"text/css\" >";
-                                closingTag = "</style>";
+                                openingTag = "<style type=\"text/css\" ><!--/*--><![CDATA[/*><!--*/";
+                                closingTag = "/*]]>*/--></style>";
                                 break;
                         default:
                                 openingTag = "<!--";
