@@ -89,6 +89,29 @@ extern "C" {
  */
 #define COMMON_FILE_SAFE_CHARS   CHARS_NUMERIC_ALPHA"_-.{}^[]`=,;"
 
+#define IP_DOMAINNAME_SAFE_CHARS      CHARS_NUMERIC_ALPHA"-."
+#define IP_ADDRESS_SAFE_CHARS         CHARS_NUMERIC"."
+
+/*!
+ * CUPS would appear to be happy with any character under the sun
+ * being in the title. However, we'll restrict it to these:
+ */
+#define WMLCUPS_TITLE_SAFE_CHARS      CHARS_NUMERIC_ALPHA"_{}^[]`=,;"
+
+/*!
+ * Internally, cups is happy with a very wide range of characters:
+ */
+#define CUPS_QUEUENAME_SAFE_CHARS     CHARS_NUMERIC_ALPHA"!\"$\%&'()*+,-.:;<=>?@[\\]^_{|}~"
+
+/*!
+ * To make our life a bit easier, we'll disallow a number of queuename
+ * characters which would otherwise be acceptable.
+ */
+#define WMLCUPS_QUEUENAME_SAFE_CHARS  CHARS_NUMERIC_ALPHA"!\"$\%&'()*+,-.:;<=>?@[\\]^_{|}~"
+
+#define CUPS_ADDRESS_SAFE_CHARS       IP_DOMAINNAME_SAFE_CHARS
+#define CUPS_DESTQUEUEPORT_SAFE_CHARS CHARS_NUMERIC_ALPHA
+
 /*
  * First come functions which may be #included by C code.
  */
@@ -890,6 +913,12 @@ namespace wml {
 		 * Clear the filestream flags if necessary
 		 */
 		static void clearFilestreamFlags (std::fstream& f);
+
+		/*!
+		 * If /tmp/messages has grown larger than megabytes
+		 * MB, then truncate it to 0.
+		 */
+		static void check_tmp_messages (int megabytes);
 	};
 
 } // namespace wml

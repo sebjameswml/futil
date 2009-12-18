@@ -3581,3 +3581,38 @@ wml::FoundryUtilities::clearFilestreamFlags (fstream& f)
 	}
 	return;
 }
+
+#define ONE_MEGABYTE 1048576
+void
+wml::FoundryUtilities::check_tmp_messages (int megabytes)
+{
+	struct stat * buf = NULL;
+	int the_error = 0;
+	FILE * fp = NULL;
+
+	buf = (struct stat*) malloc (sizeof (struct stat));
+	if (!buf) {
+		// Malloc error.
+		exit (-1);
+	}
+	memset (buf, 0, sizeof(struct stat));
+	if (stat ("/tmp/messages", buf)) {
+		the_error = errno;
+		debuglog (LOG_ERR,
+			  "%s: Failed to stat /tmp/messages, errno=%d",
+			  __FUNCTION__, the_error);
+	}
+
+	if (buf->st_size > (megabytes * ONE_MEGABYTE)) {
+		// Truncate /tmp/messages.
+		fp = fopen ("/tmp/messages", "w+");
+		if (fp != NULL) {
+			fprintf (fp, "%s\n", "syslog truncated.");
+			fclose (fp);
+			syslog (LOG_INFO, "/tmp/messages truncated.");
+		}
+	}
+
+	free (buf);
+	return;
+}
