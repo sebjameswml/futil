@@ -38,7 +38,7 @@ using namespace wml;
 #define STDERR 2
 
 // Constructor
-Process::Process () :
+wml::Process::Process () :
 	progName("unknown"),
 	error (PROCESSNOERROR),
 	pid(0),
@@ -49,13 +49,13 @@ Process::Process () :
 }
 
 // Destructor
-Process::~Process ()
+wml::Process::~Process ()
 {
 	free (this->p);
 }
 
 void
-Process::writeIn (string& input)
+wml::Process::writeIn (string& input)
 {
 	write (this->parentToChild[WRITING_END], input.c_str(), input.size());
 }
@@ -63,7 +63,7 @@ Process::writeIn (string& input)
 // fork and exec a new process using execv, which takes stdin via a
 // fifo and returns output also via a fifo.
 int
-Process::start (const string& program, const list<string>& args)
+wml::Process::start (const string& program, const list<string>& args)
 {
 	char** argarray;
 	list<string> myargs = args;
@@ -152,7 +152,7 @@ Process::start (const string& program, const list<string>& args)
 
 // If no pid after a while, return false.
 bool
-Process::waitForStarted (void)
+wml::Process::waitForStarted (void)
 {
 	unsigned int i=0;
 	while (this->pid == 0 && i<1000) {
@@ -174,7 +174,7 @@ Process::waitForStarted (void)
 
 // Send a TERM signal to the process.
 void
-Process::terminate (void)
+wml::Process::terminate (void)
 {
 	kill (this->pid, 15); // 15 is TERM
 	// Now check if the process has gone and kill it with signal 9 (KILL)
@@ -186,7 +186,7 @@ Process::terminate (void)
 
 // Check on this process
 void
-Process::probeProcess (void)
+wml::Process::probeProcess (void)
 {
 	// Has the process started?
 	if (!this->signalledStart) {
@@ -257,7 +257,7 @@ Process::probeProcess (void)
 
 // Read stdout pipe, without blocking.
 string
-Process::readAllStandardOutput (void)
+wml::Process::readAllStandardOutput (void)
 {
 	string s;
 	int bytes = 0;
@@ -281,7 +281,7 @@ Process::readAllStandardOutput (void)
 
 // Read stderr pipe without blocking
 string
-Process::readAllStandardError (void)
+wml::Process::readAllStandardError (void)
 {
 	string s;
 	int bytes = 0;
@@ -301,6 +301,26 @@ Process::readAllStandardError (void)
 		poll (&p, 1, 0);
 	}
 	return s;
+}
+
+pid_t
+wml::Process::getPid (void) {
+	return this->pid;
+}
+
+int
+wml::Process::getError (void) {
+	return this->error;
+}
+
+void
+wml::Process::setError (int e) {
+	this->error = e;
+}
+
+void
+wml::Process::setCallbacks (ProcessCallbacks * cb) {
+	this->callbacks = cb;
 }
 
 //@}

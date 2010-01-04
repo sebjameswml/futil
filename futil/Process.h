@@ -1,3 +1,4 @@
+/* -*-c++-*- */
 /*
  * A class to fork and exec processes.
  *
@@ -88,14 +89,14 @@ namespace wml {
 		 * Accessors
 		 */
 		//@{
-		pid_t getPid (void) { return this->pid; }
-		int getError (void) { return this->error; }
-		void setError (int e) { this->error = e; }
+		pid_t getPid (void);
+		int getError (void);
+		void setError (int e);
 
 		/*!
 		 * Setter for the callbacks.
 		 */
-		void setCallbacks (ProcessCallbacks * cb) { this->callbacks = cb; }
+		void setCallbacks (ProcessCallbacks * cb);
 		//@}
 
 		/*!
