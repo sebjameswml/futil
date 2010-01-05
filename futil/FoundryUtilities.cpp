@@ -724,7 +724,9 @@ wml::FoundryUtilities::dirExists (std::string& path)
 }
 
 void
-wml::FoundryUtilities::createDir (std::string path, mode_t mode)
+wml::FoundryUtilities::createDir (std::string path,
+				  mode_t mode,
+				  int uid, int gid)
 {
 	if (path.empty()) {
 		// Create no directory. Just return.
@@ -792,6 +794,9 @@ wml::FoundryUtilities::createDir (std::string path, mode_t mode)
 				break;
 			}
 			throw runtime_error (emsg.str());
+		}
+		if (uid>-1 && gid>-1) {
+			chown (prePath.c_str(), static_cast<uid_t>(uid), static_cast<gid_t>(gid));
 		}
 		i++;
 	}
@@ -2192,6 +2197,43 @@ wml::FoundryUtilities::coutFile (const char* filePath)
 
 	f.close();
 	return;
+}
+
+void
+wml::FoundryUtilities::coutFile (std::string filePath)
+{
+	ifstream f;
+	f.open (filePath.c_str(), ios::in);
+
+	if (!f.is_open()) {
+		stringstream msg;
+		msg << "Couldn't open file '" << filePath << "'";
+		throw runtime_error (msg.str());
+	}
+
+	string line;
+	while (getline (f, line, '\n')) {
+	        cout << line << endl;
+	}
+
+	f.close();
+	return;
+}
+
+int
+wml::FoundryUtilities::fileSize (string filePath)
+{
+	struct stat buf;
+	memset (&buf, 0, sizeof(struct stat));
+	if (stat (filePath.c_str(), &buf)) {
+		int the_error = errno;
+		debuglog (LOG_ERR,
+			  "%s: Failed to stat %s, errno=%d",
+			  __FUNCTION__, filePath.c_str(), the_error);
+		return 0;
+	}
+	int size = buf.st_size;
+	return size;
 }
 
 /*!

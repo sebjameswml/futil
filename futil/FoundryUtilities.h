@@ -316,9 +316,12 @@ namespace wml {
 		//@}
 
 		/*!
-		 * Create the directory. Wrapper around mkdir()
+		 * Create the directory. Wrapper around mkdir(). If
+		 * uid/gid is set to >-1, then chown each directory.
 		 */
-		static void createDir (std::string path, mode_t mode = 0775);
+		static void createDir (std::string path,
+				       mode_t mode = 0775,
+				       int uid = -1, int gid = -1);
 
 		/*!
 		 * Touch the file.
@@ -677,6 +680,12 @@ namespace wml {
 		 * outputting static html.
 		 */
 		static void coutFile (const char* filePath);
+		static void coutFile (std::string filePath);
+
+		/*!
+		 * Get the size of the file in bytes.
+		 */
+		static int fileSize (std::string filePath);
 
 		/*!
 		 * A group of functions to carry out baseN conversions.
