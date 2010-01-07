@@ -3498,6 +3498,9 @@ wml::FoundryUtilities::doIconv (const char * fromEncoding,
 			if (theE == EINVAL) {
 				throw runtime_error ("Need to deal with this... (memmove?)");
 			} else {
+				DBG ("doIconv() called on string '" << fromString
+				      << "' from " << fromEncoding
+				      << " to " << toEncoding);
 				stringstream ee;
 				ee << __FUNCTION__ << ": Error in iconv(), errno: " << theE;
 				throw runtime_error (ee.str());
