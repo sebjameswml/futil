@@ -680,6 +680,35 @@ wml::FoundryUtilities::getInactiveMemory (void)
 	return memInactive<<10; // Left shift 10 to return bytes, not kbytes
 }
 
+float
+wml::FoundryUtilities::getLoadAverage (void)
+{
+	ifstream f ("/proc/loadavg");
+	if (!f.is_open()) {
+		return -1.0;
+	}
+	string line;
+	while (getline (f, line, '\n') != false) {
+		if (!line.empty()) {
+			break;
+		}
+	}
+	f.close();
+
+	// Now read in the most recent load average.
+	string::size_type space = line.find_first_of (" ");
+	if (space == string::npos) {
+		return -2.0;
+	}
+
+	stringstream ss;
+	float rtn;
+	ss << line.substr (0, space);
+	ss >> rtn;
+
+	return rtn;
+}
+
 bool
 wml::FoundryUtilities::fileExists (std::string& path)
 {
@@ -2226,10 +2255,12 @@ wml::FoundryUtilities::fileSize (string filePath)
 	struct stat buf;
 	memset (&buf, 0, sizeof(struct stat));
 	if (stat (filePath.c_str(), &buf)) {
+#ifdef DEBUG
 		int the_error = errno;
 		debuglog (LOG_ERR,
 			  "%s: Failed to stat %s, errno=%d",
 			  __FUNCTION__, filePath.c_str(), the_error);
+#endif
 		return 0;
 	}
 	int size = buf.st_size;

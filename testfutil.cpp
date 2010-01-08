@@ -44,6 +44,8 @@ int main(int argc, char** argv)
 	FoundryUtilities::sanitizeReplace (s, CHARS_NUMERIC_ALPHA"_", '_');
 	cout << "After sanitizeReplace, s is '" << s << "'\n";
 
+	cout << "Load av: " << FoundryUtilities::getLoadAverage() << '\n';
+
 	DBGCLOSE();
 
 	return 0;

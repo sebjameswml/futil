@@ -290,9 +290,24 @@ namespace wml {
 		 */
 		static unsigned int getBufferedMemory (void);
 
+		/*!
+		 * \brief Return the amount of active RAM.
+		 *
+		 * Returns active RAM in bytes.
+		 */
 		static unsigned int getActiveMemory (void);
 
+		/*!
+		 * \brief Return the amount of inactive RAM.
+		 *
+		 * Returns inactive RAM in bytes.
+		 */
 		static unsigned int getInactiveMemory (void);
+
+		/*!
+		 * Returns the system load average.
+		 */
+		static float getLoadAverage (void);
 
 		/*!
 		 * Stat a file, return true if the file exists and is
