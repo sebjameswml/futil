@@ -136,6 +136,10 @@ extern "C" {
 
 #include <vector>
 #include <list>
+#include <istream>
+#include <ostream>
+#include <iostream>
+#include <fstream>
 
 /*! \file FoundryUtilities.h
  * \brief Declares the class \c FoundryUtilities
@@ -344,7 +348,10 @@ namespace wml {
 		static void touchFile (std::string path);
 
 		/*!
-		 * Copy a file. Throw exception on failure.
+		 * Copy a file. If from/to is a string or a char*,
+		 * then these are the filepaths. Some versions allow
+		 * you to copy the file contents into an output
+		 * stream. Throw exception on failure.
 		 */
 		//@{
 		static void copyFile (std::string& from, std::string& to);
@@ -353,6 +360,11 @@ namespace wml {
 		static void copyFile (const char * from, std::ostream& to);
 		static void copyFile (FILE* from, std::string to);
 		//@}
+
+		/*!
+		 * Copy a file from an input stream into a string.
+		 */
+		static void copyFileToString (std::istream& from, std::string& to);
 
 		/*!
 		 * Move a file. Throw exception on failure.
