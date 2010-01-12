@@ -916,7 +916,7 @@ wml::FoundryUtilities::copyFileToString (istream& from, string& to)
 	char buf[64];
 	while (!from.eof()) {
 		from.read (buf, 63);
-		to += buf;
+		to.append (buf, from.gcount());
 	}
 }
 
