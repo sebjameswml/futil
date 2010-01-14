@@ -911,6 +911,23 @@ wml::FoundryUtilities::copyFile (string& from, ostream& to)
 }
 
 void
+wml::FoundryUtilities::copyFile (istream& from, string& to)
+{
+	char buf[64];
+	ofstream f;
+	f.open (to.c_str(), ios::out|ios::trunc);
+	if (!f.is_open()) {
+		stringstream ee;
+		ee << "Failed to open output file '" << to << "'";
+		throw runtime_error (ee.str());
+	}
+	while (!from.eof()) {
+		from.read (buf, 63);
+		f.write (buf, from.gcount());
+	}
+}
+
+void
 wml::FoundryUtilities::copyFileToString (istream& from, string& to)
 {
 	char buf[64];

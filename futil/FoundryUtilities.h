@@ -359,6 +359,7 @@ namespace wml {
 		static void copyFile (std::string& from, std::ostream& to);
 		static void copyFile (const char * from, std::ostream& to);
 		static void copyFile (FILE* from, std::string to);
+		static void copyFile (std::istream& from, std::string& to);
 		//@}
 
 		/*!

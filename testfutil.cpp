@@ -1,6 +1,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 
 #include "futil/config.h"
 #include "WmlDbg.h"
@@ -61,6 +62,12 @@ int main(int argc, char** argv)
 	fromS.open ("testFile");
 	FoundryUtilities::copyFileToString (fromS, into);
 	cout << "into is:\n" << into;
+
+	string fromFile ("/tmp/B108642.pdf");
+	stringstream ff;
+	FoundryUtilities::copyFile (fromFile, ff);
+	string toPath ("/tmp/new.pdf");
+	FoundryUtilities::copyFile (ff, toPath);
 
 	DBGCLOSE();
 
