@@ -1914,6 +1914,10 @@ wml::FoundryUtilities::getScript (SCRIPT_TYPE script,
         if (inlineOutput == true) {
                 ifstream f;
 
+		string::size_type pos = scriptFile.find("/httpd/");
+		if (pos != string::npos && pos != 0) {
+			scriptFile = "/httpd/" + scriptFile;
+		}
                 f.open (scriptFile.c_str(), ios::in);
 
                 if (f.is_open()) {
@@ -1993,10 +1997,7 @@ wml::FoundryUtilities::getJavascript (std::stringstream& rJavascript,
 		}
 
 	} else {
-		string::size_type pos = jsFile.find("/httpd/");
-		if (pos != 0) {
-			jsFile = "/httpd/" + jsFile;
-		}
+		// Nothing.
 	}
 	FoundryUtilities::getScript(SCRIPT_JAVASCRIPT, rJavascript, jsFile, inlineOutput);
 }
