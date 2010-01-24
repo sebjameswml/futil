@@ -1906,18 +1906,61 @@ wml::FoundryUtilities::getMonthFromLog (std::string& filePath,
 }
 
 void
+wml::FoundryUtilities::getCSS (std::stringstream& rCSS,
+			       std::string cssFile,
+			       bool inlineOutput)
+{
+        FoundryUtilities::getScript(SCRIPT_CSS, rCSS, cssFile, inlineOutput);
+}
+
+void
+wml::FoundryUtilities::getJavascript (std::stringstream& rJavascript,
+                                      std::string jsFile,
+                                      bool inlineOutput)
+{
+	if (FoundryUtilities::dirExists ("/etc/wml/js/")){
+		string::size_type pos = jsFile.find_last_of ("/");
+		string jsFileName = jsFile;
+		if (pos != string::npos) {
+			jsFileName = jsFile.substr(pos+1);
+		}
+		jsFileName = "/etc/wml/js/" + jsFileName;
+		if (FoundryUtilities::fileExists (jsFileName)) {
+			jsFile = jsFileName;
+		}
+
+	} else {
+		// Nothing. jsFile is either js/somefile.js or
+		// /httpd/js/somefile.js. getScript should strip off
+		// any /httpd prefix, then add it back in if necessary
+		// (which depends on the value of inlineOutput).
+	}
+	FoundryUtilities::getScript (SCRIPT_JAVASCRIPT, rJavascript, jsFile, inlineOutput);
+}
+
+void
 wml::FoundryUtilities::getScript (SCRIPT_TYPE script,
                                   std::stringstream& rScript,
                                   std::string scriptFile,
                                   bool inlineOutput)
 {
         if (inlineOutput == true) {
-                ifstream f;
+
+		// inlineOutput is true, we're reading the file in
+		// from the filesystem to output into the page.
 
 		string::size_type pos = scriptFile.find("/httpd/");
-		if (pos != string::npos && pos != 0) {
+		if (pos == string::npos) {
+			// no /httpd/ in scriptFile, prefix it...
 			scriptFile = "/httpd/" + scriptFile;
+		} else if (pos != 0) {
+			// scriptFile HAS /httpd/ in it, but not at start, add it in...
+			scriptFile = "/httpd/" + scriptFile;
+		} else {
+			// /httpd/ present and at start, no need to modify scriptFile.
 		}
+
+                ifstream f;
                 f.open (scriptFile.c_str(), ios::in);
 
                 if (f.is_open()) {
@@ -1952,6 +1995,19 @@ wml::FoundryUtilities::getScript (SCRIPT_TYPE script,
                         rScript << "<!-- Could not open " << scriptFile << " -->" << endl;
                 }
         } else {
+
+		// We're just going to place a <script type=... tag
+		// into the javascript, which should NOT have the
+		// /httpd prefix to the path - as far as the client
+		// browser is concerned, javascript files are in
+		// address/js/somefile.js and css in
+		// address/css/somefile.css.
+		string::size_type pos = scriptFile.find("/httpd/");
+		if (pos != string::npos && pos == 0) {
+			// We have /httpd/ at the start of the scriptFile, so remove it.
+			scriptFile = scriptFile.substr (7); // 7 is length of "/httpd/"
+		}
+
                 string openingTag;
                 string closingTag;
                 switch (script) {
@@ -1970,36 +2026,6 @@ wml::FoundryUtilities::getScript (SCRIPT_TYPE script,
                 rScript << openingTag << scriptFile << closingTag << endl;
         }
         return;
-}
-
-void
-wml::FoundryUtilities::getCSS (std::stringstream& rCSS,
-			       std::string cssFile,
-			       bool inlineOutput)
-{
-        FoundryUtilities::getScript(SCRIPT_CSS, rCSS, cssFile, inlineOutput);
-}
-
-void
-wml::FoundryUtilities::getJavascript (std::stringstream& rJavascript,
-                                      std::string jsFile,
-                                      bool inlineOutput)
-{
-	if (FoundryUtilities::dirExists ("/etc/wml/js/")){
-		string::size_type pos = jsFile.find_last_of ("/");
-		string jsFileName = jsFile;
-		if (pos != string::npos) {
-			jsFileName = jsFile.substr(pos+1);
-		}
-		jsFileName = "/etc/wml/js/" + jsFileName;
-		if (FoundryUtilities::fileExists (jsFileName)) {
-			jsFile = jsFileName;
-		}
-
-	} else {
-		// Nothing.
-	}
-	FoundryUtilities::getScript(SCRIPT_JAVASCRIPT, rJavascript, jsFile, inlineOutput);
 }
 
 void
