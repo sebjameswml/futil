@@ -1910,7 +1910,7 @@ wml::FoundryUtilities::getCSS (std::stringstream& rCSS,
 			       std::string cssFile,
 			       bool inlineOutput)
 {
-        FoundryUtilities::getScript(SCRIPT_CSS, rCSS, cssFile, inlineOutput);
+        FoundryUtilities::getScript (SCRIPT_CSS, rCSS, cssFile, inlineOutput);
 }
 
 void
@@ -1918,7 +1918,8 @@ wml::FoundryUtilities::getJavascript (std::stringstream& rJavascript,
                                       std::string jsFile,
                                       bool inlineOutput)
 {
-	if (FoundryUtilities::dirExists ("/etc/wml/js/")){
+	if (inlineOutput == true
+	    && FoundryUtilities::dirExists ("/etc/wml/js/")){
 		string::size_type pos = jsFile.find_last_of ("/");
 		string jsFileName = jsFile;
 		if (pos != string::npos) {
@@ -1949,7 +1950,7 @@ wml::FoundryUtilities::getScript (SCRIPT_TYPE script,
 		// inlineOutput is true, we're reading the file in
 		// from the filesystem to output into the page.
 
-		string::size_type pos = scriptFile.find("/etc/wml/js");
+		string::size_type pos = scriptFile.find("/etc/wml");
 		if (pos == string::npos) {
 			pos = scriptFile.find("/httpd/");
 			if (pos == string::npos) {
