@@ -1949,15 +1949,18 @@ wml::FoundryUtilities::getScript (SCRIPT_TYPE script,
 		// inlineOutput is true, we're reading the file in
 		// from the filesystem to output into the page.
 
-		string::size_type pos = scriptFile.find("/httpd/");
+		string::size_type pos = scriptFile.find("/etc/wml/js");
 		if (pos == string::npos) {
-			// no /httpd/ in scriptFile, prefix it...
-			scriptFile = "/httpd/" + scriptFile;
-		} else if (pos != 0) {
-			// scriptFile HAS /httpd/ in it, but not at start, add it in...
-			scriptFile = "/httpd/" + scriptFile;
-		} else {
-			// /httpd/ present and at start, no need to modify scriptFile.
+			pos = scriptFile.find("/httpd/");
+			if (pos == string::npos) {
+				// no /httpd/ in scriptFile, prefix it...
+				scriptFile = "/httpd/" + scriptFile;
+			} else if (pos != 0) {
+				// scriptFile HAS /httpd/ in it, but not at start, add it in...
+				scriptFile = "/httpd/" + scriptFile;
+			} else {
+				// /httpd/ present and at start, no need to modify scriptFile.
+			}
 		}
 
                 ifstream f;
@@ -2027,6 +2030,51 @@ wml::FoundryUtilities::getScript (SCRIPT_TYPE script,
         }
         return;
 }
+
+/*void
+wml::FoundryUtilities::getCSS (std::stringstream& rCSS,
+			       std::string cssFile,
+			       bool inlineOutput)
+{
+        FoundryUtilities::getScript(SCRIPT_CSS, rCSS, cssFile, inlineOutput);
+}
+
+void
+wml::FoundryUtilities::getJavascript (std::stringstream& rJavascript,
+                                      std::string jsFile,
+                                      bool inlineOutput)
+{
+	if (FoundryUtilities::dirExists ("/etc/wml/js/")){
+		string::size_type pos = jsFile.find_last_of ("/");
+		string jsFileName = jsFile;
+		if (pos != string::npos) {
+			jsFileName = jsFile.substr(pos+1);
+		}
+		jsFileName = "/etc/wml/js/" + jsFileName;
+		if (FoundryUtilities::fileExists (jsFileName)) {
+			jsFile = jsFileName;
+		}
+		else {
+			pos = jsFile.find("/httpd/");
+			if (pos != 0) {
+				jsFile = "/httpd/" + jsFile;
+			} else if (pos != string::npos) {
+				throw runtime_error ("invalid file path");
+			}
+			DBG ("FLNM::File is: " << jsFile);
+		}
+
+	} else {
+		string::size_type pos = jsFile.find("/httpd/");
+		if (pos != 0) {
+			jsFile = "/httpd/" + jsFile;
+		} else if (pos != string::npos) {
+				throw runtime_error ("invalid file path");
+		}
+		DBG ("FLNM::File is: " << jsFile);
+	}
+	FoundryUtilities::getScript(SCRIPT_JAVASCRIPT, rJavascript, jsFile, inlineOutput);
+	}*/
 
 void
 wml::FoundryUtilities::unicodeize (std::string& str)
