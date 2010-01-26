@@ -20,6 +20,7 @@ extern "C" {
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/statvfs.h>
 #include <sys/file.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
@@ -707,6 +708,49 @@ wml::FoundryUtilities::getLoadAverage (void)
 	ss >> rtn;
 
 	return rtn;
+}
+
+string
+wml::FoundryUtilities::freeSpace (string dirPath)
+{
+	stringstream rtn;
+	struct statvfs dir;
+	int theError = 0;
+
+	if (statvfs (dirPath.c_str(), &dir)) {
+		theError = errno;
+		rtn << "statvfs returned errno %d" << theError;
+		return rtn.str();
+	}
+
+	fsblkcnt_t available = 0;
+	char suffix[3] = "KB";
+	if (dir.f_bavail > 1400000) {
+		// Show in GB
+		available = dir.f_bavail >> 20;
+		suffix[0] = 'G';
+
+	} else if (dir.f_bavail > 140000) {
+		// Show in MB
+		available = dir.f_bavail >> 10;
+		suffix[0] = 'M';
+	} else {
+		// Show in KB
+		available = dir.f_bavail;
+	}
+
+	// available is now number of _blocks_ available, need
+	// to multiply by fragment size to get bytes total
+	available = available * dir.f_frsize;
+
+	// Now available is the number of bytes/kb/mb not
+	// kb/mb/gb, so fix that:
+	available = available >> 10;
+
+	// Outputs number of free KB/MB/GB
+	rtn <<  available << ' ' << suffix;
+
+	return rtn.str();
 }
 
 bool

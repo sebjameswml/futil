@@ -314,6 +314,14 @@ namespace wml {
 		static float getLoadAverage (void);
 
 		/*!
+		 * Return the amount of free space on the filesystem
+		 * on which dirPath resides. The returned value is a
+		 * human readable amount, with the KB/MB/GB suffix
+		 * being automatically selected.
+		 */
+		static std::string freeSpace (std::string dirPath);
+
+		/*!
 		 * Stat a file, return true if the file exists and is
 		 * a regular file.  If file is a hanging symlink,
 		 * fileExists returns false, if file is a symlink
