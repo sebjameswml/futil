@@ -95,6 +95,16 @@
 #endif
 
 /*
+ * Macro to open the debug file, but without first truncating it. To
+ * be called early on in the main() function.
+ */
+#ifdef DEBUG
+# define DBGAPPEND(s) DBGSTREAM.open (s, std::ios::out|std::ios::app);
+#else
+# define DBGAPPEND(s)
+#endif
+
+/*
  * Macro to close the debug file. To be called late in the main()
  * function, just before it exits.
  */
