@@ -1490,6 +1490,13 @@ wml::FoundryUtilities::macAddrToStr (unsigned int* mac)
 
 void
 wml::FoundryUtilities::readDirectoryTree (vector<string>& vec,
+					  string dirPath)
+{
+	FoundryUtilities::readDirectoryTree (vec, dirPath.c_str(), "");
+}
+
+void
+wml::FoundryUtilities::readDirectoryTree (vector<string>& vec,
 					  const char* baseDirPath,
 					  const char* subDirPath)
 {

@@ -403,10 +403,20 @@ namespace wml {
 		 * The base directory path baseDirPath should have NO
 		 * TRAILING '/'. The subDirPath should have NO INITIAL
 		 * '/' character.
+		 *
+		 * The subDirPath argument is present because this is
+		 * a recursive function.
 		 */
 		static void readDirectoryTree (std::vector<std::string>& vec,
 					       const char* baseDirPath,
 					       const char* subDirPath);
+
+		/*!
+		 * A simple wrapper around the more complex version,
+		 * for the user to call.
+		 */
+		static void readDirectoryTree (std::vector<std::string>& vec,
+					       std::string dirPath);
 
 		/*!
 		 * Return a datestamp - st_mtime; the file
