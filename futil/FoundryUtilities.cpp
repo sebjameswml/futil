@@ -3215,7 +3215,7 @@ wml::FoundryUtilities::formatUint64InBaseN (UINT64_TYPE num, int base)
 	string outNum = "";
 
 	UINT64_TYPE n = num;
-	UINT64_TYPE quotient = 0;
+	UINT64_TYPE quotient = num;
 	UINT64_TYPE remainder;
 
 	while (n>=(UINT64_TYPE)base) {
