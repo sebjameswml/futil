@@ -806,6 +806,9 @@ wml::FoundryUtilities::createDir (std::string path,
 		return;
 	}
 
+	// Set umask to 0000 to stop it interfering with mode
+	int oldUmask = umask (0000);
+
 	string::size_type pos, lastPos = path.size()-1;
 	vector<string> dirs;
 	while ((pos = path.find_last_of ('/', lastPos)) != 0) {
@@ -873,6 +876,9 @@ wml::FoundryUtilities::createDir (std::string path,
 		}
 		i++;
 	}
+
+	// Reset umask
+	umask (oldUmask);
 }
 
 void
@@ -908,7 +914,8 @@ wml::FoundryUtilities::copyFile (string& from, string& to)
 
 	out.open (to.c_str(), ios::out|ios::trunc);
 	if (!out.is_open()) {
-		throw runtime_error ("FoundryUtilities::copyFile(): Couldn't open TO file");
+		string emsg = "FoundryUtilities::copyFile(): Couldn't open TO file '" + to + "'";
+		throw runtime_error (emsg);
 	}
 
 	FoundryUtilities::copyFile (from, out);
