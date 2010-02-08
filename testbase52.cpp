@@ -16,23 +16,30 @@ int main(int argc, char** argv)
 {
         DBGOPEN ("testbase52.log");
 
-	cout << "0 in WML base 52 is: "
-	     << FoundryUtilities::formatUint64InBaseN ((UINT64_TYPE)0, 52)
-	     << endl;
-
-	cout << "86400 in WML base 52 (10 days of a WML eval) is: "
-	     << FoundryUtilities::formatUint64InBaseN ((UINT64_TYPE)86400, 52)
-	     << endl;
-
 	if (argc>1) {
         stringstream ss;
 	UINT64_TYPE x;
 	ss << argv[1];
 	ss >> x;
-	cout << x << " in WML base 52 is: "
+	cout << x << " in WML base 52 (64 bit conversion) is: "
 	     << FoundryUtilities::formatUint64InBaseN (x, 52)
 	     << endl;
-        }
+
+	UINT32_TYPE* n;
+	UINT32_TYPE num[4];
+        stringstream sss;
+	sss << argv[1];
+	sss >> num[0];
+	num[1] = 0;
+	num[2] = 0;
+	num[3] = 0;
+	n = &(num[0]);
+	cout << *n << " in WML base 52 (128 bit conversion) is: "
+	     << FoundryUtilities::formatUint128InBaseN (n, 4, 52)
+	     << endl;
+        } else {
+		cerr << "Usage: " << argv[0] << " N, where N is a decimal number\n";
+	}
 	DBGCLOSE();
 
 	return 0;
