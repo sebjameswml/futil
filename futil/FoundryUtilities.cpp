@@ -882,6 +882,106 @@ wml::FoundryUtilities::createDir (std::string path,
 }
 
 void
+wml::FoundryUtilities::setPermissions (string filepath, mode_t mode)
+{
+	int rtn = chmod (filepath.c_str(), mode);
+	if (rtn) {
+		int e = errno;
+		stringstream emsg;
+		emsg << "setPermissions(): chmod() set error: ";
+		switch (e) {
+		case EACCES:
+			emsg << "Permission is denied";
+			break;
+		case EFAULT:
+			emsg << "Bad address";
+			break;
+		case ELOOP:
+			emsg << "Too many symlinks";
+			break;
+		case ENAMETOOLONG:
+			emsg << "File name too long";
+			break;
+		case ENOENT:
+			emsg << "Path invalid (part or all of it)";
+			break;
+		case ENOMEM:
+			emsg << "Out of kernel memory";
+			break;
+		case ENOTDIR:
+			emsg << "component of the path is not a directory";
+			break;
+		case EPERM:
+			emsg << "file system doesn't support directory creation";
+			break;
+		case EROFS:
+			emsg << "path refers to location on read only filesystem";
+			break;
+		case EBADF:
+			emsg << "file descriptor is not valid";
+			break;
+		case EIO:
+			emsg << "an i/o error occurred";
+			break;
+		default:
+			emsg << "unknown error";
+			break;
+		}
+		throw runtime_error (emsg.str());
+	}
+}
+
+void
+wml::FoundryUtilities::setOwnership (string filepath, int uid, int gid)
+{
+	int rtn = chown (filepath.c_str(), uid, gid);
+	if (rtn) {
+		int e = errno;
+		stringstream emsg;
+		emsg << "setOwnership(): chown() set error: ";
+		switch (e) {
+		case EACCES:
+			emsg << "Permission is denied";
+			break;
+		case EFAULT:
+			emsg << "Bad address";
+			break;
+		case ELOOP:
+			emsg << "Too many symlinks";
+			break;
+		case ENAMETOOLONG:
+			emsg << "File name too long";
+			break;
+		case ENOENT:
+			emsg << "Path invalid (part or all of it)";
+			break;
+		case ENOMEM:
+			emsg << "Out of kernel memory";
+			break;
+		case ENOTDIR:
+			emsg << "component of the path is not a directory";
+			break;
+		case EPERM:
+			emsg << "file system doesn't support directory creation";
+			break;
+		case EROFS:
+			emsg << "path refers to location on read only filesystem";
+			break;
+		case EBADF:
+			emsg << "file descriptor is not valid";
+			break;
+		case EIO:
+			emsg << "an i/o error occurred";
+			break;
+		default:
+			emsg << "unknown error";
+			break;
+		}
+		throw runtime_error (emsg.str());
+	}
+}
+
+void
 wml::FoundryUtilities::touchFile (std::string path)
 {
 	ofstream f;

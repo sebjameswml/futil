@@ -351,6 +351,19 @@ namespace wml {
 				       int uid = -1, int gid = -1);
 
 		/*!
+		 * Set the permissions for the provided file
+		 */
+		static void setPermissions (std::string filepath,
+					    mode_t mode);
+
+		/*!
+		 * Set the ownership for the provided file
+		 */
+		static void setOwnership (std::string filepath,
+					  int uid = -1,
+					  int gid = -1);
+
+		/*!
 		 * Touch the file.
 		 */
 		static void touchFile (std::string path);
