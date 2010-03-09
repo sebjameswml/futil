@@ -1,10 +1,25 @@
 /* -*-c++-*- */
 /*
- * A class to fork and exec processes.
+ * Process is part of WML futil - it's a class to fork and exec
+ * processes.
  *
- * Copyright 2009, William Matthew Limited.
+ *  WML futil is Copyright William Matthew Ltd. 2009.
  *
- * Author: S James <sjames@wmltd.co.uk>
+ *  Author: Seb James <sjames@wmltd.co.uk>
+ *
+ *  WML futil is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  WML futil is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with WML futil.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
 #ifndef _PROCESS_H_
