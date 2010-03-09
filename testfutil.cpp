@@ -47,16 +47,6 @@ int main(int argc, char** argv)
 
 	cout << "Load av: " << FoundryUtilities::getLoadAverage() << '\n';
 
-	UINT64_TYPE n;
-	string b52("");
-	n = (UINT64_TYPE)181440;
-	b52 = FoundryUtilities::formatUint64InBaseN (n, 52);
-	cout << "181440 (21 days of wmllicence eval) is " << b52 << '\n';
-
-	n = (UINT64_TYPE)267840;
-	b52 = FoundryUtilities::formatUint64InBaseN (n, 52);
-	cout << "267840 (31 days of wmllicence eval) is " << b52 << '\n';
-
 	string into("");
 	ifstream fromS;
 	fromS.open ("testFile");

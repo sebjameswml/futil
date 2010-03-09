@@ -15,60 +15,6 @@ extern "C" {
 #include <sys/types.h>
 }
 
-/* The WML Base 52 definitions */
-#define WMLBASE52_CHAR00 's'
-#define WMLBASE52_CHAR01 'q'
-#define WMLBASE52_CHAR02 'd'
-#define WMLBASE52_CHAR03 'J'
-#define WMLBASE52_CHAR04 'K'
-#define WMLBASE52_CHAR05 'R'
-#define WMLBASE52_CHAR06 'j'
-#define WMLBASE52_CHAR07 'X'
-#define WMLBASE52_CHAR08 'U'
-#define WMLBASE52_CHAR09 'p'
-#define WMLBASE52_CHAR10 'o'
-#define WMLBASE52_CHAR11 't'
-#define WMLBASE52_CHAR12 'b'
-#define WMLBASE52_CHAR13 'f'
-#define WMLBASE52_CHAR14 'Q'
-#define WMLBASE52_CHAR15 'r'
-#define WMLBASE52_CHAR16 'G'
-#define WMLBASE52_CHAR17 'H'
-#define WMLBASE52_CHAR18 'I'
-#define WMLBASE52_CHAR19 'Y'
-#define WMLBASE52_CHAR20 'a'
-#define WMLBASE52_CHAR21 'C'
-#define WMLBASE52_CHAR22 'A'
-#define WMLBASE52_CHAR23 'B'
-#define WMLBASE52_CHAR24 'L'
-#define WMLBASE52_CHAR25 'c'
-#define WMLBASE52_CHAR26 'x'
-#define WMLBASE52_CHAR27 'T'
-#define WMLBASE52_CHAR28 'V'
-#define WMLBASE52_CHAR29 'm'
-#define WMLBASE52_CHAR30 'z'
-#define WMLBASE52_CHAR31 'W'
-#define WMLBASE52_CHAR32 'k'
-#define WMLBASE52_CHAR33 'h'
-#define WMLBASE52_CHAR34 'E'
-#define WMLBASE52_CHAR35 'u'
-#define WMLBASE52_CHAR36 'S'
-#define WMLBASE52_CHAR37 'O'
-#define WMLBASE52_CHAR38 'Z'
-#define WMLBASE52_CHAR39 'P'
-#define WMLBASE52_CHAR40 'i'
-#define WMLBASE52_CHAR41 'n'
-#define WMLBASE52_CHAR42 'g'
-#define WMLBASE52_CHAR43 'y'
-#define WMLBASE52_CHAR44 'N'
-#define WMLBASE52_CHAR45 'l'
-#define WMLBASE52_CHAR46 'F'
-#define WMLBASE52_CHAR47 'e'
-#define WMLBASE52_CHAR48 'D'
-#define WMLBASE52_CHAR49 'M'
-#define WMLBASE52_CHAR50 'w'
-#define WMLBASE52_CHAR51 'v'
-
 /*!
  * Character sets useful when calling FoundryUtilities::sanitize().
  *
@@ -182,14 +128,6 @@ namespace wml {
 			return toupper(c);
 		}
 	};
-
-	/*! A 128 bit number structure. */
-	typedef struct {
-		UINT64_TYPE lo;
-		UINT64_TYPE hi;
-		bool neg;
-		bool big; /* true if hi is >0 */
-	} wmlint128;
 
 	/*! \class foundryutilities foundryutilities.h futil/foundryutilities.h
 	 *
@@ -745,110 +683,6 @@ namespace wml {
 		 * Get the size of the file in bytes.
 		 */
 		static int fileSize (std::string filePath);
-
-		/*!
-		 * A group of functions to carry out baseN conversions.
-		 */
-		//@{
-
-		/*!
-		 * Return the zero character for the given base. For
-		 * decimal or hex, it returns '0', for WML Base 52,
-		 * WMLBASE52_CHAR00, and throws an exception if it
-		 * doesn't know the representation character for zero
-		 * in the given base.
-		 *
-		 * @param[in] base The base, or radix for which the
-		 * zero character is required.
-		 * @return The zero character for the base @base.
-		 */
-		static char zeroChar (int base);
-
-		/*!
-		 * Add the number n to the string str, represented in
-		 * the given base.
-		 *
-		 * @param[in] n The number of add to the string @str.
-		 * @param[out] str The string to which the number @n
-		 * should be appended.
-		 * @param[in] base The base or radix in which the
-		 * number should be represented when added to string @str.
-		 * @param[in] at_start If true, the numeral should be
-		 * inserted at the start of the string @str.
-		 */
-		static void addChar (int n, std::string& str, int base, bool at_start);
-
-		/*!
-		 * Convert the character c, which is represented with
-		 * the radix base into an integer, which is returned.
-		 *
-		 * @param[in] c The character to convert into an int.
-		 * @param[in] base The radix in which the character
-		 * @c represents the number.
-		 * @return The number @c as an integer.
-		 */
-		static int baseNToInt (char c, int base);
-
-		/*!
-		 * Convert the string @str into a number, placing it
-		 * into the array @num, which is @numlen in length.
-		 *
-		 * Separate hex function because hex can be done faster than an
-		 * arbitrary base because there are 8 hex numerals ("4 bit nibbles")
-		 * per 32 bit uint32.
-		 */
-		static void hexToUint32s (const std::string& str,
-					  UINT32_TYPE * num,
-					  UINT32_TYPE numlen);
-
-		/*!
-		 * Convert the string @str, represented in base @base
-		 * into a number, placing it into the array @num,
-		 * which is @numlen in length.
-		 */
-		static void baseNToUint32s (const std::string& str,
-					    UINT32_TYPE * num,
-					    UINT32_TYPE numlen,
-					    int base);
-
-		/*!
-		 * Output the number @num represented in base @base.
-		 */
-		static std::string formatUint64InBaseN (UINT64_TYPE num, int base);
-
-
-		/*!
-		 * Output the number @num which can be up to 4 32 bit
-		 * bytes wide, represented in base @base.
-		 */
-		static std::string formatUint128InBaseN (UINT32_TYPE * num,
-							 UINT32_TYPE numlen,
-							 int base);
-
-		/*!
-		 * Multiply two UINT64_TYPE numbers and return the
-		 * result in a wmlint128.
-		 */
-		static wmlint128 bigMultUnsigned (UINT64_TYPE a,
-						  UINT64_TYPE b);
-
-		/*!
-		 * Divide @numerator by @denom, returning result as wmlint128.
-		 */
-		static wmlint128 bigDiv (wmlint128 numerator,
-					 UINT64_TYPE denom);
-
-		/*!
-		 * Divide @numerator by @denom, returning modulus as UINT64_TYPE.
-		 */
-		static UINT64_TYPE bigModUnsigned (wmlint128 numerator,
-						   UINT64_TYPE denom);
-
-		/*!
-		 * return true if a is greater than or equal to b.
-		 */
-		static bool bigGTE (wmlint128 a, UINT64_TYPE b);
-		//@}
 
 		/*!
 		 * Increment the count stored in the file given by
