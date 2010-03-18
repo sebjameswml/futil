@@ -80,24 +80,7 @@ extern "C" {
 #define CUPS_DESTQUEUEPORT_SAFE_CHARS CHARS_NUMERIC_ALPHA
 
 /*
- * First come functions which may be #included by C code.
- */
-#ifdef __cplusplus
-extern "C" {
-#endif
-	int emailMsg (const char *subject,
-		      const char *message);
-	int emailMsgPlusAttachment (const char *subject,
-				    const char *message,
-				    const char *attachfile);
-	int get_system_mac (unsigned int * mac);
-#ifdef __cplusplus
-}
-#endif
-
-
-/*
- * Remaining code is available to C++ programs only.
+ * FoundryUtilities code is available to C++ programs only.
  */
 #ifdef __cplusplus
 
@@ -360,6 +343,12 @@ namespace wml {
 		static void unlinkFile (std::string fpath);
 
 		/*!
+		 * Use libmagic to obtain a string description of the
+		 * type of the file specified by filePath.
+		 */
+		static std::string getFileType (std::string filePath);
+
+		/*!
 		 * This reads the contents of a directory tree, making
 		 * up a list of the contents in the vector vec. If the
 		 * directory tree has subdirectories, these are
@@ -406,17 +395,6 @@ namespace wml {
 		 */
 		static void releaseLock (int fd);
 
-#ifdef WMLPPLOCK_REQUIRED
-		/*!
-		 * Obtain a "WMLPP Platform lock"
-		 */
-		static bool getWmlppLock (void);
-
-		/*!
-		 * Release a "WMLPP Platform lock"
-		 */
-		static void releaseWmlppLock (void);
-#endif
 		/*!
 		 * Replace '\' with '\\' so that str is suitable to be
 		 * placed in a shell script.

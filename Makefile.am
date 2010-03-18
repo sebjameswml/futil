@@ -6,22 +6,22 @@ SUBDIRS = futil doc
 bin_PROGRAMS = testDoIconv testXmlCondition testfutil testsymlinks testdirperms testSetPerm
 
 testdirperms_SOURCES = testdirperms.cpp
-testdirperms_LDADD = futil/libfutil.la -luuid
+testdirperms_LDADD = futil/libfutil.la -luuid -lmagic
 
 testsymlinks_SOURCES = testsymlinks.cpp
-testsymlinks_LDADD = futil/libfutil.la -luuid
+testsymlinks_LDADD = futil/libfutil.la -luuid -lmagic
 
 testfutil_SOURCES = testfutil.cpp
-testfutil_LDADD = futil/libfutil.la -luuid
+testfutil_LDADD = futil/libfutil.la -luuid -lmagic
 
 testDoIconv_SOURCES = testDoIconv.cpp
-testDoIconv_LDADD = futil/libfutil.la -luuid
+testDoIconv_LDADD = futil/libfutil.la -luuid -lmagic
 
 testXmlCondition_SOURCES = testXmlCondition.cpp
-testXmlCondition_LDADD = futil/libfutil.la -luuid
+testXmlCondition_LDADD = futil/libfutil.la -luuid -lmagic
 
 testSetPerm_SOURCES = testSetPerm.cpp
-testSetPerm_LDADD = futil/libfutil.la -luuid
+testSetPerm_LDADD = futil/libfutil.la -luuid -lmagic
 
 INCLUDES = -I./futil
 
