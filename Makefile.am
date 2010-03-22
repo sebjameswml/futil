@@ -3,7 +3,7 @@ AUTOMAKE_OPTIONS = check-news dist-bzip2
 
 SUBDIRS = futil doc
 
-bin_PROGRAMS = testDoIconv testXmlCondition testfutil testsymlinks testdirperms testSetPerm
+bin_PROGRAMS = testDoIconv testXmlCondition testfutil testsymlinks testdirperms testSetPerm testdates dateToEpoch
 
 testdirperms_SOURCES = testdirperms.cpp
 testdirperms_LDADD = futil/libfutil.la -luuid -lmagic
@@ -13,6 +13,12 @@ testsymlinks_LDADD = futil/libfutil.la -luuid -lmagic
 
 testfutil_SOURCES = testfutil.cpp
 testfutil_LDADD = futil/libfutil.la -luuid -lmagic
+
+testdates_SOURCES = testdates.cpp
+testdates_LDADD = futil/libfutil.la -luuid -lmagic
+
+dateToEpoch_SOURCES = dateToEpoch.cpp
+dateToEpoch_LDADD = futil/libfutil.la -luuid -lmagic
 
 testDoIconv_SOURCES = testDoIconv.cpp
 testDoIconv_LDADD = futil/libfutil.la -luuid -lmagic

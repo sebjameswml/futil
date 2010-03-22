@@ -573,6 +573,19 @@ namespace wml {
 		static time_t dateToNum (std::string& dateStr);
 
 		/*!
+		 * Convert a date/time of form 2009-02-16 14:34:34 to
+		 * the unix epoch number. The fifth character of the
+		 * string is examined, and if it is not a numeral, it
+		 * is used as the date separator. If the fifth
+		 * character IS a numeral, then the date format is
+		 * read in as YYYYMMDD.
+		 *
+		 * The 3rd char after the space is read in and used as
+		 * time separator
+		 */
+		static time_t dateTimeToNum (std::string dateTimeStr);
+
+		/*!
 		 * Convert a unix epoch number to a date/time of form
 		 * 2009-02-16 02:03:01, using dateSeparator to delimit
 		 * the date and timeSeparator to delimit the time.

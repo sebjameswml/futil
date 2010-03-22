@@ -1685,6 +1685,118 @@ wml::FoundryUtilities::dateToNum (std::string& dateStr)
 	return rtnTime;
 }
 
+time_t
+wml::FoundryUtilities::dateTimeToNum (std::string dateTimeStr)
+{
+	char dateSeparator = '\0';
+	char timeSeparator = '\0';
+
+	if (dateTimeStr.empty()) {
+		return -2;
+	}
+
+	if (dateTimeStr.size() < 8) {
+		return -3;
+	}
+
+	if (dateTimeStr[4] < '0'
+	    || dateTimeStr[4] > '9') {
+		dateSeparator = dateTimeStr[4];
+		if (dateTimeStr.size() < 10) {
+			return -4;
+		}
+	}
+
+	string year;
+	string month;
+	string day;
+	unsigned int yearN=0, monthN=0, dayN=0;
+
+	year = dateTimeStr.substr (0,4);
+
+	if (dateSeparator == '\0') {
+		month = dateTimeStr.substr (4,2);
+		day = dateTimeStr.substr (6,2);
+	} else {
+		month = dateTimeStr.substr (5,2);
+		day = dateTimeStr.substr (8,2);
+	}
+
+	stringstream yearss, monthss, dayss;
+	yearss << year;
+	yearss.width(4);
+	yearss.fill ('0');
+	yearss >> yearN;
+
+	monthss << month;
+	monthss.width(2);
+	monthss.fill ('0');
+	monthss >> monthN;
+
+	dayss << day;
+	dayss.width(2);
+	dayss.fill ('0');
+	dayss >> dayN;
+
+	string hour;
+	string min;
+	string sec;
+	unsigned int hourN=0, minN=0, secN=0;
+
+	string::size_type spacePos = dateTimeStr.find (" ", 0);
+	if (spacePos != string::npos) {
+		if (dateTimeStr[spacePos+3] < '0'
+		    || dateTimeStr[spacePos+3] > '9') {
+			timeSeparator = dateTimeStr[spacePos+3];
+		}
+
+		hour = dateTimeStr.substr (spacePos+1, 2);
+
+		if (timeSeparator != '\0') {
+			min = dateTimeStr.substr (spacePos+4, 2);
+			sec = dateTimeStr.substr (spacePos+7, 2);
+		} else {
+			min = dateTimeStr.substr (spacePos+3, 2);
+			sec = dateTimeStr.substr (spacePos+5, 2);
+		}
+
+		//DBG ("hour: " << hour << " min: " << min << " sec: " << sec);
+
+		stringstream hourss, minss, secss;
+		hourss << hour;
+		hourss.width(2);
+		hourss.fill ('0');
+		hourss >> hourN;
+
+		minss << min;
+		minss.width(2);
+		minss.fill ('0');
+		minss >> minN;
+
+		secss << sec;
+		secss.width(2);
+		secss.fill ('0');
+		secss >> secN;
+	}
+
+	struct tm * t;
+	t = (struct tm*) malloc (sizeof (struct tm));
+	t->tm_year = yearN-1900;
+	t->tm_mon = monthN-1;
+	t->tm_mday = dayN;
+	t->tm_hour = hourN;
+	t->tm_min = minN;
+	t->tm_sec = secN;
+	t->tm_isdst = -1;
+	time_t rtnTime = mktime (t);
+	if (rtnTime == -1) {
+		throw runtime_error ("mktime() returned -1");
+	}
+	free (t);
+
+	return rtnTime;
+}
+
 std::string
 wml::FoundryUtilities::numToDateTime (time_t epochSeconds,
 				      char dateSeparator,
