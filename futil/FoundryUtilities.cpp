@@ -1690,6 +1690,10 @@ wml::FoundryUtilities::numToDateTime (time_t epochSeconds,
 				      char dateSeparator,
 				      char timeSeparator)
 {
+	if (epochSeconds == 0) {
+		return "unknown";
+	}
+
 	struct tm * t;
 	time_t es = epochSeconds;
 	t = (struct tm*) malloc (sizeof (struct tm));
