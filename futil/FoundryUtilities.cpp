@@ -516,6 +516,24 @@ wml::FoundryUtilities::freeSpace (string dirPath)
 	return rtn.str();
 }
 
+unsigned int
+wml::FoundryUtilities::freeSpaceKBytes (string dirPath)
+{
+	struct statvfs dir;
+	if (statvfs (dirPath.c_str(), &dir)) {
+		return 0;
+	}
+
+	// dir.f_bavail is number of _blocks_ available, need
+	// to multiply by fragment size to get bytes total:
+	fsblkcnt_t available = dir.f_bavail * dir.f_frsize;
+
+	// Now available is the number of bytes not KB so fix:
+	available = available >> 10;
+
+	return static_cast<unsigned int>(available);
+}
+
 bool
 wml::FoundryUtilities::fileExists (std::string& path)
 {

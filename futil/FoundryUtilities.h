@@ -264,6 +264,12 @@ namespace wml {
 		static std::string freeSpace (std::string dirPath);
 
 		/*!
+		 * Return the amount of free space in KBytes on the
+		 * filesystem on which dirPath resides.
+		 */
+		static unsigned int freeSpaceKBytes (std::string dirPath);
+
+		/*!
 		 * Stat a file, return true if the file exists and is
 		 * a regular file.  If file is a hanging symlink,
 		 * fileExists returns false, if file is a symlink
