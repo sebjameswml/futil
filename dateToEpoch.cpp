@@ -20,12 +20,17 @@ int main(int argc, char** argv)
 {
         DBGOPEN ("dateToEpoch.log");
 
-	if (argc < 2) {
-		cerr << "Usage: dateToEpoch datestr\n";
+	string d;
+	cin >> d;
+
+	if (d.empty() && argc < 2) {
+		cerr << "Usage: dateToEpoch datestr or echo datestr | dateToEpoch\n";
 		return -1;
 	}
 
-	string d (argv[1]);
+	if (d.empty()) {
+		d = argv[1];
+	}
 
 	time_t n = 0;
 
