@@ -89,7 +89,8 @@
  * function.
  */
 #ifdef DEBUG
-# define DBGOPEN(s) DBGSTREAM.open (s, std::ios::out|std::ios::trunc);
+# define DBGOPEN(s) DBGSTREAM.open (s, std::ios::out|std::ios::trunc); \
+DBGSTREAM << "**WML Debug File**\n";
 #else
 # define DBGOPEN(s)
 #endif
@@ -99,7 +100,8 @@
  * be called early on in the main() function.
  */
 #ifdef DEBUG
-# define DBGAPPEND(s) DBGSTREAM.open (s, std::ios::out|std::ios::app);
+# define DBGAPPEND(s) DBGSTREAM.open (s, std::ios::out|std::ios::app); \
+DBGSTREAM << "**WML Debug File**\n";
 #else
 # define DBGAPPEND(s)
 #endif
