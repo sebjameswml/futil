@@ -117,7 +117,7 @@ DBGSTREAM << "**WML Debug File**\n";
 #endif
 
 #ifdef DEBUG
-# define DBG(s)  DBGSTREAM << "DBG: " << __FUNCTION__ << ": " << s << endl;
+# define DBG(s)  DBGSTREAM << "DBG: " << __FUNCTION__ << ": " << s << std::endl;
 # define debuglog(type, format, ...) syslog(type, format, __VA_ARGS__)
 #else
 # define DBG(s)
@@ -125,7 +125,7 @@ DBGSTREAM << "**WML Debug File**\n";
 #endif
 
 #ifdef DEBUG2
-# define DBG2(s)  DBGSTREAM << "DBG2: " << __FUNCTION__ << ": " << s << endl;
+# define DBG2(s)  DBGSTREAM << "DBG2: " << __FUNCTION__ << ": " << s << std::endl;
 # define debuglog2(type, format, ...) syslog(type, format, __VA_ARGS__)
 #else
 # define DBG2(s)
