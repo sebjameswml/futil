@@ -29,6 +29,12 @@ namespace wml {
 		std::string getFileType (std::string filePath);
 	private:
 
+		/*!
+		 * Pointer to libmagic struct containing magic file type
+		 * rules
+		 * This is initialised in the constructor which allocates
+		 * memory and then uninitialised in the deconstructor
+		 */
 		struct magic_set* magic;
 	};
 }
