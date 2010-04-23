@@ -839,6 +839,16 @@ namespace wml {
 		 * MB, then truncate it to 0.
 		 */
 		static void check_tmp_messages (int megabytes);
+
+		/*!
+		 * Determine if ip_string is a valid IP
+		 * address. Return true if so, false if not.
+		 *
+		 * This function copied from
+		 * wmlnetapui/wmlnetapui/SystemPage.cpp
+		 */
+		static bool valid_ip (std::string ip_string);
+
 	};
 
 } // namespace wml

@@ -56,6 +56,7 @@ extern "C" {
 #include <string.h>
 #include <iconv.h>
 #include <magic.h>
+#include <regex.h>
 }
 
 /*!
@@ -2697,4 +2698,48 @@ wml::FoundryUtilities::check_tmp_messages (int megabytes)
 
 	free (buf);
 	return;
+}
+
+bool
+wml::FoundryUtilities::valid_ip (string ip_string)
+{
+	regex_t * ip_regex;
+	int reg_error;
+	int valid = 0; /* The result of the validation. */
+
+	ip_regex = (regex_t*) malloc (sizeof(regex_t));
+
+	/* Validation one - does it conform to NNN.NNN.NNN.NNN format? */
+	reg_error =
+		regcomp (ip_regex,
+			 "^(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\\."
+			 "(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\\."
+			 "(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\\."
+			 "(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])$",
+			 REG_EXTENDED);
+
+	if (reg_error) {
+		return false;
+	}
+
+	valid = regexec (ip_regex, ip_string.c_str(), 0, NULL, 0) ? 0 : 1;
+
+	/* Validation two. Make sure the IP is not 0.0.0.0. */
+	reg_error =
+		regcomp (ip_regex,
+			 "^0+\\.0+\\.0+\\.0+$",
+			 REG_EXTENDED);
+
+	if (reg_error) {
+		return false;
+	}
+
+	if (regexec (ip_regex, ip_string.c_str(), 0, NULL, 0) == 0) {
+		valid = 0;
+	}
+
+	if (valid > 0) {
+		return true;
+	}
+	return false;
 }
