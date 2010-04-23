@@ -474,6 +474,34 @@ wml::FoundryUtilities::getLoadAverage (void)
 	return rtn;
 }
 
+float
+wml::FoundryUtilities::getUptime (void)
+{
+	ifstream f ("/proc/loadavg");
+	if (!f.is_open()) {
+		return -1.0;
+	}
+	string line;
+	while (getline (f, line, '\n') != false) {
+		if (!line.empty()) {
+			break;
+		}
+	}
+	f.close();
+
+	// Now read in the uptime - that's the first of the two
+	// numbers in the line.
+	string::size_type space = line.find_first_of (" ");
+	if (space == string::npos) {
+		return -2.0;
+	}
+
+	stringstream ss;
+	float rtn;
+	ss << line.substr (0, space);
+	ss >> rtn;
+}
+
 string
 wml::FoundryUtilities::freeSpace (string dirPath)
 {

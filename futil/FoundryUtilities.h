@@ -256,6 +256,11 @@ namespace wml {
 		static float getLoadAverage (void);
 
 		/*!
+		 * Get the uptime for the system in seconds.
+		 */
+		static float getUptime (void);
+
+		/*!
 		 * Return the amount of free space on the filesystem
 		 * on which dirPath resides. The returned value is a
 		 * human readable amount, with the KB/MB/GB suffix
