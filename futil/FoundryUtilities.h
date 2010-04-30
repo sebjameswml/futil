@@ -287,6 +287,11 @@ namespace wml {
 		//@}
 
 		/*!
+		 * Like fileExists, but for block devices
+		 */
+		static bool blockdevExists (std::string& path);
+
+		/*!
 		 * Stat a directory, return true if the directory
 		 * exists.
 		 */

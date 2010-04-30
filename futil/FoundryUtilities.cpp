@@ -586,6 +586,28 @@ wml::FoundryUtilities::fileExists (std::string& path)
 }
 
 bool
+wml::FoundryUtilities::blockdevExists (std::string& path)
+{
+	struct stat * buf = NULL;
+
+	buf = static_cast<struct stat*> (malloc (sizeof (struct stat)));
+	memset (buf, 0, sizeof (struct stat));
+
+	if (stat (path.c_str(), buf)) {
+		free (buf);
+		return false;
+	}
+
+	if (S_ISBLK (buf->st_mode)) {
+		free (buf);
+		return true;
+	}
+
+	free (buf);
+	return false;
+}
+
+bool
 wml::FoundryUtilities::fileExists (const char * path)
 {
 	string thePath = path;
