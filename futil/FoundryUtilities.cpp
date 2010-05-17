@@ -477,7 +477,7 @@ wml::FoundryUtilities::getLoadAverage (void)
 float
 wml::FoundryUtilities::getUptime (void)
 {
-	ifstream f ("/proc/loadavg");
+	ifstream f ("/proc/uptime");
 	if (!f.is_open()) {
 		return -1.0;
 	}
@@ -500,6 +500,8 @@ wml::FoundryUtilities::getUptime (void)
 	float rtn;
 	ss << line.substr (0, space);
 	ss >> rtn;
+
+	return rtn;
 }
 
 string
