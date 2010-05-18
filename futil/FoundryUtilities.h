@@ -86,6 +86,7 @@ extern "C" {
 
 #include <vector>
 #include <list>
+#include <set>
 #include <istream>
 #include <ostream>
 #include <iostream>
@@ -396,6 +397,25 @@ namespace wml {
 					       std::string dirPath);
 
 		/*!
+		 * Get a list of only the immediate subdirectories in
+		 * dirPath.
+		 *
+		 * For example, if you have a structure like:
+		 *
+		 * file1
+		 * file2
+		 * dir1/file1
+		 * dir2/file1
+		 * dir2/file2
+		 * dir2/aDirectory
+		 *
+		 * The set dset would be filled only with dir1,
+		 * dir2.
+		 */
+		static void readDirectoryDirs (std::set<std::string>& dset,
+					       std::string dirPath);
+
+		/*!
 		 * Return a datestamp - st_mtime; the file
 		 * modification time for the given file.
 		 */
@@ -504,6 +524,12 @@ namespace wml {
 		 * Status:\\tS (sleeping)\\n or Status:\\tR (running)
 		 */
 		static bool pidLoaded (int pid);
+
+		/*!
+		 * Get the command line for the given pid out of
+		 * /proc/pid/cmdline.
+		 */
+		static std::string pidCmdline (int pid);
 
 		/*!
 		 * Get the mac address of the platform from eth0

@@ -36,6 +36,8 @@
 #include <cstdlib>
 #include <stdexcept>
 #include <list>
+#include <vector>
+#include <set>
 #include <algorithm>
 
 #include "FoundryUtilities.h"
@@ -1324,6 +1326,27 @@ wml::FoundryUtilities::pidLoaded (int pid)
 }
 
 std::string
+wml::FoundryUtilities::pidCmdline (int pid)
+{
+	stringstream path;
+	ifstream f;
+	string str("");
+
+	if (pid>0) {
+		// Find pid n.
+		path << "/proc/" << pid << "/cmdline";
+		f.open (path.str().c_str(), ios::in);
+		if (!f.is_open()) {
+			// No file, so not running.
+			return str;
+		}
+		getline (f, str, '\n');
+		f.close();
+	}
+	return str;
+}
+
+std::string
 wml::FoundryUtilities::getMacAddr (void)
 {
 	char mac[32] = "";
@@ -1539,6 +1562,38 @@ wml::FoundryUtilities::readDirectoryTree (vector<string>& vec,
 				newEntry = sd + "/" + ep->d_name;
 			}
 			vec.push_back (newEntry);
+		}
+	}
+
+	(void) closedir (d);
+	return;
+}
+
+void
+wml::FoundryUtilities::readDirectoryDirs (std::set<std::string>& dset,
+					  std::string dirPath)
+{
+	DIR* d;
+	struct dirent *ep;
+	size_t entry_len = 0;
+
+	if (!(d = opendir (dirPath.c_str()))) {
+		string msg = "Failed to open directory " + dirPath;
+		throw runtime_error (msg);
+	}
+
+	while ((ep = readdir (d))) {
+
+ 		if (ep->d_type == DT_DIR) {
+
+			// Skip "." and ".." directories
+			if ( ((entry_len = strlen (ep->d_name)) > 0 && ep->d_name[0] == '.') &&
+			     (ep->d_name[1] == '\0' || ep->d_name[1] == '.') ) {
+				continue;
+			}
+
+			// All other directories are added to vec
+			dset.insert (ep->d_name);
 		}
 	}
 
