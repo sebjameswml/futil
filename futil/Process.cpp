@@ -258,6 +258,7 @@ wml::Process::probeProcess (void)
 		int rtn = 0;
 		if ((rtn = waitpid (this->pid, (int *)0, WNOHANG)) == this->pid) {
 			this->callbacks->processFinishedSignal (this->progName);
+			this->pid = 0;
 			return;
 		} else if (rtn == -1) {
 			theError = errno;
@@ -319,22 +320,35 @@ wml::Process::readAllStandardError (void)
 }
 
 pid_t
-wml::Process::getPid (void) {
+wml::Process::getPid (void)
+{
 	return this->pid;
 }
 
+bool
+wml::Process::running (void)
+{
+	if (this->pid > 0) {
+		return true;
+	}
+	return false;
+}
+
 int
-wml::Process::getError (void) {
+wml::Process::getError (void)
+{
 	return this->error;
 }
 
 void
-wml::Process::setError (int e) {
+wml::Process::setError (int e)
+{
 	this->error = e;
 }
 
 void
-wml::Process::setCallbacks (ProcessCallbacks * cb) {
+wml::Process::setCallbacks (ProcessCallbacks * cb)
+{
 	this->callbacks = cb;
 }
 

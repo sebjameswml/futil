@@ -101,6 +101,12 @@ namespace wml {
 		void probeProcess (void);
 
 		/*!
+		 * If the process is running - if pid > 0, return
+		 * true. Otherwise return false.
+		 */
+		bool running (void);
+
+		/*!
 		 * Accessors
 		 */
 		//@{
