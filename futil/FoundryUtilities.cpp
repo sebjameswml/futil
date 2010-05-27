@@ -1017,7 +1017,7 @@ wml::FoundryUtilities::unlinkFile (string fpath)
 	}
 }
 
-std::string
+/*std::string
 wml::FoundryUtilities::getFileType (string filePath)
 {
 	struct magic_set* magic;
@@ -1048,7 +1048,7 @@ wml::FoundryUtilities::getFileType (string filePath)
 	magic_close (magic);
 
 	return fileType;
-}
+	}*/
 
 std::string
 wml::FoundryUtilities::fileModDatestamp (const char* filename)

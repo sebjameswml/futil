@@ -3,7 +3,7 @@
 #endif
 
 #include <config.h>
-#include <FileTypeIdentifier.h>
+#include <FileTyper.h>
 #include <sstream>
 #include <stdexcept>
 
@@ -37,7 +37,7 @@ wml::FileTyper::~FileTyper (void)
 }
 
 string
-wml::FileTyper::getFileType (string filePath)
+wml::FileTyper::getFileTypeStr (string filePath)
 {
 	const char* type = magic_file (this->magic, filePath.c_str());
 	if (type == (const char*)0) {
@@ -49,4 +49,15 @@ wml::FileTyper::getFileType (string filePath)
 	string fileType = type;
 
 	return fileType;
+}
+
+wml::FILETYPE
+wml::FileTyper::getFileType (string filePath)
+{
+	string fileTypeString = this->getFileTypeStr (filePath);
+	if (fileTypeString == "") {
+
+	} else {
+
+	}
 }

@@ -363,7 +363,7 @@ namespace wml {
 		 * Use libmagic to obtain a string description of the
 		 * type of the file specified by filePath.
 		 */
-		static std::string getFileType (std::string filePath);
+		//static std::string getFileType (std::string filePath);
 
 		/*!
 		 * This reads the contents of a directory tree, making
