@@ -61,6 +61,9 @@ wml::Process::Process () :
 {
 	// Set up the polling structs
 	this->p = static_cast<struct pollfd*>(malloc (2*sizeof (struct pollfd)));
+
+	// Initialise the callbacks to 0
+	this->callbacks = (ProcessCallbacks*)0;
 }
 
 // Destructor
@@ -176,12 +179,16 @@ wml::Process::waitForStarted (void)
 	}
 	if (this->pid>0) {
 		DBG ("The process started!");
-		this->callbacks->startedSignal (this->progName);
+		if (this->callbacks != (ProcessCallbacks*)0) {
+			this->callbacks->startedSignal (this->progName);
+		}
 		this->signalledStart = true;
 		return true;
 	} else {
 		this->error = PROCESSFAILEDTOSTART;
-		this->callbacks->errorSignal (this->error);
+		if (this->callbacks != (ProcessCallbacks*)0) {
+			this->callbacks->errorSignal (this->error);
+		}
 		return false;
 	}
 
@@ -206,7 +213,9 @@ wml::Process::probeProcess (void)
 	// Has the process started?
 	if (!this->signalledStart) {
 		if (this->pid > 0) {
-			this->callbacks->startedSignal (this->progName);
+			if (this->callbacks != (ProcessCallbacks*)0) {
+				this->callbacks->startedSignal (this->progName);
+			}
 			this->signalledStart = true;
 			DBG ("Process::probeProcess set signalledStart and signalled the start...");
 		}
@@ -214,7 +223,9 @@ wml::Process::probeProcess (void)
 
 	// Check for error condition
 	if (this->error>0) {
-		this->callbacks->errorSignal (this->error);
+		if (this->callbacks != (ProcessCallbacks*)0) {
+			this->callbacks->errorSignal (this->error);
+		}
 		DBG ("have error in probeProcess, returning");
 		return;
 	}
@@ -239,15 +250,21 @@ wml::Process::probeProcess (void)
 	if (this->p[0].revents & POLLNVAL || this->p[1].revents & POLLNVAL) {
 		DBG ("Process::probeProcess: pipes closed, process must have crashed");
 		this->error = PROCESSCRASHED;
-		this->callbacks->errorSignal (this->error);
+		if (this->callbacks != (ProcessCallbacks*)0) {
+			this->callbacks->errorSignal (this->error);
+		}
 		return;
 	}
 
 	if (this->p[0].revents & POLLIN || this->p[0].revents & POLLPRI) {
-		this->callbacks->readyReadStandardOutputSignal();
+		if (this->callbacks != (ProcessCallbacks*)0) {
+			this->callbacks->readyReadStandardOutputSignal();
+		}
 	}
 	if (this->p[1].revents & POLLIN || this->p[1].revents & POLLPRI) {
-		this->callbacks->readyReadStandardErrorSignal();
+		if (this->callbacks != (ProcessCallbacks*)0) {
+			this->callbacks->readyReadStandardErrorSignal();
+		}
 	}
 
 	// Is the process running? We check last, so that we get any
@@ -257,7 +274,9 @@ wml::Process::probeProcess (void)
 	if (this->signalledStart == true) {
 		int rtn = 0;
 		if ((rtn = waitpid (this->pid, (int *)0, WNOHANG)) == this->pid) {
-			this->callbacks->processFinishedSignal (this->progName);
+			if (this->callbacks != (ProcessCallbacks*)0) {
+				this->callbacks->processFinishedSignal (this->progName);
+			}
 			this->pid = 0;
 			return;
 		} else if (rtn == -1) {
