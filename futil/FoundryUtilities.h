@@ -787,18 +787,28 @@ namespace wml {
 					      char separator = ',');
 
                 /*!
-                 * Converts pdf files to a ghostscript device specified.
+                 * Converts pdf files to a ghostscript device
+                 * specified. If wait is true, then the function will
+                 * block until the conversion is complete. Otherwise,
+                 * the forked process will be left to run and the
+                 * function returns immediately.
                  */
                 static void pdfConversion (std::string inputPath, std::string outputDevice,
                                            std::string outputPath, unsigned int width,
-                                           unsigned int height);
+                                           unsigned int height, bool wait = false);
 
                 /*!
                  * Creates jpeg(s) from a pdf file. To create a jpeg for each page
                  * use %d in the output path in place of the page number.
+		 *
+		 * If wait is true, then the function will block until
+                 * the conversion is complete. Otherwise, the forked
+                 * process will be left to run and the function
+                 * returns immediately.
                  */
                 static void pdfToJpeg (std::string inputPath, std::string outputPath,
-                                       unsigned int width, unsigned int height);
+                                       unsigned int width, unsigned int height,
+				       bool wait = false);
 
                 /*!
                  * Creates png(s) from a pdf file. To create a png for each page
@@ -806,9 +816,15 @@ namespace wml {
                  * contain an alpha channel. PDF 1.4 transparent files do not give a
                  * transparent background with this device. Text and graphics anti-aliasing
                  * are enabled by default.
+		 *
+		 * If wait is true, then the function will block until
+                 * the conversion is complete. Otherwise, the forked
+                 * process will be left to run and the function
+                 * returns immediately.
                  */
                 static void pdfToPng (std::string inputPath, std::string outputPath,
-				      unsigned int width, unsigned int height);
+				      unsigned int width, unsigned int height,
+				      bool wait = false);
 
 		/*!
 		 * A wrapper around the iconv() call from glibc.

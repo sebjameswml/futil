@@ -70,6 +70,10 @@ int lock_fd_glob = 0;
 
 using namespace std;
 
+/*!
+ * FoundryUtilities implementation
+ */
+
 // Constructor
 wml::FoundryUtilities::FoundryUtilities (void)
 {
@@ -2549,7 +2553,8 @@ wml::FoundryUtilities::suffix (int n)
 void
 wml::FoundryUtilities::pdfConversion (string inputPath,
 				      string outputDevice, string outputPath,
-				      unsigned int width, unsigned int height)
+				      unsigned int width, unsigned int height,
+				      bool wait)
 {
         string widthS, heightS;
         stringstream tempSS, returnSS;
@@ -2564,6 +2569,7 @@ wml::FoundryUtilities::pdfConversion (string inputPath,
         Process ghostScript;
         string processPath = "/usr/bin/gs";
         list<string> args;
+        args.push_back ("gs");
         args.push_back ("-dNOPAUSE");
         args.push_back ("-dBATCH");
         args.push_back ("-g" + widthS + "x" + heightS);
@@ -2571,20 +2577,30 @@ wml::FoundryUtilities::pdfConversion (string inputPath,
         args.push_back ("-sOutputFile=" + outputPath);
         args.push_back (inputPath);
         ghostScript.start (processPath, args);
+
+	if (wait == true) {
+		ghostScript.waitForStarted();
+		while (ghostScript.running()) {
+			usleep (500000);
+			ghostScript.probeProcess();
+		}
+	}
 }
 
 void
 wml::FoundryUtilities::pdfToJpeg (string inputPath, string outputPath,
-				  unsigned int width, unsigned int height)
+				  unsigned int width, unsigned int height,
+				  bool wait)
 {
-	pdfConversion (inputPath, "jpeg", outputPath, width, height);
+	pdfConversion (inputPath, "jpeg", outputPath, width, height, wait);
 }
 
 void
 wml::FoundryUtilities::pdfToPng (string inputPath, string outputPath,
-				 unsigned int width, unsigned int height)
+				 unsigned int width, unsigned int height,
+				 bool wait)
 {
-	pdfConversion (inputPath, "pngalpha", outputPath, width, height);
+	pdfConversion (inputPath, "pngalpha", outputPath, width, height, wait);
 }
 
 
