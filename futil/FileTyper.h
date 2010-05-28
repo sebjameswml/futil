@@ -24,11 +24,15 @@ namespace wml {
          * \brief The types of files which a user of the Tempest PDF+
          * or DSM might upload
          */
-        enum FILETYPE {MFT_UNKNOWN, MFT_FORM, MFT_MACRO, MFT_FONT,
-                       MFT_CONFIG, MFT_UNICODE_FONT, MFT_UNICODE_ARCHIVE,
+        enum FILETYPE {MFT_UNKNOWN, MFT_FORM, MFT_MACRO, MFT_TYPE1_FONT,
+		       MFT_TRUETYPE_FONT, MFT_CONFIG, MFT_UNICODE_FONT,
+		       MFT_UNICODE_ARCHIVE, MFT_ZIP, MFT_PNG_IMAGE,
                        MFT_PDF_FILE, MFT_CONVERT_INI, MFT_USER_INI,
                        MFT_CSV, MFT_XML, MFT_LOG, MFT_RAW_DATA, MFT_AFM,
-		       MFT_PPD, MFT_PCL_FILE, MFT_PRESCRIBE_DATA, FILETYPE_N};
+		       MFT_PPD, MFT_PCL_FILE, MFT_PRESCRIBE_DATA,
+		       MFT_ASCII_TEXT, MFT_BZ2_ARCHIVE, MFT_GZIP_ARCHIVE,
+		       MFT_RPM_PACKAGE, MFT_DEBIAN_PACKAGE, MFT_TAR,
+		       FILETYPE_N};
 
 	//@}
 
@@ -51,7 +55,6 @@ namespace wml {
 		 */
 		wml::FILETYPE getFileType (std::string filePath);
 	private:
-
 		/*!
 		 * Pointer to libmagic struct containing magic file type
 		 * rules

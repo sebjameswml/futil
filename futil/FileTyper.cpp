@@ -55,9 +55,39 @@ wml::FILETYPE
 wml::FileTyper::getFileType (string filePath)
 {
 	string fileTypeString = this->getFileTypeStr (filePath);
-	if (fileTypeString == "") {
-
+	if (fileTypeString.find ("Prescribe document") == 0) {
+		return MFT_PRESCRIBE_DATA;
+	} else if (fileTypeString.find ("PDF document") == 0) {
+		return MFT_PDF_FILE;
+	} else if (fileTypeString.find ("PostScript Type 1 font") != string::npos) {
+		return MFT_TYPE1_FONT;
+	} else if (fileTypeString.find ("TrueType")) {
+		return MFT_TRUETYPE_FONT;
+	} else if (fileTypeString.find ("PCL file") == 0) {
+		return MFT_PCL_FILE;
+	} else if (fileTypeString.find ("XML") == 0) {
+		return MFT_XML;
+	} else if (fileTypeString.find ("ASCII text") == 0) {
+		return MFT_ASCII_TEXT;
+	} else if (fileTypeString.find ("ASCII font metrics") == 0) {
+		return MFT_AFM;
+	} else if (fileTypeString.find ("bzip2 compressed data") == 0) {
+		return MFT_BZ2_ARCHIVE;
+	} else if (fileTypeString.find ("gzip compressed data") == 0) {
+		return MFT_GZIP_ARCHIVE;
+	} else if (fileTypeString.find ("PPD file") == 0) {
+		return MFT_PPD;
+	} else if (fileTypeString.find ("RPM") == 0) {
+		return MFT_RPM_PACKAGE;
+	} else if (fileTypeString.find ("POSIX tar archive (GNU)") == 0) {
+		return MFT_TAR;
+	} else if (fileTypeString.find ("Debian binary package") == 0) {
+		return MFT_DEBIAN_PACKAGE;
+	} else if (fileTypeString.find ("Zip archive data") == 0) {
+		return MFT_ZIP;
+	} else if (fileTypeString.find ("PNG image") == 0) {
+		return MFT_PNG_IMAGE;
 	} else {
-
+		return MFT_UNKNOWN;
 	}
 }

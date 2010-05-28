@@ -1021,39 +1021,6 @@ wml::FoundryUtilities::unlinkFile (string fpath)
 	}
 }
 
-/*std::string
-wml::FoundryUtilities::getFileType (string filePath)
-{
-	struct magic_set* magic;
-	magic = magic_open (MAGIC_CHECK); // Can OR in MAGIC_MIME,
-	                                  // MAGIC_RAW, etc for
-	                                  // additional features. See
-	                                  // file command's file.c for
-	                                  // details.
-
-	if (magic_load (magic, "/usr/share/wmlpp/wmlmagic.mgc") == -1) {
-		// If the WML specific magic file is not found, fall
-		// back to the one shipped with "file":
-		if (magic_load (magic, "/usr/share/file/magic.mgc") == -1) {
-			stringstream ee;
-			ee << "Error loading file-typing info: " << magic_error (magic);
-			throw runtime_error (ee.str());
-		}
-	}
-
-	const char* type = magic_file (magic, filePath.c_str());
-	if (type == (const char*)0) {
-		stringstream ee;
-		ee << "Error typing file: " << magic_error (magic);
-		throw runtime_error (ee.str());
-	}
-
-	string fileType = type;
-	magic_close (magic);
-
-	return fileType;
-	}*/
-
 std::string
 wml::FoundryUtilities::fileModDatestamp (const char* filename)
 {

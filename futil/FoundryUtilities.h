@@ -360,12 +360,6 @@ namespace wml {
 		static void unlinkFile (std::string fpath);
 
 		/*!
-		 * Use libmagic to obtain a string description of the
-		 * type of the file specified by filePath.
-		 */
-		//static std::string getFileType (std::string filePath);
-
-		/*!
 		 * This reads the contents of a directory tree, making
 		 * up a list of the contents in the vector vec. If the
 		 * directory tree has subdirectories, these are
