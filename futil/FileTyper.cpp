@@ -67,10 +67,10 @@ wml::FileTyper::getFileType (string filePath)
 		return MFT_PCL_FILE;
 	} else if (fileTypeString.find ("XML") == 0) {
 		return MFT_XML;
-	} else if (fileTypeString.find ("ASCII text") == 0) {
-		return MFT_ASCII_TEXT;
 	} else if (fileTypeString.find ("ASCII font metrics") == 0) {
 		return MFT_AFM;
+	} else if (fileTypeString.find ("ASCII") == 0) {
+		return MFT_ASCII_TEXT;
 	} else if (fileTypeString.find ("bzip2 compressed data") == 0) {
 		return MFT_BZ2_ARCHIVE;
 	} else if (fileTypeString.find ("gzip compressed data") == 0) {
