@@ -2,6 +2,7 @@
 # pragma implementation
 #endif
 
+#include <WmlDbg.h>
 #include <config.h>
 #include <FileTyper.h>
 #include <sstream>
@@ -61,7 +62,8 @@ wml::FileTyper::getFileType (string filePath)
 		return MFT_PDF_FILE;
 	} else if (fileTypeString.find ("PostScript Type 1 font") != string::npos) {
 		return MFT_TYPE1_FONT;
-	} else if (fileTypeString.find ("TrueType")) {
+	} else if (fileTypeString.find ("TrueType") == 0) {
+		DBG (fileTypeString);
 		return MFT_TRUETYPE_FONT;
 	} else if (fileTypeString.find ("PCL file") == 0) {
 		return MFT_PCL_FILE;
