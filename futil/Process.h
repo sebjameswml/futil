@@ -188,6 +188,76 @@ namespace wml {
 		ProcessCallbacks * callbacks;
 	};
 
+
+	/*!
+	 * \class ProcessData A class used as a parent to a callback
+	 * object when a process is used within a static function, and
+	 * as such no parent object exists.
+	 *
+	 * Example of this usage can be found in WmlnetapuiUtilities.cpp
+	 */
+	class ProcessData
+	{
+	public:
+		/* \name Constructor and Destructor */
+		ProcessData (void);
+		~ProcessData (void);
+
+		/* \name Public Class Functions */
+		//@{
+		/*!
+		 * \brief Set the process finished message for a process
+		 */
+		void setProcessFinishedMsg (std::string message);
+
+		/*!
+		 * \brief Set the error num for a process
+		 */
+		void setErrorNum (int err);
+
+		/*!
+		 * \brief Set stdOutReady
+		 */
+		void setStdOutReady (bool ready);
+
+		/*!
+		 * \brief Set stdErrReady
+		 */
+		void setStdErrReady (bool ready);
+
+		/*!
+		 * \brief Getters
+		 */
+		std::string getProcessFinishedMsg (void);
+		int getErrorNum (void);
+		bool getStdOutReady (void);
+		bool getStdErrReady (void);
+		//@}
+	private:
+		/* \name Private Class Attributes */
+		//@{
+		/*!
+		 * \brief Holds the name of the process that finished
+		 */
+		std::string processFinishedMessage;
+
+		/*!
+		 * \brief Holds a process error number
+		 */
+		int errorNum;
+
+		/*!
+		 * \brief determines if std out is ready to be read from
+		 */
+		bool stdOutReady;
+
+		/*!
+		 * \brief determines if std err is ready to be read from
+		 */
+		bool stdErrReady;
+		//@}
+	};
+
 } // namespace wml
 
 #endif // _PROCESS_H_

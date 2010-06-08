@@ -372,3 +372,67 @@ wml::Process::setCallbacks (ProcessCallbacks * cb)
 }
 
 //@}
+
+/*!
+ * Implementation of ProcessData class
+ */
+//@{
+wml::ProcessData::ProcessData (void)
+{
+	this->stdOutReady = false;
+	this->stdErrReady = false;
+}
+
+wml::ProcessData::~ProcessData (void)
+{
+}
+
+void
+wml::ProcessData::setProcessFinishedMsg (string message)
+{
+	this->processFinishedMessage = message;
+}
+
+void
+wml::ProcessData::setErrorNum (int err)
+{
+	this->errorNum = err;
+}
+
+void
+wml::ProcessData::setStdOutReady (bool ready)
+{
+	this->stdOutReady = ready;
+}
+
+void
+wml::ProcessData::setStdErrReady (bool ready)
+{
+	this->stdErrReady = ready;
+}
+
+string
+wml::ProcessData::getProcessFinishedMsg (void)
+{
+	return this->processFinishedMessage;
+}
+
+int
+wml::ProcessData::getErrorNum (void)
+{
+	return this->errorNum;
+}
+
+bool
+wml::ProcessData::getStdOutReady (void)
+{
+	return this->stdOutReady;
+}
+
+bool
+wml::ProcessData::getStdErrReady (void)
+{
+	return this->stdErrReady;
+}
+
+//@}
