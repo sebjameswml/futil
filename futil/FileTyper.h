@@ -53,6 +53,8 @@ namespace wml {
 		MFT_RPM_PACKAGE,
 		MFT_DEBIAN_PACKAGE,
 		MFT_TAR,
+		MFT_POSTSCRIPT,
+		MFT_HP_PJL,
 		FILETYPE_N
 	};
 
