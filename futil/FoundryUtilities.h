@@ -169,28 +169,40 @@ namespace wml {
 		static int stripTrailingCarriageReturn (std::string& input);
 
 		/*!
-		 * Erase trailing spaces from from input. Return the
+		 * Erase trailing spaces from input. Return the
 		 * number of spaces removed.
 		 */
 		static int stripTrailingSpaces (std::string& input);
 
 		/*!
-		 * Erase trailing chars c from from input. Return the
+		 * Erase trailing chars c from input. Return the
 		 * number of chars removed.
 		 */
 		static int stripTrailingChars (std::string& input, char c = ' ');
 
 		/*!
-		 * Erase leading spaces from from input. Return the
+		 * Erase trailing whitespace from input. Return the
+		 * number of whitespace characters removed.
+		 */
+		static int stripTrailingWhitespace (std::string& input);
+
+		/*!
+		 * Erase leading spaces from input. Return the
 		 * number of spaces removed.
 		 */
 		static int stripLeadingSpaces (std::string& input);
 
 		/*!
-		 * Erase any leading character c from from input. Return the
+		 * Erase any leading character c from input. Return the
 		 * number of chars removed.
 		 */
 		static int stripLeadingChars (std::string& input, char c = ' ');
+
+		/*!
+		 * Erase leading whitespace from input. Return the
+		 * number of whitespace characters removed.
+		 */
+		static int stripLeadingWhitespace (std::string& input);
 
 		/*!
 		 * Do a search and replace, search for searchTerm,

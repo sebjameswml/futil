@@ -110,6 +110,22 @@ wml::FoundryUtilities::stripTrailingCarriageReturn (std::string& input)
 }
 
 int
+wml::FoundryUtilities::stripTrailingWhitespace (std::string& input)
+{
+	char c;
+	string::size_type len = input.size(), pos = len;
+	while (pos > 0 &&
+	       ((c = input[pos-1]) == ' '
+		|| c == '\t'
+		|| c == '\n'
+		|| c == '\r')) {
+		pos--;
+	}
+	input.erase (pos);
+	return (len - pos);
+}
+
+int
 wml::FoundryUtilities::stripTrailingSpaces (std::string& input)
 {
 	return FoundryUtilities::stripTrailingChars (input);
@@ -124,6 +140,22 @@ wml::FoundryUtilities::stripTrailingChars (std::string& input, char c)
 		i++;
 	}
 	return i;
+}
+
+int
+wml::FoundryUtilities::stripLeadingWhitespace (std::string& input)
+{
+	char c;
+	string::size_type pos = 0;
+	while (pos<input.size() &&
+	       ((c = input[pos]) == ' '
+		|| c == '\t'
+		|| c == '\n'
+		|| c == '\r')) {
+		pos++;
+	}
+	input.erase (0, pos);
+	return pos;
 }
 
 int
