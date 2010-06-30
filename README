@@ -2,16 +2,23 @@ Foundry Utilities
 -----------------
 
 This package is a set of utility functions which we find useful at
-WML.
+William Matthew Ltd (WML).
 
-The class is called wml::FoundryUtilities (it may in future be renamed to
-wml::futil in a refactoring exercise).
+The class is called wml::FoundryUtilities (it may in future be renamed
+to wml::futil in a refactoring exercise).
 
 wml::FoundryUtilities contains a set of public static functions to
 make our programming life easier.
+
+Two additional classes are provided - wml::Process which is used to
+launch and interact with forked processes, and wml::FileTyper which is
+a C++ wrapper around libmagic.
+
+futil depends on libuuid and libmagic, both of which are available
+under open source licences.
 
 The name comes from "Foundry Linux" which is the name we give to the
 LFS-based from-source GNU/Linux OS which we distribute to our
 customers.
 
-Seb James, 9th March 2010.
+Seb James, 30th June 2010.
