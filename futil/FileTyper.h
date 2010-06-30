@@ -1,4 +1,28 @@
 /* -*-c++-*- */
+/*
+ * This file is part of WML futil - a library containing static public
+ * utility functions and classes used across WML code.
+ *
+ *  WML futil is Copyright William Matthew Ltd. 2010.
+ *
+ *  Authors: Seb James <sjames@wmltd.co.uk>
+ *           Tamora James <tjames@wmltd.co.uk>
+ *           Mark Richardson <mrichardson@wmltd.co.uk>
+ *
+ *  WML futil is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  WML futil is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with WML futil.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 
 #ifndef _FILETYPER_H_
 #define _FILETYPER_H_
@@ -22,7 +46,10 @@ namespace wml {
 
         /*!
          * \brief The types of files which a user of the Tempest PDF+
-         * or DSM might upload
+         * or DSM might upload. Why the MFT prefix? MFT stands for
+         * "Macro File Type". When I first had to identify files it
+         * was to determine what kind of PCL macro they were. The MFT
+         * prefix has simply got stuck.
          */
         enum FILETYPE {
 		MFT_UNKNOWN,
