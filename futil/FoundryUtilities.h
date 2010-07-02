@@ -289,10 +289,7 @@ namespace wml {
 
 		/*!
 		 * Stat a file, return true if the file exists and is
-		 * a regular file.  If file is a hanging symlink,
-		 * fileExists returns false, if file is a symlink
-		 * pointing to a regular file, fileExists returns
-		 * true.
+		 * any kind of file except a directory.
 		 */
 		//@{
 		static bool fileExists (std::string& path);
@@ -300,9 +297,40 @@ namespace wml {
 		//@}
 
 		/*!
-		 * Like fileExists, but for block devices
+		 * Stat a file, return true if the file exists and is
+		 * a regular file.  If file is a hanging symlink,
+		 * fileExists returns false, if file is a symlink
+		 * pointing to a regular file, fileExists returns
+		 * true.
+		 */
+		//@{
+		static bool regfileExists (std::string& path);
+		//@}
+
+		/*!
+		 * Like regfileExists, but for block devices
 		 */
 		static bool blockdevExists (std::string& path);
+
+		/*!
+		 * Like regfileExists, but for sockets
+		 */
+		static bool socketExists (std::string& path);
+
+		/*!
+		 * Like regfileExists, but for fifos
+		 */
+		static bool fifoExists (std::string& path);
+
+		/*!
+		 * Like regfileExists, but for char devices
+		 */
+		static bool chardevExists (std::string& path);
+
+		/*!
+		 * Like lnkExists, but for char devices
+		 */
+		static bool linkExists (std::string& path);
 
 		/*!
 		 * Stat a directory, return true if the directory

@@ -616,7 +616,12 @@ wml::FoundryUtilities::fileExists (std::string& path)
 		return false;
 	}
 
-	if (S_ISREG (buf->st_mode)) {
+	if (S_ISREG (buf->st_mode)
+	    || S_ISBLK (buf->st_mode)
+	    || S_ISSOCK (buf->st_mode)
+	    || S_ISFIFO (buf->st_mode)
+	    || S_ISLNK (buf->st_mode)
+	    || S_ISCHR (buf->st_mode)) {
 		free (buf);
 		return true;
 	}
@@ -639,6 +644,116 @@ wml::FoundryUtilities::blockdevExists (std::string& path)
 	}
 
 	if (S_ISBLK (buf->st_mode)) {
+		free (buf);
+		return true;
+	}
+
+	free (buf);
+	return false;
+}
+
+bool
+wml::FoundryUtilities::regfileExists (std::string& path)
+{
+	struct stat * buf = NULL;
+
+	buf = static_cast<struct stat*> (malloc (sizeof (struct stat)));
+	memset (buf, 0, sizeof (struct stat));
+
+	if (stat (path.c_str(), buf)) {
+		free (buf);
+		return false;
+	}
+
+	if (S_ISREG (buf->st_mode)) {
+		free (buf);
+		return true;
+	}
+
+	free (buf);
+	return false;
+}
+
+bool
+wml::FoundryUtilities::socketExists (std::string& path)
+{
+	struct stat * buf = NULL;
+
+	buf = static_cast<struct stat*> (malloc (sizeof (struct stat)));
+	memset (buf, 0, sizeof (struct stat));
+
+	if (stat (path.c_str(), buf)) {
+		free (buf);
+		return false;
+	}
+
+	if (S_ISSOCK (buf->st_mode)) {
+		free (buf);
+		return true;
+	}
+
+	free (buf);
+	return false;
+}
+
+bool
+wml::FoundryUtilities::fifoExists (std::string& path)
+{
+	struct stat * buf = NULL;
+
+	buf = static_cast<struct stat*> (malloc (sizeof (struct stat)));
+	memset (buf, 0, sizeof (struct stat));
+
+	if (stat (path.c_str(), buf)) {
+		free (buf);
+		return false;
+	}
+
+	if (S_ISFIFO (buf->st_mode)) {
+		free (buf);
+		return true;
+	}
+
+	free (buf);
+	return false;
+}
+
+bool
+wml::FoundryUtilities::linkExists (std::string& path)
+{
+	struct stat * buf = NULL;
+
+	buf = static_cast<struct stat*> (malloc (sizeof (struct stat)));
+	memset (buf, 0, sizeof (struct stat));
+
+	if (stat (path.c_str(), buf)) {
+		free (buf);
+		return false;
+	}
+
+	if (S_ISLNK (buf->st_mode)) {
+		free (buf);
+		return true;
+	}
+
+	free (buf);
+	return false;
+}
+
+bool
+wml::FoundryUtilities::chardevExists (std::string& path)
+{
+	struct stat * buf = NULL;
+
+	buf = static_cast<struct stat*> (malloc (sizeof (struct stat)));
+	memset (buf, 0, sizeof (struct stat));
+
+	if (stat (path.c_str(), buf)) {
+		free (buf);
+		return false;
+	}
+
+	if (S_ISCHR (buf->st_mode)) {
 		free (buf);
 		return true;
 	}
