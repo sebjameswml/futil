@@ -566,6 +566,19 @@ namespace wml {
 		static std::string pidCmdline (int pid);
 
 		/*!
+		 * Populate a vector of directories in /proc
+		 */
+		static void readProcDirs (std::vector<std::string>& vec,
+					  const char* baseDirPath,
+					  const char* subDirPath);
+
+		/*!
+		 * Get the first PID whose program name matches the
+		 * argument programName.
+		 */
+		static int getPid (std::string& programName);
+
+		/*!
 		 * Get the mac address of the platform from eth0
 		 *
 		 * @return The mac address as a string (something like

@@ -1464,6 +1464,135 @@ wml::FoundryUtilities::pidCmdline (int pid)
 	return str;
 }
 
+int
+wml::FoundryUtilities::getPid (std::string& programName)
+{
+	// From processes, work out if any named processes are
+	// running. Return pid of running OSK. If there is none, return -1;
+
+	// Open all subdirectories in /proc which have only numerals
+	// in their name within these, get the first line: Name: whatever
+	// If the name is programName, then get the Pid line, and return that.
+
+	int pid = -1;
+
+	if (programName.empty()) {
+		return pid;
+	}
+
+	if (programName.size() > 15) {
+		throw runtime_error ("FoundryUtilities::getPid() Use first 15 chars of program name only");
+	}
+
+	vector<string> dirs;
+	FoundryUtilities::readProcDirs (dirs, "/proc", "");
+
+	vector<string>::iterator i = dirs.begin();
+	bool gotPid = false;
+	while (gotPid == false && i != dirs.end()) {
+		string dpath = *i;
+		unsigned int dpathSize = dpath.size();
+		for (unsigned int j=0; j<dpathSize; j++) {
+			// We should have just a list of status files.
+			if (dpath.find ("status", 0) != string::npos) {
+				// Open and read the file
+				stringstream path;
+				path << "/proc/" << dpath;
+				ifstream f;
+				f.open (path.str().c_str(), ios::in);
+				if (!f.is_open()) {
+					// No file, so not running.
+					return false;
+				}
+				string pidline, name;
+				getline (f, name, '\n'); // First line is the name
+				getline (f, pidline, '\n'); // Second line is the State line.
+				getline (f, pidline, '\n'); // Third line is Tgid.
+				getline (f, pidline, '\n'); // Fourth line is Pid
+				f.close();
+				// Analyse
+				if (name.find (programName, 0) != string::npos) {
+					stringstream pp;
+					pp << pidline.substr(5);
+					pp >> pid;
+					gotPid = true;
+					break;
+				} else {
+					// Not the right process
+					break;
+				}
+			} else {
+				// dpath is not a status file, break.
+				break;
+			}
+		}
+		i++;
+	}
+
+	return pid;
+}
+
+void
+wml::FoundryUtilities::readProcDirs (vector<string>& vec,
+				     const char* baseDirPath,
+				     const char* subDirPath)
+{
+	DIR* d;
+	struct dirent *ep;
+	size_t entry_len = 0;
+
+	string dirPath ("");
+	string bd (baseDirPath);
+	string sd (subDirPath);
+	dirPath = bd + "/" + sd;
+
+	if (!(d = opendir (dirPath.c_str()))) {
+		// Just return.
+		return;
+	}
+
+	while ((ep = readdir (d))) {
+	        unsigned char fileType = ep->d_type;
+	        string fileName = dirPath + "/" + (string)ep->d_name;
+
+		if (fileType == DT_DIR) {
+
+			// Skip "." and ".." directories
+			if ( ((entry_len = strlen (ep->d_name)) > 0 && ep->d_name[0] == '.') &&
+			     (ep->d_name[1] == '\0' || ep->d_name[1] == '.') ) {
+				continue;
+			}
+
+			// For process directories, recurse.
+			string newPath;
+			if (sd.size() == 0) {
+				newPath = ep->d_name;
+			} else {
+				newPath = sd + "/" + ep->d_name;
+			}
+
+			string tester(ep->d_name);
+			if (FoundryUtilities::containsOnlyNumerals (tester)) {
+				FoundryUtilities::readProcDirs (vec, baseDirPath, newPath.c_str());
+			}
+		} else if (fileType == DT_LNK) {
+			// Do nothing
+		} else {
+			// status files (only) are added to the vector
+			string newEntry;
+			if (sd.size() == 0) {
+				newEntry = ep->d_name;
+			} else {
+				newEntry = sd + "/" + ep->d_name;
+			}
+			if (newEntry.find ("status", 0) != string::npos) {
+				vec.push_back (newEntry);
+			}
+		}
+	}
+	(void) closedir (d);
+}
+
 std::string
 wml::FoundryUtilities::getMacAddr (void)
 {
