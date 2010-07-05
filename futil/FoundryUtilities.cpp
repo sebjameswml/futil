@@ -3109,3 +3109,22 @@ wml::FoundryUtilities::valid_ip (string ip_string)
 	}
 	return false;
 }
+
+void
+wml::FoundryUtilities::splitString (vector<string>& tokens,
+				    string& stringToSplit,
+				    string& delim)
+{
+	string::size_type pos;
+	pos = stringToSplit.find (delim);
+	if (pos != string::npos) {
+		tokens.push_back (stringToSplit.substr(0, pos));
+		string::size_type newPos;
+		newPos = pos + delim.size();
+		string newString = stringToSplit.substr(newPos);
+		FoundryUtilities::splitString (tokens, newString, delim);
+	} else {
+		tokens.push_back (stringToSplit);
+		return;
+	}
+}

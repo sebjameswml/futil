@@ -948,6 +948,16 @@ namespace wml {
 		 */
 		static bool valid_ip (std::string ip_string);
 
+		/*!
+		 * Split a string into a set of strings using
+		 * the delimiter specified. Unlike most string split
+		 * functions, the delimiter in this can be more than
+		 * one character in length
+		 */
+		static void splitString (std::vector<std::string>& tokens,
+					 std::string& stringToSplit,
+					 std::string& delim);
+
 	};
 
 } // namespace wml
