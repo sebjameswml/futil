@@ -1490,41 +1490,37 @@ wml::FoundryUtilities::getPid (std::string& programName)
 	vector<string>::iterator i = dirs.begin();
 	bool gotPid = false;
 	while (gotPid == false && i != dirs.end()) {
+		// Looping through each directory in /proc
 		string dpath = *i;
-		unsigned int dpathSize = dpath.size();
-		for (unsigned int j=0; j<dpathSize; j++) {
-			// We should have just a list of status files.
-			if (dpath.find ("status", 0) != string::npos) {
-				// Open and read the file
-				stringstream path;
-				path << "/proc/" << dpath;
-				ifstream f;
-				f.open (path.str().c_str(), ios::in);
-				if (!f.is_open()) {
-					// No file, so not running.
-					return false;
-				}
-				string pidline, name;
-				getline (f, name, '\n'); // First line is the name
-				getline (f, pidline, '\n'); // Second line is the State line.
-				getline (f, pidline, '\n'); // Third line is Tgid.
-				getline (f, pidline, '\n'); // Fourth line is Pid
-				f.close();
-				// Analyse
-				if (name.find (programName, 0) != string::npos) {
-					stringstream pp;
-					pp << pidline.substr(5);
-					pp >> pid;
-					gotPid = true;
-					break;
-				} else {
-					// Not the right process
-					break;
-				}
-			} else {
-				// dpath is not a status file, break.
-				break;
+		if (dpath.find ("status", 0) != string::npos) {
+			// This path is a status file, open and read it
+			stringstream path;
+			path << "/proc/" << dpath;
+			ifstream f;
+			f.open (path.str().c_str(), ios::in);
+			if (!f.is_open()) {
+				// No file, so not running.
+				i++;
+				continue;
 			}
+			string pidline, name;
+			getline (f, name, '\n'); // First line is the name
+			getline (f, pidline, '\n'); // Second line is the State line.
+			getline (f, pidline, '\n'); // Third line is Tgid.
+			getline (f, pidline, '\n'); // Fourth line is Pid
+			f.close();
+			// Analyse
+			if (name.find (programName, 0) != string::npos) {
+				stringstream pp;
+				pp << pidline.substr(5);
+				pp >> pid;
+				gotPid = true;
+				break;
+			} else {
+				// Not the right process
+			}
+		} else {
+			// dpath is not a status file
 		}
 		i++;
 	}
