@@ -235,7 +235,8 @@ wml::Process::probeProcess (void)
 		return;
 	}
 
-	// Why can't these 4 lines go in contructor?
+	// Why can't these 4 lines go in contructor? Because
+	// childeToParent etc aren't set up until Process::start()?
 	this->p[0].fd = this->childToParent[READING_END];
 	this->p[0].events = POLLIN | POLLPRI;
 	this->p[1].fd = this->childErrToParent[READING_END];
@@ -245,7 +246,15 @@ wml::Process::probeProcess (void)
 	this->p[0].revents = 0;
 	this->p[1].revents = 0;
 
-	poll (this->p, 2, 0);
+	// Poll for data
+	int prtn = poll (this->p, 2, 0);
+	if (prtn > 0) {
+		DBG ("poll returned " << prtn);
+	} else if (prtn == 0) {
+		// No revents from poll
+	} else {
+		DBG ("error from poll() call");
+	}
 
 	if (this->p[0].revents & POLLNVAL || this->p[1].revents & POLLNVAL) {
 		DBG ("Process::probeProcess: pipes closed, process must have crashed");
@@ -278,6 +287,7 @@ wml::Process::probeProcess (void)
 				this->callbacks->processFinishedSignal (this->progName);
 			}
 			this->pid = 0;
+			DBG ("Process finished, returning");
 			return;
 		} else if (rtn == -1) {
 			theError = errno;
@@ -294,6 +304,7 @@ wml::Process::probeProcess (void)
 string
 wml::Process::readAllStandardOutput (void)
 {
+	DBG ("Called");
 	string s;
 	int bytes = 0;
 	char c;
