@@ -72,6 +72,23 @@ wml::Process::~Process ()
 	free (this->p);
 }
 
+bool
+wml::Process::reset (void)
+{
+	if (this->running()) {
+		return false;
+	}
+	if (this->callbacks != (ProcessCallbacks*)0) {
+		DBG ("Resetting callbacks pointer");
+		this->callbacks = (ProcessCallbacks*)0;
+	}
+	this->signalledStart = false;
+	this->error = PROCESSNOERROR;
+	this->progName = "unknown";
+	this->environment.clear();
+	return true;
+}
+
 void
 wml::Process::writeIn (string& input)
 {

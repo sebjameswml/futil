@@ -72,8 +72,24 @@ namespace wml {
 	class Process
 	{
 	public:
+		/*!
+		 * Just one constructor. Allocates memory for pollfd*
+		 * p.
+		 */
 		Process();
+
+		/*!
+		 * Destructor. Deallocates memory for pollfd* p
+		 */
 		~Process();
+
+		/*!
+		 * Reset the process ready to be used again. If this
+		 * process is still running, return false and don't do
+		 * the reset. Otherwise, reset member attributes and
+		 * return true.
+		 */
+		bool reset (void);
 
 		/*!
 		 * Write \arg input to the stdin of the process.
