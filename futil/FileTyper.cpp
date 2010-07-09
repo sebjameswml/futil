@@ -116,6 +116,8 @@ wml::FileTyper::getFileType (string filePath)
 		return MFT_ZIP;
 	} else if (fileTypeString.find ("PNG image") == 0) {
 		return MFT_PNG_IMAGE;
+	} else if (fileTypeString.find ("PostScript document text") == 0) {
+		return MFT_POSTSCRIPT;
 	} else if (fileTypeString.find ("HP Printer Job Language data") == 0) {
 		if (fileTypeString.find ("contains PostScript") != string::npos) {
 			return MFT_POSTSCRIPT;
