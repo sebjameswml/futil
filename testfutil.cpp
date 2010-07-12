@@ -1,6 +1,6 @@
 /*
- * This test program is part of WML futil - a library containing
- * static public utility functions and classes used across WML code.
+ *  This test program is part of WML futil - a library containing
+ *  static public utility functions and classes used across WML code.
  *
  *  WML futil is Copyright William Matthew Ltd. 2010.
  *
