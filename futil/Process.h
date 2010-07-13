@@ -97,6 +97,13 @@ namespace wml {
 		void writeIn (string& input);
 
 		/*!
+		 * When Process::start() is called, pause useconds
+		 * before forking and exec-ing the program. This is a
+		 * setter for this->pauseBeforeStart.
+		 */
+		void setPauseBeforeStart (unsigned int useconds);
+
+		/*!
 		 * fork and exec the process.
 		 */
 		int start (const string& program, const list<string>& args);
@@ -160,6 +167,13 @@ namespace wml {
 		 * The environment and arguments of the program to execute
 		 */
 		list<string> environment;
+
+		/*!
+		 * Number of micro seconds to pause (via a usleep()
+		 * call) before forking and execing the program
+		 * following the call to Process::start().
+		 */
+		unsigned int pauseBeforeStart;
 
 		/*!
 		 * Holds a Process error, defined above. PROCESSNOERROR, etc.

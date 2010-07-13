@@ -55,6 +55,7 @@ using namespace wml;
 // Constructor
 wml::Process::Process () :
 	progName("unknown"),
+	pauseBeforeStart(0),
 	error (PROCESSNOERROR),
 	pid(0),
 	signalledStart(false)
@@ -83,6 +84,7 @@ wml::Process::reset (void)
 		this->callbacks = (ProcessCallbacks*)0;
 	}
 	this->signalledStart = false;
+	this->pauseBeforeStart = 0;
 	this->error = PROCESSNOERROR;
 	this->progName = "unknown";
 	this->environment.clear();
@@ -93,6 +95,12 @@ void
 wml::Process::writeIn (string& input)
 {
 	write (this->parentToChild[WRITING_END], input.c_str(), input.size());
+}
+
+void
+wml::Process::setPauseBeforeStart (unsigned int useconds)
+{
+	this->pauseBeforeStart = useconds;
 }
 
 // fork and exec a new process using execv, which takes stdin via a
@@ -146,6 +154,11 @@ wml::Process::start (const string& program, const list<string>& args)
 			DBG (*i);
 		}
 		argarray[j] = NULL;
+
+		// Pause here, in the child process, prior to the exec call
+		if (this->pauseBeforeStart) {
+			usleep (this->pauseBeforeStart);
+		}
 
 		DBG ("About to execute '" + program + "' with those arguments..");
 
