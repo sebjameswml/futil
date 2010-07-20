@@ -598,9 +598,14 @@ namespace wml {
 		 * Get the mac address from the string @macStr
 		 *
 		 * @param[in] macStr A string representing the Mac address
-		 * in the form "aa:bb:cc:aa:bb:cc".
+		 * in the form "aa:bb:cc:11:22:33".
+		 *
 		 * @param[out] mac A buffer of 2 * 32 bit unsigned
-		 * ints in which to place the mac address
+		 * ints in which to place the mac address. mac[0]
+		 * contains the lowest 4 nibbles of the mac address;
+		 * in this example, it would contain
+		 * 0xcc112233. mac[1] contains the top two nibbles -
+		 * here it would be 0xaabb.
 		 */
 		static void strToMacAddr (std::string& macStr, unsigned int* mac);
 
