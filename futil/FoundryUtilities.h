@@ -372,6 +372,10 @@ namespace wml {
 		 * then these are the filepaths. Some versions allow
 		 * you to copy the file contents into an output
 		 * stream. Throw exception on failure.
+		 *
+		 * The "from" file is expected to be a regular file -
+		 * an exception will be thrown if this is not the
+		 * case.
 		 */
 		//@{
 		static void copyFile (std::string& from, std::string& to);
