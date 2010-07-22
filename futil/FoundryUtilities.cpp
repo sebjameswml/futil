@@ -1023,6 +1023,14 @@ wml::FoundryUtilities::copyFile (string& from, ostream& to)
 {
 	ifstream in;
 
+	// Test that "from" is a regular file
+	if (!FoundryUtilities::regfileExists (from)) {
+		stringstream ee;
+		ee << "FoundryUtilities::copyFile(): FROM file '"
+		   << from << "' is not a regular file";
+		throw runtime_error (ee.str());
+	}
+
 	in.open (from.c_str(), ios::in);
 	if (!in.is_open()) {
 		throw runtime_error ("FoundryUtilities::copyFile(): Couldn't open FROM file");
