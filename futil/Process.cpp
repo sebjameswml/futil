@@ -203,8 +203,8 @@ bool
 wml::Process::waitForStarted (void)
 {
 	unsigned int i=0;
-	while (this->pid == 0 && i<1000) {
-		usleep (1000);
+	while (this->pid == 0 && i<100000) {
+		usleep (10);
 		i++;
 	}
 	if (this->pid>0) {
