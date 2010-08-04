@@ -603,6 +603,40 @@ wml::FoundryUtilities::freeSpaceKBytes (string dirPath)
 	return static_cast<unsigned int>(available);
 }
 
+unsigned int
+wml::FoundryUtilities::totalSpaceKBytes (string dirPath)
+{
+	struct statvfs dir;
+	memset (&dir, 0, sizeof(struct statvfs));
+	if (statvfs (dirPath.c_str(), &dir)) {
+		return 0;
+	}
+
+	cout << dirPath << "\n";
+
+	cout << "available blocks: " << dir.f_bavail << "\n";
+//	cout << "available * frsize: " << dir.f_bavail * dir.f_frsize << "\n";
+	cout << "hopefully 'total' blocks: " << dir.f_blocks << "\n";
+//	cout << "total * frsize: " << dir.f_blocks * dir.f_frsize << "\n";
+
+	unsigned long long int a, b;
+	a = dir.f_blocks;
+	b = dir.f_bsize;
+
+	unsigned long long int c;
+	c = a * b;
+
+	c = c >> 10;
+
+	fsblkcnt_t total = dir.f_blocks * dir.f_bsize;
+
+	cout << "fsblkcnt_t size: " << sizeof (fsblkcnt_t) << "\n";
+
+	total = total >> 10;
+
+	return static_cast<unsigned int>(c);
+}
+
 bool
 wml::FoundryUtilities::fileExists (std::string& path)
 {
