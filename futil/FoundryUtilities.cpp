@@ -585,7 +585,7 @@ wml::FoundryUtilities::freeSpace (string dirPath)
 	return rtn.str();
 }
 
-unsigned int
+UINT64_TYPE
 wml::FoundryUtilities::freeSpaceKBytes (string dirPath)
 {
 	struct statvfs dir;
@@ -593,17 +593,39 @@ wml::FoundryUtilities::freeSpaceKBytes (string dirPath)
 		return 0;
 	}
 
-	// dir.f_bavail is number of _blocks_ available, need
+	// Note that fsblkcnt_t (used in struct statvfs) is a 32 bit
+	// unsigned int in our 32 bit environment.
+
+
+#ifdef YOU_WANT_TO_SEE_HOW_TO_MULT_TWO_32_BIT_NUMBERS
+	UINT64_TYPE ans = 0;
+	fsblkcnt_t a = 0x80000001;
+	fsblkcnt_t b = 0x2;
+	cout << "a is 0x" << hex << a << endl;
+	cout << "b is 0x" << hex << b << endl;
+	// Crucially, we cast the first number to be a 64 bit type.
+	ans = static_cast<UINT64_TYPE>(a) * b;
+	cout << "64 bit answer 1 is: 0x" << hex << ans << endl;
+	ans = static_cast<UINT64_TYPE>(b) * a;
+	cout << "64 bit answer 2 is: 0x" << hex << ans << endl;
+#endif
+
+	// dir.f_bavail is number of _blocks_ available; need
 	// to multiply by fragment size to get bytes total:
-	fsblkcnt_t available = dir.f_bavail * dir.f_frsize;
+	//
+	UINT64_TYPE available = static_cast<UINT64_TYPE>(dir.f_bavail) * dir.f_frsize;
 
 	// Now available is the number of bytes not KB so fix:
 	available = available >> 10;
 
-	return static_cast<unsigned int>(available);
+	// Unsigned int is large enough to return a free space amount
+	// of up to 4096 GiBytes/4 TerraBytes. We may need to deal
+	// with network mounted shares with >4TB, so this function
+	// would be better returning a UINT64_TYPE
+	return available;
 }
 
-unsigned int
+UINT64_TYPE
 wml::FoundryUtilities::totalSpaceKBytes (string dirPath)
 {
 	struct statvfs dir;
@@ -614,27 +636,13 @@ wml::FoundryUtilities::totalSpaceKBytes (string dirPath)
 
 	cout << dirPath << "\n";
 
-	cout << "available blocks: " << dir.f_bavail << "\n";
-//	cout << "available * frsize: " << dir.f_bavail * dir.f_frsize << "\n";
-	cout << "hopefully 'total' blocks: " << dir.f_blocks << "\n";
-//	cout << "total * frsize: " << dir.f_blocks * dir.f_frsize << "\n";
+	// f_blocks is  "size of fs in f_frsize units"
+	UINT64_TYPE total = static_cast<UINT64_TYPE>(dir.f_blocks) * dir.f_frsize;
 
-	unsigned long long int a, b;
-	a = dir.f_blocks;
-	b = dir.f_bsize;
-
-	unsigned long long int c;
-	c = a * b;
-
-	c = c >> 10;
-
-	fsblkcnt_t total = dir.f_blocks * dir.f_bsize;
-
-	cout << "fsblkcnt_t size: " << sizeof (fsblkcnt_t) << "\n";
-
+	// Turn the total space in bytes into KB
 	total = total >> 10;
 
-	return static_cast<unsigned int>(c);
+	return total;
 }
 
 bool

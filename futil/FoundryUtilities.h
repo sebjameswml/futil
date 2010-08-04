@@ -285,13 +285,13 @@ namespace wml {
 		 * Return the amount of free space in KBytes on the
 		 * filesystem on which dirPath resides.
 		 */
-		static unsigned int freeSpaceKBytes (std::string dirPath);
+		static UINT64_TYPE freeSpaceKBytes (std::string dirPath);
 
 		/*!
 		 * Return the total amount of space in KBytes on the
 		 * filesystem on which dirPath resides.
 		 */
-		static unsigned int totalSpaceKBytes (std::string dirPath);
+		static UINT64_TYPE totalSpaceKBytes (std::string dirPath);
 
 		/*!
 		 * Stat a file, return true if the file exists and is
