@@ -197,14 +197,17 @@ wml::Process::start (const string& program, const list<string>& args)
 	return PROCESS_MAIN_APP;
 }
 
-
+#define START_SLEEP_PERIOD 10 // useconds
+#define START_SLEEP_TOTAL 100000000 // useconds
 // If no pid after a while, return false.
 bool
 wml::Process::waitForStarted (void)
 {
 	unsigned int i=0;
-	while (this->pid == 0 && i<100000) {
-		usleep (10);
+	// Wait for a total of START_SLEEP_TOTAL plus pauseBeforeStart useconds
+	while (this->pid == 0
+	       && i < ((START_SLEEP_TOTAL+this->pauseBeforeStart)/START_SLEEP_PERIOD)) {
+		usleep (START_SLEEP_PERIOD);
 		i++;
 	}
 	if (this->pid>0) {
