@@ -634,11 +634,8 @@ wml::FoundryUtilities::totalSpaceKBytes (string dirPath)
 		return 0;
 	}
 
-	cout << dirPath << "\n";
-
 	// f_blocks is  "size of fs in f_frsize units"
 	UINT64_TYPE total = static_cast<UINT64_TYPE>(dir.f_blocks) * dir.f_frsize;
-
 	// Turn the total space in bytes into KB
 	total = total >> 10;
 
