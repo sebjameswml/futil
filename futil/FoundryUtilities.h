@@ -222,9 +222,9 @@ namespace wml {
 
 		/*!
 		 * Take the string str and condition it, so that it
-		 * makes a valid XML tag. replace disallowed
-		 * characters with '_' and make sure it doesn't start
-		 * with a numeral.
+		 * makes a valid XML tag, by replacing disallowed
+		 * characters with '_' and making sure it doesn't
+		 * start with a numeral.
 		 */
 		static void conditionAsXmlTag (std::string& str);
 
