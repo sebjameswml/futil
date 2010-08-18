@@ -2840,9 +2840,9 @@ void
 wml::FoundryUtilities::pdfConversion (string inputPath,
 				      string outputDevice, string outputPath,
 				      unsigned int width, unsigned int height,
-				      bool wait)
+				      bool wait, unsigned int resolution)
 {
-        string widthS, heightS;
+        string widthS, heightS, resS;
         stringstream tempSS, returnSS;
 
         tempSS << width;
@@ -2850,6 +2850,9 @@ wml::FoundryUtilities::pdfConversion (string inputPath,
         tempSS.str("");
         tempSS << height;
         heightS = tempSS.str();
+        tempSS.str("");
+        tempSS << resolution;
+        resS = tempSS.str();
         tempSS.str("");
 
         Process ghostScript;
@@ -2859,6 +2862,9 @@ wml::FoundryUtilities::pdfConversion (string inputPath,
         args.push_back ("-dNOPAUSE");
         args.push_back ("-dBATCH");
         args.push_back ("-g" + widthS + "x" + heightS);
+	if (resolution > 0) {
+		args.push_back ("-r" + resS);
+	}
         args.push_back ("-sDEVICE=" + outputDevice);
         args.push_back ("-sOutputFile=" + outputPath);
         args.push_back (inputPath);
@@ -2876,17 +2882,17 @@ wml::FoundryUtilities::pdfConversion (string inputPath,
 void
 wml::FoundryUtilities::pdfToJpeg (string inputPath, string outputPath,
 				  unsigned int width, unsigned int height,
-				  bool wait)
+				  bool wait, unsigned int resolution)
 {
-	pdfConversion (inputPath, "jpeg", outputPath, width, height, wait);
+	pdfConversion (inputPath, "jpeg", outputPath, width, height, wait, resolution);
 }
 
 void
 wml::FoundryUtilities::pdfToPng (string inputPath, string outputPath,
 				 unsigned int width, unsigned int height,
-				 bool wait)
+				 bool wait, unsigned int resolution)
 {
-	pdfConversion (inputPath, "pngalpha", outputPath, width, height, wait);
+	pdfConversion (inputPath, "pngalpha", outputPath, width, height, wait, resolution);
 }
 
 

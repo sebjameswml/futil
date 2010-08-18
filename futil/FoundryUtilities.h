@@ -857,7 +857,8 @@ namespace wml {
                  */
                 static void pdfConversion (std::string inputPath, std::string outputDevice,
                                            std::string outputPath, unsigned int width,
-                                           unsigned int height, bool wait = false);
+                                           unsigned int height, bool wait = false,
+					   unsigned int resolution = 0);
 
                 /*!
                  * Creates jpeg(s) from a pdf file. To create a jpeg for each page
@@ -870,7 +871,7 @@ namespace wml {
                  */
                 static void pdfToJpeg (std::string inputPath, std::string outputPath,
                                        unsigned int width, unsigned int height,
-				       bool wait = false);
+				       bool wait = false, unsigned int resolution = 0);
 
                 /*!
                  * Creates png(s) from a pdf file. To create a png for each page
@@ -886,7 +887,7 @@ namespace wml {
                  */
                 static void pdfToPng (std::string inputPath, std::string outputPath,
 				      unsigned int width, unsigned int height,
-				      bool wait = false);
+				      bool wait = false, unsigned int resolution = 0);
 
 		/*!
 		 * A wrapper around the iconv() call from glibc.
