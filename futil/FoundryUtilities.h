@@ -428,17 +428,27 @@ namespace wml {
 		 *
 		 * The subDirPath argument is present because this is
 		 * a recursive function.
+		 *
+		 * If olderThanSeconds is passed in with a non-zero
+		 * value, then only files older than olderThanSeconds
+		 * will be returned.
 		 */
 		static void readDirectoryTree (std::vector<std::string>& vec,
 					       const char* baseDirPath,
-					       const char* subDirPath);
+					       const char* subDirPath,
+					       unsigned int olderThanSeconds = 0);
 
 		/*!
 		 * A simple wrapper around the more complex version,
 		 * for the user to call.
+		 *
+		 * If olderThanSeconds is passed in with a non-zero
+		 * value, then only files older than olderThanSeconds
+		 * will be returned.
 		 */
 		static void readDirectoryTree (std::vector<std::string>& vec,
-					       std::string dirPath);
+					       std::string dirPath,
+					       unsigned int olderThanSeconds = 0);
 
 		/*!
 		 * Get a list of only the immediate subdirectories in

@@ -1776,15 +1776,17 @@ wml::FoundryUtilities::macAddrToStr (unsigned int* mac)
 
 void
 wml::FoundryUtilities::readDirectoryTree (vector<string>& vec,
-					  string dirPath)
+					  string dirPath,
+					  unsigned int olderThanSeconds)
 {
-	FoundryUtilities::readDirectoryTree (vec, dirPath.c_str(), "");
+	FoundryUtilities::readDirectoryTree (vec, dirPath.c_str(), "", olderThanSeconds);
 }
 
 void
 wml::FoundryUtilities::readDirectoryTree (vector<string>& vec,
 					  const char* baseDirPath,
-					  const char* subDirPath)
+					  const char* subDirPath,
+					  unsigned int olderThanSeconds)
 {
 	DIR* d;
 	struct dirent *ep;
@@ -1800,9 +1802,12 @@ wml::FoundryUtilities::readDirectoryTree (vector<string>& vec,
 		throw runtime_error (msg);
 	}
 
+	struct stat buf;
 	while ((ep = readdir (d))) {
+
 	        unsigned char fileType;
 	        string fileName = dirPath + "/" + (string)ep->d_name;
+
 	        if (ep->d_type == DT_LNK) {
 	                // Is it a link to a directory or a file?
 		        struct stat * buf = NULL;
@@ -1842,7 +1847,8 @@ wml::FoundryUtilities::readDirectoryTree (vector<string>& vec,
 			} else {
 				newPath = sd + "/" + ep->d_name;
 			}
-			FoundryUtilities::readDirectoryTree (vec, baseDirPath, newPath.c_str());
+			FoundryUtilities::readDirectoryTree (vec, baseDirPath,
+							     newPath.c_str(), olderThanSeconds);
 		} else {
 			// Non-directories are simply added to the vector
 			string newEntry;
@@ -1850,6 +1856,29 @@ wml::FoundryUtilities::readDirectoryTree (vector<string>& vec,
 				newEntry = ep->d_name;
 			} else {
 				newEntry = sd + "/" + ep->d_name;
+			}
+
+			// If we have to check the file age, do so here before the vec.push_back()
+			if (olderThanSeconds > 0) {
+				// Stat the file
+				memset (&buf, 0, sizeof (struct stat));
+
+				if (stat (fileName.c_str(), &buf)) {
+					// no file to stat
+					DBG ("stat() error for '" << fileName << "'");
+					continue;
+				}
+
+				if (time(NULL) - buf.st_atime <= olderThanSeconds) {
+					// The age of the last access is less
+					// than olderThanSeconds, so skip
+					// (we're only returning the OLDER
+					// files)
+					DBG ("File " << fileName << " is too new to include, continuing");
+					continue;
+				} else {
+					DBG ("File " << fileName << " is older than " << olderThanSeconds << " s");
+				}
 			}
 			vec.push_back (newEntry);
 		}
