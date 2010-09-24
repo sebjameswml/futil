@@ -845,6 +845,11 @@ namespace wml {
 		 */
 		static std::list<std::string> csvToList (std::string& csvList,
 							 char separator = ',');
+		/*!
+		 * split csv into a set
+		 */
+		static std::set<std::string> csvToSet (std::string& csvList,
+						       char separator = ',');
 
 		/*!
 		 * Output a vector of strings as a csv string.

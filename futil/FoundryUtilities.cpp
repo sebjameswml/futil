@@ -1813,7 +1813,8 @@ wml::FoundryUtilities::readDirectoryTree (vector<string>& vec,
 		        struct stat * buf = NULL;
 		        buf = (struct stat*) malloc (sizeof (struct stat));
 		        if (!buf) { // Malloc error.
-		                throw runtime_error ("Failed to malloc buf; could not stat link " + fileName);
+		                throw runtime_error ("Failed to malloc buf; "
+						     "could not stat link " + fileName);
 		        }
 		        memset (buf, 0, sizeof(struct stat));
 		        if (stat (fileName.c_str(), buf)) {
@@ -1869,15 +1870,18 @@ wml::FoundryUtilities::readDirectoryTree (vector<string>& vec,
 					continue;
 				}
 
-				if (time(NULL) - buf.st_atime <= olderThanSeconds) {
+				if (static_cast<unsigned int>(time(NULL)) - buf.st_atime
+				    <= olderThanSeconds) {
 					// The age of the last access is less
 					// than olderThanSeconds, so skip
 					// (we're only returning the OLDER
 					// files)
-					DBG ("File " << fileName << " is too new to include, continuing");
+					DBG ("File " << fileName
+					     << " is too new to include, continuing");
 					continue;
 				} else {
-					DBG ("File " << fileName << " is older than " << olderThanSeconds << " s");
+					DBG ("File " << fileName << " is older than "
+					     << olderThanSeconds << " s");
 				}
 			}
 			vec.push_back (newEntry);
@@ -2797,6 +2801,29 @@ wml::FoundryUtilities::csvToList (std::string& csvList, char separator)
 	}
 
 	return theList;
+}
+
+std::set<std::string>
+wml::FoundryUtilities::csvToSet (std::string& csvList, char separator)
+{
+	set<string> theSet;
+	string csvl (csvList);
+	string entry("");
+	string::size_type a=0, b=0;
+	while (a < csvl.size()
+	       && (b = csvl.find (separator, a)) != string::npos) {
+		entry = csvl.substr (a, b-a);
+		theSet.insert (entry);
+		a=b+1;
+	}
+	// Last one has no ','
+	if (a < csvl.size()) {
+		b = csvl.size();
+		entry = csvl.substr (a, b-a);
+		theSet.insert (entry);
+	}
+
+	return theSet;
 }
 
 std::string
