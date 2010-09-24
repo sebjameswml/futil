@@ -863,6 +863,12 @@ namespace wml {
 		static std::string listToCsv (std::list<std::string>& listList,
 					      char separator = ',');
 
+		/*!
+		 * Output a set of strings as a csv string.
+		 */
+		static std::string setToCsv (std::set<std::string>& listList,
+					     char separator = ',');
+
                 /*!
                  * Converts pdf files to a ghostscript device
                  * specified. If wait is true, then the function will

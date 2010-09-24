@@ -2863,6 +2863,24 @@ wml::FoundryUtilities::listToCsv (std::list<std::string>& listList, char separat
 }
 
 std::string
+wml::FoundryUtilities::setToCsv (std::set<std::string>& setList, char separator)
+{
+	set<string>::iterator i = setList.begin();
+	bool first = true;
+	stringstream ss;
+	while (i != setList.end()) {
+		if (first) {
+			first = false;
+		} else {
+			ss << separator;
+		}
+		ss << *i;
+		i++;
+	}
+	return ss.str();
+}
+
+std::string
 wml::FoundryUtilities::suffix (int n)
 {
 	string suf("th"); // Most numbers end in "th" (in English)
