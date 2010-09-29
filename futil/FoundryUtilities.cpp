@@ -3212,8 +3212,6 @@ wml::FoundryUtilities::check_tmp_messages (int megabytes)
 	// Added -v to get more info on what logrotate is up to.
 	system ("/usr/sbin/logrotate -v -s /tmp/logrotate_tmp.status "
 		"/etc/wml/sys/logrotate_tmp.conf >/tmp/logrotate_tmp.out 2>&1");
-
-	syslog (LOG_INFO, "%s: Rotated /tmp/messages.", __FUNCTION__);
 }
 
 bool
