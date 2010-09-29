@@ -3154,39 +3154,66 @@ wml::FoundryUtilities::clearFilestreamFlags (fstream& f)
 	return;
 }
 
-#define ONE_MEGABYTE 1048576
 void
 wml::FoundryUtilities::check_tmp_messages (int megabytes)
 {
-	struct stat * buf = NULL;
-	int the_error = 0;
-	FILE * fp = NULL;
+	/*
+	 * /tmp/logrotate.conf is created if the file doesn't exist.
+	 */
 
-	buf = (struct stat*) malloc (sizeof (struct stat));
-	if (!buf) {
-		// Malloc error.
-		exit (-1);
-	}
-	memset (buf, 0, sizeof(struct stat));
-	if (stat ("/tmp/messages", buf)) {
-		the_error = errno;
-		debuglog (LOG_ERR,
-			  "%s: Failed to stat /tmp/messages, errno=%d",
-			  __FUNCTION__, the_error);
-	}
+	struct stat buf;
+	bool noLogrotateConf = false;
 
-	if (buf->st_size > (megabytes * ONE_MEGABYTE)) {
-		// Truncate /tmp/messages.
-		fp = fopen ("/tmp/messages", "w+");
-		if (fp != NULL) {
-			fprintf (fp, "%s\n", "syslog truncated.");
-			fclose (fp);
-			syslog (LOG_INFO, "/tmp/messages truncated.");
+	memset (&buf, 0, sizeof(struct stat));
+	if (stat ("/etc/wml/sys/logrotate_tmp.conf", &buf)) {
+		// No such path.
+		noLogrotateConf = true;
+		// Ensure directory is present:
+		if (!FoundryUtilities::dirExists("/etc/wml/sys")) {
+			FoundryUtilities::createDir ("/etc/wml/sys");
+		}
+	} else {
+		if (S_ISREG (buf.st_mode)) {
+			noLogrotateConf = false;
+		} else {
+			noLogrotateConf = true;
 		}
 	}
 
-	free (buf);
-	return;
+	if (noLogrotateConf == true) {
+
+		// Create logrotate.conf file
+
+		ofstream f;
+		f.open ("/etc/wml/sys/logrotate_tmp.conf", ios::out|ios::trunc);
+		if (f.is_open()) {
+			f << "/tmp/messages {" << endl;
+			f << "  rotate 1" << endl;
+			f << "  start 1" << endl;
+                        f << "  size " << megabytes << "M" << endl;
+			f << "  missingok" << endl;
+			f << "  create" << endl;
+			// Here, if we can't write to a test file, we'd like to defer
+			f << "  firstaction" << endl;
+			f << "    killall syslog-ng" << endl;
+			f << "  endscript" << endl;
+			// Or here, if the log share doesn't remount... what?
+			f << "  lastaction" << endl;
+			f << "    /usr/sbin/syslog-ng" << endl;
+			f << "  endscript" << endl;
+			f << "}" << endl;
+			f.close();
+		} else {
+			syslog (LOG_ERR, "%s: Failed to write logrotate.conf", __FUNCTION__);
+			// Attempt to rotate anyway...
+		}
+	}
+
+	// Added -v to get more info on what logrotate is up to.
+	system ("/usr/sbin/logrotate -v -s /tmp/logrotate_tmp.status "
+		"/etc/wml/sys/logrotate_tmp.conf >/tmp/logrotate_tmp.out 2>&1");
+
+	syslog (LOG_INFO, "%s: Rotated /tmp/messages.", __FUNCTION__);
 }
 
 bool
