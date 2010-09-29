@@ -3209,8 +3209,8 @@ wml::FoundryUtilities::check_tmp_messages (int megabytes)
 		}
 	}
 
-	// Added -v to get more info on what logrotate is up to.
-	system ("/usr/sbin/logrotate -v -s /tmp/logrotate_tmp.status "
+	// Can add -v before -s to get more info on what logrotate is up to.
+	system ("/usr/sbin/logrotate -s /tmp/logrotate_tmp.status "
 		"/etc/wml/sys/logrotate_tmp.conf >/tmp/logrotate_tmp.out 2>&1");
 }
 
