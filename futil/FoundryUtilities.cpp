@@ -190,6 +190,7 @@ wml::FoundryUtilities::searchReplace (const char* searchTerm,
 		while ((ptr = data.rfind (searchTerm, pos)) != string::npos) {
 			data.erase (ptr, stl);
 			data.insert (ptr, replaceTerm);
+			count++;
 			if (ptr >= stl) {
 				// This is a move backwards along the
 				// string far enough that we don't
@@ -199,7 +200,6 @@ wml::FoundryUtilities::searchReplace (const char* searchTerm,
 			} else {
 				break;
 			}
-			count++;
 		}
 	} else {
 		// Replace first only
@@ -258,6 +258,49 @@ wml::FoundryUtilities::searchReplace (std::string& searchTerm,
 	const char* st = searchTerm.c_str();
 	const char* rt = replaceTerm.c_str();
 	return FoundryUtilities::searchReplace (st, rt, data, replaceAll);
+}
+
+int
+wml::FoundryUtilities::searchReplaceInFile (std::string searchTerm,
+					    std::string replaceTerm,
+					    std::string fileName,
+					    bool replaceAll)
+{
+	int count(0);
+
+	ifstream f;
+	f.open (fileName.c_str(), ios::in);
+	if (!f.is_open()) {
+		throw runtime_error ("searchReplaceInFile(): Couldn't open the target file");
+	}
+	ofstream of;
+	string tfn = FoundryUtilities::generateRandomFilename ("/tmp/futil_srchrepl_");
+	of.open (tfn.c_str(), ios::out|ios::trunc);
+	if (!of.is_open()) {
+		throw runtime_error ("searchReplaceInFile(): Couldn't open the temp file");
+	}
+
+	string line;
+	while (getline (f, line, '\n')) {
+		count += FoundryUtilities::searchReplace (searchTerm, replaceTerm,
+							  line, replaceAll);
+		of << line << '\n';
+	}
+	f.close();
+	of.close();
+
+	// Finally, move the temp file to the input file.
+	try {
+		FoundryUtilities::moveFile (tfn, fileName);
+	} catch (const std::exception& e) {
+		stringstream msg;
+		msg << "searchReplaceInFile(): Failed to move "
+		    << "temp file onto input file: " << e.what();
+		throw runtime_error (msg.str());
+	}
+
+	DBG ("Returning " << count);
+	return count;
 }
 
 unsigned int

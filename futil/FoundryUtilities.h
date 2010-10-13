@@ -211,6 +211,7 @@ namespace wml {
 		 * just replace the first occurrence of searchTerm
 		 * with replaceTerm.
 		 */
+		//@{
 		static int searchReplace (const char* searchTerm,
 					  const char* replaceTerm,
 					  std::string& data,
@@ -219,6 +220,21 @@ namespace wml {
 					  std::string& replaceTerm,
 					  std::string& data,
 					  bool replaceAll = true);
+		//@}
+
+
+		/*!
+		 * Do a search and replace in the file fileName,
+		 * search for searchTerm, replacing with
+		 * replaceTerm. if replaceAll is true, replace all
+		 * occurrences of searchTerm, otherwise just replace
+		 * the first occurrence of searchTerm with
+		 * replaceTerm.
+		 */
+		static int searchReplaceInFile (std::string searchTerm,
+						std::string replaceTerm,
+						std::string fileName,
+						bool replaceAll = true);
 
 		/*!
 		 * Take the string str and condition it, so that it
