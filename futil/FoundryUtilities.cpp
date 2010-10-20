@@ -303,6 +303,64 @@ wml::FoundryUtilities::searchReplaceInFile (std::string searchTerm,
 	return count;
 }
 
+int
+wml::FoundryUtilities::deleteLinesContaining (std::string searchTerm,
+					      std::string fileName,
+					      bool deleteEndOfLine)
+{
+	int count(0);
+
+	ifstream f;
+	f.open (fileName.c_str(), ios::in);
+	if (!f.is_open()) {
+		throw runtime_error ("searchReplaceInFile(): Couldn't open the target file");
+	}
+	ofstream of;
+	string tfn = FoundryUtilities::generateRandomFilename ("/tmp/futil_srchrepl_");
+	of.open (tfn.c_str(), ios::out|ios::trunc);
+	if (!of.is_open()) {
+		throw runtime_error ("searchReplaceInFile(): Couldn't open the temp file");
+	}
+
+	string line;
+	while (getline (f, line, '\n')) {
+		if (line.find (searchTerm, 0) == string::npos) {
+			// No match
+			of << line << '\n';
+		} else {
+			// Some sort of match.
+			count++;
+			if (deleteEndOfLine) {
+				// Add nothing to ofstream
+			} else {
+				// Add just the EOL char. See if we
+				// need to add a CR before the NL:
+				if (line[line.size()-1] == '\r') {
+					of << '\r';
+				}
+				of << '\n';
+			}
+		}
+
+
+	}
+	f.close();
+	of.close();
+
+	// Finally, move the temp file to the input file.
+	try {
+		FoundryUtilities::moveFile (tfn, fileName);
+	} catch (const std::exception& e) {
+		stringstream msg;
+		msg << "searchReplaceInFile(): Failed to move "
+		    << "temp file onto input file: " << e.what();
+		throw runtime_error (msg.str());
+	}
+
+	DBG ("Returning " << count);
+	return count;
+}
+
 unsigned int
 wml::FoundryUtilities::getMemory (void)
 {

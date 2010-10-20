@@ -237,6 +237,16 @@ namespace wml {
 						bool replaceAll = true);
 
 		/*!
+		 * Search for searchTerm in fileName. Any lines
+		 * containing searchTerm should be deleted. If
+		 * deleteEndOfLine is true, also remove the EOL NL or
+		 * CRNL sequence, otherwise, leave the EOL in place.
+		 */
+		static int deleteLinesContaining (std::string searchTerm,
+						  std::string fileName,
+						  bool deleteEndOfLine = true);
+
+		/*!
 		 * Take the string str and condition it, so that it
 		 * makes a valid XML tag, by replacing disallowed
 		 * characters with '_' and making sure it doesn't
