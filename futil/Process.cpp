@@ -282,7 +282,7 @@ wml::Process::probeProcess (void)
 	// Poll for data
 	int prtn = poll (this->p, 2, 0);
 	if (prtn > 0) {
-		DBG ("poll returned " << prtn);
+		DBG2 ("poll returned " << prtn);
 	} else if (prtn == 0) {
 		// No revents from poll
 	} else {
