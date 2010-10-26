@@ -1,5 +1,9 @@
 /* -*-c++-*- */
 /*
+ * \file FileTyper.h
+ *
+ * \brief A c++ wrapper around libmagic
+ *
  *  This file is part of WML futil - a library containing static public
  *  utility functions and classes used across WML code.
  *
@@ -39,14 +43,11 @@ extern "C" {
 
 namespace wml {
 
-	/*!
-	 * File page enumerated types
-	 */
-	//@{
-
         /*!
-         * \brief The types of files which a user of the Tempest PDF+
-         * or DSM might upload. Why the MFT prefix? MFT stands for
+         * \brief The types of files which are used in WMLPP
+         * appliances.
+	 *
+	 * Why the MFT prefix? MFT stands for
          * "Macro File Type". When I first had to identify files it
          * was to determine what kind of PCL macro they were. The MFT
          * prefix has simply got stuck.
@@ -85,14 +86,20 @@ namespace wml {
 		FILETYPE_N
 	};
 
-	//@}
-
+	/*!
+	 * \brief A wrapper around libmagic
+	 *
+	 * Makes use of libmagic to identify files wrapping that api
+	 * up in a simple C++ interface.
+	 */
 	class FileTyper
 	{
 	public:
 		/*! Constructor and destructor */
+		//@{
 		FileTyper (void);
 		~FileTyper (void);
+		//@}
 
 		/*!
 		 * \brief Return a string containing information

@@ -1,5 +1,9 @@
 /* -*-c++-*- */
 /*
+ * \file Process.h
+ *
+ * \brief A class for execing processes
+ *
  * Process is part of WML futil - it's a class to fork and exec
  * processes.
  *
@@ -50,6 +54,9 @@ using namespace std;
 namespace wml {
 
 	/*!
+	 * \brief A set of virtual callbacks for use with the Process
+	 * class.
+	 *
 	 * A set of virtual callbacks. These should be derived in the
 	 * client code. They're called by Process via the
 	 * ProcessCallbacks* callbacks member variable.
@@ -67,6 +74,9 @@ namespace wml {
 	};
 
 	/*!
+	 * \brief A C++ class to exec processes without use of
+	 * system().
+	 *
 	 * Process is a simple replacement for the Qt class QProcess.
 	 */
 	class Process
@@ -220,9 +230,11 @@ namespace wml {
 
 
 	/*!
-	 * \class ProcessData A class used as a parent to a callback
-	 * object when a process is used within a static function, and
-	 * as such no parent object exists.
+	 * \brief A class used as a parent to a callback object.
+	 *
+	 * This class is used as a callback object parent when a
+	 * process is used within a static function, and as such no
+	 * parent object exists.
 	 *
 	 * Example of this usage can be found in WmlnetapuiUtilities.cpp
 	 */

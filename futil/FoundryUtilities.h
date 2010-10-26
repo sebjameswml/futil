@@ -1,5 +1,12 @@
 /* -*-c++-*- */
-/*
+/*!
+ * \file FoundryUtilities.h
+ *
+ * \brief Declares the class FoundryUtilities
+ *
+ * FoundryUtilities contains some generally useful static member
+ * functions.
+ *
  * This file is part of WML futil - a library containing static public
  * utility functions and classes used across WML code.
  *
@@ -41,6 +48,7 @@ extern "C" {
  *
  * These are ordered so that the most common chars appear earliest.
  */
+//@{
 #define CHARS_NUMERIC            "0123456789"
 #define CHARS_ALPHA              "etaoinshrdlcumwfgypbvkjxqzETAOINSHRDLCUMWFGYPBVKJXQZ"
 #define CHARS_ALPHALOWER         "etaoinshrdlcumwfgypbvkjxqz"
@@ -48,6 +56,8 @@ extern "C" {
 #define CHARS_NUMERIC_ALPHA      "etaoinshrdlcumwfgypbvkjxqz0123456789ETAOINSHRDLCUMWFGYPBVKJXQZ"
 #define CHARS_NUMERIC_ALPHALOWER "etaoinshrdlcumwfgypbvkjxqz0123456789"
 #define CHARS_NUMERIC_ALPHAUPPER "0123456789ETAOINSHRDLCUMWFGYPBVKJXQZ"
+//@}
+
 /*!
  * These are the chars which are acceptable for use in both unix, mac
  * AND windows file names. This doesn guarantee a safe Windows
@@ -56,7 +66,14 @@ extern "C" {
  */
 #define COMMON_FILE_SAFE_CHARS   CHARS_NUMERIC_ALPHA"_-.{}^[]`=,;"
 
+/*!
+ * Chars which are safe for IP domainnames
+ */
 #define IP_DOMAINNAME_SAFE_CHARS      CHARS_NUMERIC_ALPHA"-."
+
+/*!
+ * Chars which are safe for IP addresses
+ */
 #define IP_ADDRESS_SAFE_CHARS         CHARS_NUMERIC"."
 
 /*!
@@ -76,7 +93,15 @@ extern "C" {
  */
 #define WMLCUPS_QUEUENAME_SAFE_CHARS  CHARS_NUMERIC_ALPHA"!\"$\%&'()*+,-.:;<=>?@[\\]^_{|}~"
 
+/*!
+ * Cups addresses are reckoned to be allowed to contain the same chars
+ * as IP domain names.
+ */
 #define CUPS_ADDRESS_SAFE_CHARS       IP_DOMAINNAME_SAFE_CHARS
+
+/*!
+ * The Cups destination queue can only be numbers or letters.
+ */
 #define CUPS_DESTQUEUEPORT_SAFE_CHARS CHARS_NUMERIC_ALPHA
 
 /*
@@ -92,13 +117,11 @@ extern "C" {
 #include <iostream>
 #include <fstream>
 
-/*! \file FoundryUtilities.h
- * \brief Declares the class \c FoundryUtilities
+/*!
+ * \brief The standard William Matthew Limited namespace.
  *
- * \c FoundryUtilities contains some generally useful static member
- * functions.
+ * The standard William Matthew Limited namespace used for all WML code.
  */
-
 namespace wml {
 
         /*!
@@ -107,7 +130,8 @@ namespace wml {
         enum SCRIPT_TYPE {SCRIPT_JAVASCRIPT, SCRIPT_CSS};
 
 	/*!
-	 * Class to allow use of transform and tolower() on strings with GNU compiler
+	 * Allows the use of transform and tolower() on strings with
+	 * GNU compiler
 	 */
 	class to_lower
 	{
@@ -121,7 +145,8 @@ namespace wml {
 	};
 
 	/*!
-	 * Class to allow use of transform and toupper() on strings with GNU compiler
+	 * Allows the use of transform and toupper() on strings with
+	 * GNU compiler
 	 */
 	class to_upper
 	{
@@ -134,22 +159,23 @@ namespace wml {
 		}
 	};
 
-	/*! \class foundryutilities foundryutilities.h futil/foundryutilities.h
+	/*!
+	 * \brief A collection of utility functions
 	 *
-	 * The \c foundryutilities class provides numerous static
-	 * utility functions.
+	 * The FoundryUtilities class provides numerous static utility
+	 * functions.
 	 */
 	class FoundryUtilities
 	{
 	public:
-		/*! \name Constructor and Destructor */
-		//@{
+		/*!
+		 * Constructor
+		 */
 		FoundryUtilities();
+		/*!
+		 * Destructor
+		 */
 		~FoundryUtilities();
-		//@}
-
-		/*! Public utility functions */
-		//@{
 
 		/*!
 		 * This removes all carriage return characters ('\\r'
@@ -335,9 +361,7 @@ namespace wml {
 		 * pointing to a regular file, fileExists returns
 		 * true.
 		 */
-		//@{
 		static bool regfileExists (std::string& path);
-		//@}
 
 		/*!
 		 * Like regfileExists, but for block devices
@@ -1020,7 +1044,6 @@ namespace wml {
 		static void splitString (std::vector<std::string>& tokens,
 					 std::string& stringToSplit,
 					 std::string& delim);
-
 	};
 
 } // namespace wml

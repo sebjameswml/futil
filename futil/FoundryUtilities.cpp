@@ -61,7 +61,7 @@ extern "C" {
 #include <regex.h>
 }
 
-/*!
+/*
  * A single global variable to hold the value of the file we need to
  * unlock. Used by FoundryUtilities::getLock() and
  * FoundryUtilities::releaseLock()
@@ -70,16 +70,14 @@ int lock_fd_glob = 0;
 
 using namespace std;
 
-/*!
+/*
  * FoundryUtilities implementation
  */
-
-// Constructor
+//@{
 wml::FoundryUtilities::FoundryUtilities (void)
 {
 }
 
-// Destructor
 wml::FoundryUtilities::~FoundryUtilities (void)
 {
 }
@@ -3377,3 +3375,4 @@ wml::FoundryUtilities::splitString (vector<string>& tokens,
 		return;
 	}
 }
+//@}
