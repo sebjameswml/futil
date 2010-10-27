@@ -891,6 +891,25 @@ namespace wml {
 							     bool ignoreTrailingEmptyVal = true);
 
 		/*!
+		 * Split a string of values into a vector using the
+		 * separator string (not char) passed in as
+		 * "separator". If ignoreTrailingEmptyVal is true,
+		 * then a trailing separator with nothing after it
+		 * will NOT cause an additional empty value in the
+		 * returned vector.
+		 */
+		static std::vector<std::string> stringToVector (std::string& s, std::string& separator,
+								bool ignoreTrailingEmptyVal = true);
+
+		/*!
+		 * Turn the passed in vector of string values into a
+		 * string separated by the separator string (not char)
+		 * passed in as "separator".
+		 */
+		static std::string vectorToString (std::vector<std::string>& s, std::string& separator);
+
+
+		/*!
 		 * split csv into a list
 		 */
 		static std::list<std::string> csvToList (std::string& csvList,
