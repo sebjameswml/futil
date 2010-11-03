@@ -643,8 +643,23 @@ namespace wml {
 					  const char* subDirPath);
 
 		/*!
-		 * Get the first PID whose program name matches the
+		 * \brief Get the first PID whose program name matches the
 		 * argument programName.
+		 *
+		 * From all running processes, work out if any of the
+		 * process named programName is running. Return the
+		 * pid of the running process. If there is none,
+		 * return -1;
+		 *
+		 * programName is just the executable file name,
+		 * without the path, e.g. tail not /usr/bin/tail and
+		 * so on. If the program name is more than 15 chars,
+		 * use only the first 15 chars to look for a match.
+		 *
+		 * Opens all subdirectories in /proc which have only
+		 * numerals in their name within these, gets the first
+		 * line: Name: whatever If the name is programName,
+		 * then get the Pid line, and return that.
 		 */
 		static int getPid (std::string& programName);
 
