@@ -440,7 +440,15 @@ namespace wml {
 		static void copyFile (const char * from, std::ostream& to);
 		static void copyFile (FILE* from, std::string to);
 		static void copyFile (std::istream& from, std::string& to);
+		static void copyFile (const char * from, FILE* to);
 		//@}
+
+		/*!
+		 * Copy from one file pointer to another. Both are
+		 * expected to be open, neither is closed after the
+		 * copy.
+		 */
+		static void copyFile (FILE* from, FILE* to);
 
 		/*!
 		 * Copy a file from an input stream into a string.
