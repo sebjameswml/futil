@@ -46,6 +46,7 @@
 extern "C" {
 #include <errno.h>
 #include <sys/types.h>
+#include <signal.h>
 #include <sys/stat.h>
 #include <sys/statvfs.h>
 #include <sys/file.h>
@@ -1703,6 +1704,38 @@ wml::FoundryUtilities::getPid (std::string& programName)
 	}
 
 	return pid;
+}
+
+int
+wml::FoundryUtilities::termKill (string& programName, int& pid)
+{
+	if (pid != -1) {
+
+		// First, send SIGTERM
+		if (kill (pid, SIGTERM) != 0) {
+			// Failed to send the SIGTERM signal
+			return -1;
+		}
+
+		// Now see if that worked
+		pid = FoundryUtilities::getPid (programName);
+		if (pid != -1) {
+
+			// Despite accepting SIGTERM signal, process is still running. Try SIGKILL.
+			if (kill (pid, SIGKILL) != 0) {
+				return -1;
+			}
+
+			pid = FoundryUtilities::getPid (programName);
+			if (pid != -1) {
+				// Despite accepting SIGKILL, process is still running (bad)
+				return -1;
+			}
+
+		}
+	}
+
+	return 0;
 }
 
 void

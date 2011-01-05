@@ -672,6 +672,16 @@ namespace wml {
 		static int getPid (std::string& programName);
 
 		/*!
+		 * Terminate then Kill the pid. Program name is used
+		 * to ensure that the signal had required effect. ONLY
+		 * RELIABLE FOR PROCESSES THAT ARE EXPECTED TO RUN AS
+		 * SINGLE INSTANCES. Set pid to -1 if killed. Return
+		 * -1 on error, 0 on success. At 20110105, unused in
+		 * WML code.
+		 */
+		static int termKill (std::string& programName, int& pid);
+
+		/*!
 		 * Get the mac address of the platform from eth0
 		 *
 		 * @return The mac address as a string (something like
