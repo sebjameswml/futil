@@ -1526,6 +1526,83 @@ wml::FoundryUtilities::generateRandomFilename (const char* prefixPath, unsigned 
 	return rtn.substr (0, length);
 }
 
+std::string
+wml::FoundryUtilities::uuidPortion (unsigned int numChars)
+{
+	string rtn("");
+
+	if (numChars == 0) {
+		return rtn;
+	}
+
+	if (numChars > 36) {
+		numChars = 36;
+	}
+
+	// Create unique string with uuid
+	unsigned char uuid[50];
+	char uuid_unparsed[37];
+
+	uuid_generate (uuid);
+	uuid_unparse (uuid, uuid_unparsed);
+	uuid_clear (uuid);
+
+	rtn.append (uuid_unparsed);
+
+	return rtn.substr (0, numChars);
+}
+
+std::string
+wml::FoundryUtilities::randomString (unsigned int numChars,
+				     bool includeUppercase,
+				     bool includeLowercase,
+				     bool includeNumerals)
+{
+	if (!includeUppercase && !includeLowercase && !includeNumerals) {
+		throw runtime_error ("No characters to return");
+	}
+
+	string rtn("");
+
+	unsigned char uuid[50];
+	uuid_generate (uuid);
+	unsigned int i = uuid[0]
+		| uuid[2] << 8
+		| uuid[4] << 16
+		| uuid[6] << 24;
+	srandom (i);
+
+	unsigned int count = 0;
+	while (count < numChars) {
+
+		int rn = random()%62;
+
+		char c = (char)rn;
+
+		// if rn in range 0-25, then UC, 26 to 51 then LC, 52 to 61, then NUM.
+		if (rn < 26 && includeUppercase) {
+			c += 0x41;
+			rtn += c;
+			count++;
+
+		} else if (rn > 25 && rn < 52 && includeLowercase) {
+			c += 0x47;
+			rtn += c;
+			count++;
+
+		} else if (rn > 51 && includeNumerals) {
+			c -= 4;
+			rtn += c;
+			count++;
+
+		} else {
+			// Skip, generate another random number
+		}
+	}
+
+	return rtn.substr (0, numChars);
+}
+
 bool
 wml::FoundryUtilities::vectorContains (std::vector<unsigned int>& v, unsigned int i)
 {

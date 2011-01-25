@@ -593,6 +593,21 @@ namespace wml {
 							   unsigned int numChars);
 
 		/*!
+		 * Return a portion of a random UUID string. numChars
+		 * to be between 0 and 36. Characters are in the range
+		 * 0-9 and a-f (i.e. hex).
+		 */
+		static std::string uuidPortion (unsigned int numChars);
+
+		/*!
+		 * Return a random string of characters.
+		 */
+		static std::string randomString (unsigned int numChars,
+						 bool includeUppercase = true,
+						 bool includeLowercase = true,
+						 bool includeNumerals = true);
+
+		/*!
 		 * This could be a template. Return true if v contains
 		 * i.
 		 */
