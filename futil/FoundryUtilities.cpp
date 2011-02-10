@@ -1556,7 +1556,8 @@ std::string
 wml::FoundryUtilities::randomString (unsigned int numChars,
 				     bool includeUppercase,
 				     bool includeLowercase,
-				     bool includeNumerals)
+				     bool includeNumerals,
+				     bool allowSimilars)
 {
 	if (!includeUppercase && !includeLowercase && !includeNumerals) {
 		throw runtime_error ("No characters to return");
@@ -1582,18 +1583,30 @@ wml::FoundryUtilities::randomString (unsigned int numChars,
 		// if rn in range 0-25, then UC, 26 to 51 then LC, 52 to 61, then NUM.
 		if (rn < 26 && includeUppercase) {
 			c += 0x41;
-			rtn += c;
-			count++;
+			if (!allowSimilars && (c == 'O' || c == 'S' || c == 'I')) {
+				// Skip
+			} else {
+				rtn += c;
+				count++;
+			}
 
 		} else if (rn > 25 && rn < 52 && includeLowercase) {
 			c += 0x47;
-			rtn += c;
-			count++;
+			if (!allowSimilars && c == 'l') {
+				// Skip
+			} else {
+				rtn += c;
+				count++;
+			}
 
 		} else if (rn > 51 && includeNumerals) {
 			c -= 4;
-			rtn += c;
-			count++;
+			if (!allowSimilars && (c == '0' || c == '1' || c == '5')) {
+				// Skip
+			} else {
+				rtn += c;
+				count++;
+			}
 
 		} else {
 			// Skip, generate another random number

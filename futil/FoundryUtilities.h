@@ -601,11 +601,29 @@ namespace wml {
 
 		/*!
 		 * Return a random string of characters.
+		 *
+		 * \param numChars The number of characters to return
+		 *
+		 * \param includeUppercase Include upper case alphas
+		 * in returned string
+		 *
+		 * \param includeLowercase Include lower case alphas
+		 * in returned string
+		 *
+		 * \param includeNumerals Include decimal numerals in
+		 * the returned string
+		 *
+		 * \param allowSimilars Allow the string to include
+		 * the "similar characters": 1,l,I,O,0; all of which
+		 * are somewhat ambiguous.
+		 *
+		 * \return the random string.
 		 */
 		static std::string randomString (unsigned int numChars,
 						 bool includeUppercase = true,
 						 bool includeLowercase = true,
-						 bool includeNumerals = true);
+						 bool includeNumerals = true,
+						 bool allowSimilars = true);
 
 		/*!
 		 * This could be a template. Return true if v contains
