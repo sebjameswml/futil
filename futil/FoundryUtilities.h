@@ -236,6 +236,8 @@ namespace wml {
 		 * replace all occurrences of searchTerm, otherwise
 		 * just replace the first occurrence of searchTerm
 		 * with replaceTerm.
+		 *
+		 * \return the number of terms replaced.
 		 */
 		//@{
 		static int searchReplace (const char* searchTerm,
