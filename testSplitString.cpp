@@ -1,3 +1,7 @@
+/*
+ * A test of string-splitting functions
+ */
+
 #include "config.h"
 #include "WmlDbg.h"
 #include <iostream>
@@ -13,7 +17,7 @@ using namespace wml;
 
 int main (int argc, char **argv)
 {
-	DBGOPEN ("/tmp/testSplitString.log");
+	DBGOPEN ("./testSplitString.log");
 	try {
 
 		// Test splitString()
@@ -24,21 +28,17 @@ int main (int argc, char **argv)
 		FoundryUtilities::splitString (tokens, s, delim);
 
 		cout << "FoundryUtilities::splitString():" << endl;
-		vector<string>::iterator iter;
-		for (iter = tokens.begin();
-		     iter != tokens.end();
-		     iter++) {
-			cout << *iter << "\n";
+		vector<string>::iterator i;
+		for (i = tokens.begin(); i != tokens.end(); i++) {
+			cout << *i << "\n";
 		}
 
 		cout << endl << "FoundryUtilities::stringToVector():" << endl;
 		// Test stringToVector()
 		//delim = ",";
 		vector<string> toks2 = FoundryUtilities::stringToVector (s, delim);
-		for (iter = toks2.begin();
-		     iter != toks2.end();
-		     iter++) {
-			cout << *iter << "\n";
+		for (i = toks2.begin(); i != toks2.end(); i++) {
+			cout << *i << "\n";
 		}
 
 		string str2 = FoundryUtilities::vectorToString (toks2, delim);
@@ -48,6 +48,21 @@ int main (int argc, char **argv)
 		// delimiting character and an enclosing
 		// char. Often, delimiting char is ',' and enclosing
 		// char is '"'.
+
+		// Use s for this first test
+		string seps(" ,");
+		string encs("\"'");
+		vector<string> toks3 = FoundryUtilities::splitStringWithEncs (s, seps, encs);
+		cout << "Output of splitStringWithEncs for the string '" << s << "':\n";
+		for (i = toks3.begin(); i != toks3.end(); i++) {
+			cout << *i << "\n";
+		}
+		s = "'this\"' is, a, \"string";
+		toks3 = FoundryUtilities::splitStringWithEncs (s, seps, encs);
+		cout << "Output of splitStringWithEncs for the string '" << s << "':\n";
+		for (i = toks3.begin(); i != toks3.end(); i++) {
+			cout << *i << "\n";
+		}
 
 	} catch (const exception& e) {
                 // handle error condition; should catch any

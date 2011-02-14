@@ -965,9 +965,45 @@ namespace wml {
 		 * then a trailing separator with nothing after it
 		 * will NOT cause an additional empty value in the
 		 * returned vector.
+		 *
+		 * Similar to FoundryUtilities::splitString.
 		 */
 		static std::vector<std::string> stringToVector (std::string& s, std::string& separator,
 								bool ignoreTrailingEmptyVal = true);
+
+		/*!
+		 * Split a string into a set of strings using the
+		 * delimiter specified.
+		 *
+		 * Similar to FoundryUtilities::stringToVector.
+		 *
+		 * \param tokens The container into which the tokens
+		 * will be placed
+		 *
+		 * \param stringToSplit The input string to be split
+		 * up
+		 *
+		 * \param delim The delimiter parameter - a single
+		 * char or a multi-character token.
+		 */
+		static void splitString (std::vector<std::string>& tokens,
+					 std::string& stringToSplit,
+					 std::string& delim);
+
+		/*!
+		 * This splits up a "search style" string into tokens.
+		 *
+		 * \param s The string to split up
+		 *
+		 * \param separatorChars the chars used only to
+		 * separate tokens (" ,")
+		 *
+		 * \param enclosureChars The characters used to
+		 * enclose a multi-word token ("\"\'")
+		 */
+		static std::vector<std::string> splitStringWithEncs (std::string& s,
+								     std::string& separatorChars,
+								     std::string& enclosureChars);
 
 		/*!
 		 * Turn the passed in vector of string values into a
@@ -1121,16 +1157,6 @@ namespace wml {
 		 * wmlnetapui/wmlnetapui/SystemPage.cpp
 		 */
 		static bool valid_ip (std::string ip_string);
-
-		/*!
-		 * Split a string into a set of strings using
-		 * the delimiter specified. Unlike most string split
-		 * functions, the delimiter in this can be more than
-		 * one character in length
-		 */
-		static void splitString (std::vector<std::string>& tokens,
-					 std::string& stringToSplit,
-					 std::string& delim);
 	};
 
 } // namespace wml

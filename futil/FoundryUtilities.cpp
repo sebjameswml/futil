@@ -3037,6 +3037,93 @@ wml::FoundryUtilities::stringToVector (string& s, string& separator,
 	return theVec;
 }
 
+// Similiar to FoundryUtilities::stringToVector()
+void
+wml::FoundryUtilities::splitString (vector<string>& tokens,
+				    string& stringToSplit,
+				    string& delim)
+{
+	string::size_type pos;
+	pos = stringToSplit.find (delim);
+	if (pos != string::npos) {
+		tokens.push_back (stringToSplit.substr(0, pos));
+		string::size_type newPos;
+		newPos = pos + delim.size();
+		string newString = stringToSplit.substr(newPos);
+		FoundryUtilities::splitString (tokens, newString, delim);
+	} else {
+		tokens.push_back (stringToSplit);
+		return;
+	}
+}
+
+vector<string>
+wml::FoundryUtilities::splitStringWithEncs (string& s,
+					    string& separatorChars,
+					    string& enclosureChars)
+{
+	DBG2 ("Called for string >" << s << "<");
+	// Run through the string, searching for separator and
+	// enclosure chars and finding tokens based on those.
+
+	vector<string> theVec;
+	string entry("");
+	string::size_type a=0, b=0;
+
+	while (a < s.size()) {
+
+		// Find the first character which isn't space, comma, etc (as provided in args)
+		if ((a = s.find_first_not_of (separatorChars, a)) == string::npos) {
+			DBG ("Nothing but separator chars in string");
+			return theVec;
+		}
+
+		// If true, then the thing we're searching for is an enclosure
+		// char, otherwise, it's a separator char.
+		bool nextIsEnc(false);
+		char currentEncChar = '\0';
+
+		DBG2 ("See if " << s[a] << " at pos " << a
+		      << " is found in enclosure chars >" << enclosureChars << "<");
+
+		if ((enclosureChars.find_first_of (static_cast<char>(s[a]), 0)) != string::npos) {
+			// First char is an enclosure char, so we're tokenising a phrase.
+			nextIsEnc = true;
+			currentEncChar = s[a];
+			++a; // Skip the enclosure char
+		}
+
+		// Check we didn't over-run
+		if (a >= s.size()) { break; }
+
+		// Now get the token
+		string::size_type range = string::npos;
+		if (nextIsEnc) {
+			DBG2 ("Searching for next instances of enc chars: >" << enclosureChars << "< ");
+			if ((b = s.find_first_of (currentEncChar, a)) != string::npos) {
+				range = b - a;
+			}
+		} else {
+			DBG2 ("Searching for next instances of sep chars: >" << separatorChars << "< ");
+			if ((b = s.find_first_of (separatorChars, a)) != string::npos) {
+				range = b - a;
+			}
+		}
+
+		entry = s.substr (a, range);
+		theVec.push_back (entry);
+
+		DBG2 ("Adding " << range + 1 << " to a (" << a << ")");
+		if (range != string::npos) {
+			a+=range+1;
+		} else {
+			a = range;
+		}
+	}
+
+	return theVec;
+}
+
 string
 wml::FoundryUtilities::vectorToString (vector<string>& v,
 				       string& separator)
@@ -3563,24 +3650,5 @@ wml::FoundryUtilities::valid_ip (string ip_string)
 		return true;
 	}
 	return false;
-}
-
-void
-wml::FoundryUtilities::splitString (vector<string>& tokens,
-				    string& stringToSplit,
-				    string& delim)
-{
-	string::size_type pos;
-	pos = stringToSplit.find (delim);
-	if (pos != string::npos) {
-		tokens.push_back (stringToSplit.substr(0, pos));
-		string::size_type newPos;
-		newPos = pos + delim.size();
-		string newString = stringToSplit.substr(newPos);
-		FoundryUtilities::splitString (tokens, newString, delim);
-	} else {
-		tokens.push_back (stringToSplit);
-		return;
-	}
 }
 //@}
