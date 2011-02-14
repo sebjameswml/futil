@@ -64,7 +64,7 @@ extern "C" {
  * filename, it imposes some extra conditions (no . at end of name,
  * some files such as NUL.txt AUX.txt disallowed).
  */
-#define COMMON_FILE_SAFE_CHARS   CHARS_NUMERIC_ALPHA"_-.{}^[]`=,;"
+#define COMMON_FILE_SAFE_CHARS        CHARS_NUMERIC_ALPHA"_-.{}^[]`=,;"
 
 /*!
  * Chars which are safe for IP domainnames
@@ -556,7 +556,15 @@ namespace wml {
 		 * it is suitable to be placed in a shell script.
 		 */
 		static void slashEscape (std::string& str);
-		//@}
+
+		/*!
+		 * Escape characters which should be escaped in sql
+		 * strings. Pass in forPatternMatching to escape % and
+		 *   chars which are treated in a special way by sql
+		 * like LIKE '%blah_%'
+		 */
+		static void sqlEscape (std::string& str, bool forPatternMatching);
+
 
 		/*!
 		 * Given a path like C:\\path\\to\\file in str, remove
