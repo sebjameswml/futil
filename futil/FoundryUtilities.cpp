@@ -3139,6 +3139,55 @@ wml::FoundryUtilities::splitStringWithEncs (string& s,
 	return theVec;
 }
 
+std::string
+wml::FoundryUtilities::htmlHighlightTerm (std::string& term,
+					  vector<string>& searchTermsUC,
+					  std::string& tag)
+{
+	string rtn("");
+	string termUC = term;
+	string::size_type p1 = string::npos, p2 = string::npos;
+	transform (termUC.begin(), termUC.end(), termUC.begin(), wml::to_upper());
+	vector<string>::iterator i = searchTermsUC.begin();
+	while (i != searchTermsUC.end()) {
+		if ((p1 = termUC.find (*i, 0)) != string::npos) {
+			p2 = p1 + i->size() - 1;
+			break;
+		}
+		++i;
+	}
+	string::size_type p = 0;
+	if (p2 != string::npos && p1 != string::npos) {
+		DBG2 ("Build highlighted search term");
+		while (p < p1 && p < term.size()) {
+			DBG2 ("Adding " << term[p] << " to return string");
+			rtn += term[p];
+			++p;
+		}
+		DBG2 ("Adding <tag> to return string");
+		rtn += "<" + tag + ">";
+		while (p <= p2 && p < term.size()) {
+			DBG2 ("Adding " << term[p] << " to return string");
+			rtn += term[p];
+			++p;
+		}
+		DBG2 ("Adding </tag> to return string");
+		rtn += "</" + tag + ">";
+		while (p < term.size()) {
+			DBG2 ("Adding " << term[p] << " to return string");
+			rtn += term[p];
+			++p;
+		}
+		DBG2 ("Finished return string");
+
+	} else {
+		DBG2 ("Return non-highlighted search term");
+		rtn = term;
+	}
+
+	return rtn;
+}
+
 string
 wml::FoundryUtilities::vectorToString (vector<string>& v,
 				       string& separator)

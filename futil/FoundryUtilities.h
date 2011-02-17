@@ -1014,6 +1014,27 @@ namespace wml {
 								     std::string& enclosureChars);
 
 		/*!
+		 * Highlight matching portions of search terms in <tag></tag> tags
+		 *
+		 * If term is "sjames" and searchTermsUC contains
+		 * "JAMES", "1234" and tag contains "b", then term
+		 * will be modified to contain "s<b>james</b>".
+		 *
+		 * \param term The search term which may need to be
+		 * highlighted. This will be modified by this function
+		 * (by adding the tags).
+		 *
+		 * \param searchTermsUC All the terms that user had in
+		 * his search which must already be in upper case.
+		 *
+		 * \param tag The tag which will be used to highlight
+		 * the matching portion of term.
+		 */
+		static std::string htmlHighlightTerm (std::string& term,
+						      std::vector<std::string>& searchTermsUC,
+						      std::string& tag);
+
+		/*!
 		 * Turn the passed in vector of string values into a
 		 * string separated by the separator string (not char)
 		 * passed in as "separator".
