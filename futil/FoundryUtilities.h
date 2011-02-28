@@ -90,8 +90,13 @@ extern "C" {
 /*!
  * To make our life a bit easier, we'll disallow a number of queuename
  * characters which would otherwise be acceptable.
+ *
+ * There is both the HTML environment and the jQuery environment which
+ * can be confused by strange queue names. Queue names are frequently
+ * used (X)HTML tags so that disallows most of the additional
+ * characters allowed by CUPS.
  */
-#define WMLCUPS_QUEUENAME_SAFE_CHARS  CHARS_NUMERIC_ALPHA"!\"$\%&'()*+,-.:;<=>?@[\\]^_{|}~"
+#define WMLCUPS_QUEUENAME_SAFE_CHARS  CHARS_NUMERIC_ALPHA"-._"
 
 /*!
  * Cups addresses are reckoned to be allowed to contain the same chars
