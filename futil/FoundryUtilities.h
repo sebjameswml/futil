@@ -400,8 +400,16 @@ namespace wml {
 		//@}
 
 		/*!
-		 * Create the directory. Wrapper around mkdir(). If
-		 * uid/gid is set to >-1, then chown each directory.
+		 * Create the directory and any parent directories
+		 * which need to be created.
+		 *
+		 * Makes use of mkdir() and acts like the system
+		 * command mkdir -p path.
+		 *
+		 * If uid/gid is set to >-1, then chown each
+		 * directory. This means that ownership is set for the
+		 * directories in the path even if the directories do
+		 * not need to be created.
 		 */
 		static void createDir (std::string path,
 				       mode_t mode = 0775,
