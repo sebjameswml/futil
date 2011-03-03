@@ -484,6 +484,14 @@ namespace wml {
 		static void unlinkFile (std::string fpath);
 
 		/*!
+		 * Unlink files in dirPath which are older than
+		 * olerThanSeconds and which contain filePart.
+		 */
+		static void clearoutDir (std::string dirPath,
+					 unsigned int olderThanSeconds = 0,
+					 std::string filePart = "");
+
+		/*!
 		 * This reads the contents of a directory tree, making
 		 * up a list of the contents in the vector vec. If the
 		 * directory tree has subdirectories, these are

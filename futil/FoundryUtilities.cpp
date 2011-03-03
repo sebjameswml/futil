@@ -2043,6 +2043,33 @@ wml::FoundryUtilities::macAddrToStr (unsigned int* mac)
 }
 
 void
+wml::FoundryUtilities::clearoutDir (string dirPath,
+				    unsigned int olderThanSeconds,
+				    string filePart)
+{
+	vector<string> files;
+	FoundryUtilities::readDirectoryTree (files, dirPath, olderThanSeconds);
+	vector<string>::iterator i = files.begin();
+	while (i != files.end()) {
+		string fpath = dirPath + "/" + *i;
+		try {
+			if (filePart.empty()) {
+				FoundryUtilities::unlinkFile (fpath);
+			} else {
+				// Must find filePart to unlink
+				if (i->find (filePart, 0) != string::npos) {
+					FoundryUtilities::unlinkFile (fpath);
+				} // else do nothing
+			}
+
+		} catch (const exception& e) {
+			DBG ("Failed to unlink " << *i << ": " << e.what());
+		}
+		++i;
+	}
+}
+
+void
 wml::FoundryUtilities::readDirectoryTree (vector<string>& vec,
 					  string dirPath,
 					  unsigned int olderThanSeconds)
@@ -2060,10 +2087,11 @@ wml::FoundryUtilities::readDirectoryTree (vector<string>& vec,
 	struct dirent *ep;
 	size_t entry_len = 0;
 
-	string dirPath ("");
-	string bd (baseDirPath);
+	string dirPath (baseDirPath);
 	string sd (subDirPath);
-	dirPath = bd + "/" + sd;
+	if (!sd.empty()) {
+		dirPath += "/" + sd;
+	}
 
 	if (!(d = opendir (dirPath.c_str()))) {
 		string msg = "Failed to open directory " + dirPath;
