@@ -960,7 +960,12 @@ wml::FoundryUtilities::createDir (std::string path,
 				emsg << "Permission is denied";
 				break;
 			case EEXIST:
-				//emsg << "Path exists, maybe not as a directory";
+				// Path exists, though maybe not as a directory.
+				// Set mode/ownership before moving on:
+				if (uid>-1 && gid>-1) {
+					chown (prePath.c_str(), static_cast<uid_t>(uid), static_cast<gid_t>(gid));
+					chmod (prePath.c_str(), mode);
+				}
 				i++;
 				continue;
 				break;
