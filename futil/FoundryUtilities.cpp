@@ -932,9 +932,11 @@ wml::FoundryUtilities::createDir (std::string path,
 		return;
 	}
 
+	// Set to true if we are provded with an absolute filepath
+	bool pathIsAbsolute(false);
+
 	// Set umask to 0000 to stop it interfering with mode
 	int oldUmask = umask (0000);
-
 	string::size_type pos, lastPos = path.size()-1;
 	vector<string> dirs;
 	if ((pos = path.find_last_of ('/', lastPos)) == string::npos) {
@@ -944,6 +946,10 @@ wml::FoundryUtilities::createDir (std::string path,
 		dirs.push_back (path);
 	} else {
 		// Definitely DO have a '/' in the path:
+		if (path[0] == '/') {
+			pathIsAbsolute = true;
+		}
+
 		while ((pos = path.find_last_of ('/', lastPos)) != 0) {
 			dirs.push_back (path.substr(pos+1, lastPos-pos));
 			DBG2 ("Push back directory " << path.substr(pos+1, lastPos-pos));
@@ -954,9 +960,18 @@ wml::FoundryUtilities::createDir (std::string path,
 	}
 
 	vector<string>::reverse_iterator i = dirs.rbegin();
-	string prePath("");
+	string prePath("/");
+	if (!pathIsAbsolute) {
+		prePath = "./";
+	}
+	bool first(true);
 	while (i != dirs.rend()) {
-		prePath += "/" + *i;
+		if (!first) {
+			prePath += "/" + *i;
+			first = true;
+		} else {
+			prePath += *i;
+		}
 		DBG2 ("mkdir " << prePath.c_str());
 		int rtn = mkdir (prePath.c_str(), mode);
 		if (rtn) {

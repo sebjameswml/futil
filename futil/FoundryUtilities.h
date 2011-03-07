@@ -417,13 +417,8 @@ namespace wml {
 		 * directories in the path even if the directories do
 		 * not need to be created.
 		 *
-		 * NB: If path is a single directory name, with no
-		 * absolute path, for example "mydir", the direcotory
-		 * will be created in the filesystem tree root, as
-		 * /mydir.
-		 *
-		 * \param path The absolute path to the directory
-		 * which should be created.
+		 * \param path The path (relative or absolute) to the
+		 * directory which should be created.
 		 *
 		 * \param mode the permissions mode which should be
 		 * set on the directory. This is applied even if the
