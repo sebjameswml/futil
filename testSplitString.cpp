@@ -64,6 +64,15 @@ int main (int argc, char **argv)
 			cout << *i << "\n";
 		}
 
+		string forCount ("ababa");
+		cout << "In string '" << forCount << "':\n";
+		cout << "Number of a chars:" << FoundryUtilities::countChars (forCount, 'a') << endl;;
+		cout << "Number of b chars:" << FoundryUtilities::countChars (forCount, 'b') << endl;;
+
+		string emptyStr("");
+		cout << "Number of b chars in an empty string:"
+		     << FoundryUtilities::countChars (emptyStr, 'b') << endl;;
+
 	} catch (const exception& e) {
                 // handle error condition; should catch any
                 // exception thrown above

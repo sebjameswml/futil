@@ -281,6 +281,12 @@ namespace wml {
 						  bool deleteEndOfLine = true);
 
 		/*!
+		 * Return the number of instances of the character c
+		 * in line.
+		 */
+		static unsigned int countChars (std::string& line, const char c);
+
+		/*!
 		 * Take the string str and condition it, so that it
 		 * makes a valid XML tag, by replacing disallowed
 		 * characters with '_' and making sure it doesn't

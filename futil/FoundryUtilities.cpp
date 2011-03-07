@@ -361,6 +361,17 @@ wml::FoundryUtilities::deleteLinesContaining (std::string searchTerm,
 }
 
 unsigned int
+wml::FoundryUtilities::countChars (std::string& line, const char c)
+{
+	unsigned int count(0);
+	string::const_iterator i = line.begin();
+	while (i != line.end()) {
+		if (*i++ == c) { ++count; }
+	}
+	return count;
+}
+
+unsigned int
 wml::FoundryUtilities::getMemory (void)
 {
 	ifstream f ("/proc/meminfo");
