@@ -937,7 +937,7 @@ wml::FoundryUtilities::createDir (std::string path,
 
 	string::size_type pos, lastPos = path.size()-1;
 	vector<string> dirs;
-	while ((pos = path.find_last_of ('/', lastPos)) != 0) {
+	while ((pos = path.find_last_of ('/', lastPos)) != 0 && pos != string::npos) {
 		dirs.push_back (path.substr(pos+1, lastPos-pos));
 		DBG2 ("Push back directory " << path.substr(pos+1, lastPos-pos));
 		lastPos = pos-1;
