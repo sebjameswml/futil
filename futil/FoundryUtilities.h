@@ -1074,6 +1074,13 @@ namespace wml {
 						      std::string& tag);
 
 		/*!
+		 * Split line into substring of a given maximum
+		 * length, splitting at spaces if possible.
+		 */
+		static std::vector<std::string> wrapLine (const std::string& line,
+							  unsigned int maxLength);
+
+		/*!
 		 * Turn the passed in vector of string values into a
 		 * string separated by the separator string (not char)
 		 * passed in as "separator".
