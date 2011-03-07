@@ -937,13 +937,21 @@ wml::FoundryUtilities::createDir (std::string path,
 
 	string::size_type pos, lastPos = path.size()-1;
 	vector<string> dirs;
-	while ((pos = path.find_last_of ('/', lastPos)) != 0 && pos != string::npos) {
-		dirs.push_back (path.substr(pos+1, lastPos-pos));
-		DBG2 ("Push back directory " << path.substr(pos+1, lastPos-pos));
-		lastPos = pos-1;
+	if ((pos = path.find_last_of ('/', lastPos)) == string::npos) {
+		// Path is not absolute, single directory. NB: This
+		// will be created in the ROOT of the filesystem tree
+		// (if permissions allow)
+		dirs.push_back (path);
+	} else {
+		// Definitely DO have a '/' in the path:
+		while ((pos = path.find_last_of ('/', lastPos)) != 0) {
+			dirs.push_back (path.substr(pos+1, lastPos-pos));
+			DBG2 ("Push back directory " << path.substr(pos+1, lastPos-pos));
+			lastPos = pos-1;
+		}
+		DBG2 ("Push back directory " << path.substr(1, lastPos));
+		dirs.push_back (path.substr(1, lastPos));
 	}
-	DBG2 ("Push back directory " << path.substr(1, lastPos));
-	dirs.push_back (path.substr(1, lastPos));
 
 	vector<string>::reverse_iterator i = dirs.rbegin();
 	string prePath("");

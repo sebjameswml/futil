@@ -416,6 +416,28 @@ namespace wml {
 		 * directory. This means that ownership is set for the
 		 * directories in the path even if the directories do
 		 * not need to be created.
+		 *
+		 * NB: If path is a single directory name, with no
+		 * absolute path, for example "mydir", the direcotory
+		 * will be created in the filesystem tree root, as
+		 * /mydir.
+		 *
+		 * \param path The absolute path to the directory
+		 * which should be created.
+		 *
+		 * \param mode the permissions mode which should be
+		 * set on the directory. This is applied even if the
+		 * directory was not created.
+		 *
+		 * \param uid The user id to apply to the
+		 * directory. This is applied even if the directory
+		 * was not created. This is NOT applied if it is set
+		 * to -1.
+		 *
+		 * \param gid The group id to apply to the
+		 * directory. This is applied even if the directory
+		 * was not created. This is NOT applied if it is set
+		 * to -1.
 		 */
 		static void createDir (std::string path,
 				       mode_t mode = 0775,
