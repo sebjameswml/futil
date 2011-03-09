@@ -3832,10 +3832,11 @@ wml::FoundryUtilities::getlineWithCopy (std::istream* istrm,
 #endif
 	line = "";
 	if (!inputComplete) {
-		getline (*istrm, line, '\n');
-		DBG2 ("line is: '" << line << "'");
-		if (copystrm.is_open()) {
-			copystrm << line << '\n';
+		if (getline (*istrm, line, '\n')) {
+			DBG2 ("line is: '" << line << "'");
+			if (copystrm.is_open()) {
+				copystrm << line << '\n';
+			}
 		}
 		if (istrm->eof()) {
 			inputComplete = true;
