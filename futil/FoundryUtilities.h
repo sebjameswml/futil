@@ -495,6 +495,17 @@ namespace wml {
 		static void copyFileToString (std::istream& from, std::string& to);
 
 		/*!
+		 * Calls basic_string::getline to copy from istrm into
+		 * line, setting inputComplete to true if eof is
+		 * reached and optionally copying to copystrm if it is
+		 * open.
+		 */
+		static bool getlineWithCopy (std::istream* istrm,
+					     std::string& line,
+					     std::ofstream& copystrm,
+					     bool& inputComplete);
+
+		/*!
 		 * Move a file. Throw exception on failure.
 		 */
 		static void moveFile (std::string from, std::string to);

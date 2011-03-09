@@ -3817,4 +3817,31 @@ wml::FoundryUtilities::valid_ip (string ip_string)
 	}
 	return false;
 }
+
+bool
+wml::FoundryUtilities::getlineWithCopy (std::istream* istrm,
+					std::string& line,
+					std::ofstream& copystrm,
+					bool& inputComplete)
+{
+#ifdef DEBUG2
+	if (istrm->good()) { DBG2 ("good is set in istrm"); }
+	if (istrm->eof()) { DBG2 ("eof is set in istrm"); }
+	if (istrm->bad()) { DBG2 ("bad is set in istrm (non-recoverable error)"); }
+	if (istrm->fail()) { DBG2 ("fail is set in istrm (recoverable error)"); }
+#endif
+	line = "";
+	if (!inputComplete) {
+		getline (*istrm, line, '\n');
+		DBG2 ("line is: '" << line << "'");
+		if (copystrm.is_open()) {
+			copystrm << line << '\n';
+		}
+		if (istrm->eof()) {
+			inputComplete = true;
+		}
+	}
+	return !line.empty();
+}
+
 //@}
