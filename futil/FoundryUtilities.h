@@ -118,6 +118,7 @@ extern "C" {
 #include <vector>
 #include <list>
 #include <set>
+#include <map>
 #include <istream>
 #include <ostream>
 #include <iostream>
@@ -235,6 +236,13 @@ namespace wml {
 		 * number of whitespace characters removed.
 		 */
 		static int stripLeadingWhitespace (std::string& input);
+
+		/*!
+		 * Erase leading and trailing whitespace from
+		 * input. Return the number of whitespace characters
+		 * removed.
+		 */
+		static int stripWhitespace (std::string& input);
 
 		/*!
 		 * Do a search and replace, search for searchTerm,
@@ -1133,6 +1141,13 @@ namespace wml {
 		 */
 		static std::string setToCsv (std::set<std::string>& listList,
 					     char separator = ',');
+
+		/*!
+		 * Split a comma-separated key/value pair list into a map.
+		 */
+		static std::map<std::string, std::string> csvToMap (const std::string& csvList,
+								    char relationship = '=',
+								    char separator = ',');
 
                 /*!
                  * Converts pdf files to a ghostscript device

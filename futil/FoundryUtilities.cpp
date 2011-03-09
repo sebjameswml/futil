@@ -158,6 +158,14 @@ wml::FoundryUtilities::stripLeadingWhitespace (std::string& input)
 }
 
 int
+wml::FoundryUtilities::stripWhitespace (std::string& input)
+{
+	int n = FoundryUtilities::stripLeadingWhitespace (input);
+	n += FoundryUtilities::stripTrailingWhitespace (input);
+	return n;
+}
+
+int
 wml::FoundryUtilities::stripLeadingSpaces (std::string& input)
 {
 	return FoundryUtilities::stripLeadingChars (input);
@@ -3439,6 +3447,29 @@ wml::FoundryUtilities::setToCsv (std::set<std::string>& setList, char separator)
 		i++;
 	}
 	return ss.str();
+}
+
+map<string, string>
+wml::FoundryUtilities::csvToMap (const std::string& csvList, char relationship, char separator)
+{
+	map<string, string> rtn;
+	string theList (csvList);
+	vector<string> v = FoundryUtilities::csvToVector (theList, separator);
+	vector<string>::iterator iV = v.begin(), end = v.end();
+	while (iV != end) {
+		vector<string> tokens = FoundryUtilities::csvToVector (*iV, relationship);
+		if (tokens.size() != 2) {
+			stringstream errss;
+			errss << "Problem getting key/value pair from '" << *iV << "'";
+			throw runtime_error (errss.str());
+		}
+		string key (tokens.at(0)), value (tokens.at(1));
+		FoundryUtilities::stripWhitespace (key);
+		FoundryUtilities::stripWhitespace (value);
+		rtn.insert (make_pair (key, value));
+		++iV;
+	}
+	return rtn;
 }
 
 std::string
