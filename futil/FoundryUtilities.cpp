@@ -938,6 +938,7 @@ wml::FoundryUtilities::createDir (std::string path,
 				  mode_t mode,
 				  int uid, int gid)
 {
+	DBG ("Called for path '" << path << "'");
 	if (path.empty()) {
 		// Create no directory. Just return.
 		return;
@@ -971,17 +972,17 @@ wml::FoundryUtilities::createDir (std::string path,
 	}
 
 	vector<string>::reverse_iterator i = dirs.rbegin();
-	string prePath("/");
-	if (!pathIsAbsolute) {
-		prePath = "./";
-	}
+	string prePath("");
 	bool first(true);
 	while (i != dirs.rend()) {
-		if (!first) {
+		if (first && !pathIsAbsolute) {
+			prePath += "./" + *i;
+			first = true;
+		} else if (first && pathIsAbsolute) {
 			prePath += "/" + *i;
 			first = true;
 		} else {
-			prePath += *i;
+			prePath += "/" + *i;
 		}
 		DBG2 ("mkdir " << prePath.c_str());
 		int rtn = mkdir (prePath.c_str(), mode);
@@ -1007,13 +1008,13 @@ wml::FoundryUtilities::createDir (std::string path,
 				emsg << "Bad address";
 				break;
 			case ELOOP:
-				emsg << "Too many symlinks";
+				emsg << "Too many symlinks in " << prePath;
 				break;
 			case ENAMETOOLONG:
-				emsg << "File name too long";
+				emsg << "File name (" << prePath << ") too long";
 				break;
 			case ENOENT:
-				emsg << "Path invalid (part or all of it)";
+				emsg << "Path '" << prePath << "' invalid (part or all of it)";
 				break;
 			case ENOMEM:
 				emsg << "Out of kernel memory";
@@ -1022,13 +1023,13 @@ wml::FoundryUtilities::createDir (std::string path,
 				emsg << "Out of storage space/quota exceeded.";
 				break;
 			case ENOTDIR:
-				emsg << "component of the path is not a directory";
+				emsg << "component of the path '" << prePath << "' is not a directory";
 				break;
 			case EPERM:
 				emsg << "file system doesn't support directory creation";
 				break;
 			case EROFS:
-				emsg << "path refers to location on read only filesystem";
+				emsg << "path '" << prePath << "' refers to location on read only filesystem";
 				break;
 			default:
 				emsg << "unknown error";
