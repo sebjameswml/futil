@@ -3456,17 +3456,26 @@ wml::FoundryUtilities::csvToMap (const std::string& csvList, char relationship, 
 	string theList (csvList);
 	vector<string> v = FoundryUtilities::csvToVector (theList, separator);
 	vector<string>::iterator iV = v.begin(), end = v.end();
+	string lastKey ("");
 	while (iV != end) {
-		vector<string> tokens = FoundryUtilities::csvToVector (*iV, relationship);
+		// Catch comma in value (key1=val1,val2,key2=val3)
+		if (iV->find (relationship) == string::npos) {
+			if (!lastKey.empty()) {
+				rtn[lastKey] += "," + *iV;
+				++iV;
+				continue;
+			}
+		}
+
+		vector<string> tokens = FoundryUtilities::csvToVector (*iV, relationship, false);
 		if (tokens.size() != 2) {
 			stringstream errss;
 			errss << "Problem getting key/value pair from '" << *iV << "'";
 			throw runtime_error (errss.str());
 		}
 		string key (tokens.at(0)), value (tokens.at(1));
-		FoundryUtilities::stripWhitespace (key);
-		FoundryUtilities::stripWhitespace (value);
 		rtn.insert (make_pair (key, value));
+		lastKey = key;
 		++iV;
 	}
 	return rtn;
