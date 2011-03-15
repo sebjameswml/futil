@@ -511,7 +511,8 @@ namespace wml {
 		static bool getlineWithCopy (std::istream* istrm,
 					     std::string& line,
 					     std::ofstream& copystrm,
-					     bool& inputComplete);
+					     bool& inputComplete,
+					     char eolChar = '\n');
 
 		/*!
 		 * Move a file. Throw exception on failure.

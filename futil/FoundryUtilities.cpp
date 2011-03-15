@@ -3863,7 +3863,8 @@ bool
 wml::FoundryUtilities::getlineWithCopy (std::istream* istrm,
 					std::string& line,
 					std::ofstream& copystrm,
-					bool& inputComplete)
+					bool& inputComplete,
+					char eolChar)
 {
 #ifdef DEBUG2
 	if (istrm->good()) { DBG2 ("good is set in istrm"); }
@@ -3874,10 +3875,10 @@ wml::FoundryUtilities::getlineWithCopy (std::istream* istrm,
 	line = "";
 	bool gotline(false);
 	if (!inputComplete) {
-		if ((gotline = getline (*istrm, line, '\n'))) {
+		if ((gotline = getline (*istrm, line, eolChar))) {
 			DBG2 ("line is: '" << line << "'");
 			if (copystrm.is_open()) {
-				copystrm << line << '\n';
+				copystrm << line << eolChar;
 			}
 		}
 		if (istrm->eof()) {
