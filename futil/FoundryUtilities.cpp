@@ -3151,7 +3151,8 @@ wml::FoundryUtilities::splitString (vector<string>& tokens,
 vector<string>
 wml::FoundryUtilities::splitStringWithEncs (string& s,
 					    string& separatorChars,
-					    string& enclosureChars)
+					    string& enclosureChars,
+					    const char escapeChar)
 {
 	DBG2 ("Called for string >" << s << "<");
 	// Run through the string, searching for separator and
@@ -3159,7 +3160,7 @@ wml::FoundryUtilities::splitStringWithEncs (string& s,
 
 	vector<string> theVec;
 	string entry("");
-	string::size_type a=0, b=0;
+	string::size_type a=0, b=0, c=0;
 
 	while (a < s.size()) {
 
@@ -3167,6 +3168,13 @@ wml::FoundryUtilities::splitStringWithEncs (string& s,
 		if ((a = s.find_first_not_of (separatorChars, a)) == string::npos) {
 			DBG ("Nothing but separator chars in string");
 			return theVec;
+		}
+
+		// See if this is an escape char, in which case, we
+		// skip it, and the char it escapes.
+		if (escapeChar && s[a] == escapeChar) {
+			++a; ++a;
+			continue;
 		}
 
 		// If true, then the thing we're searching for is an enclosure
@@ -3191,8 +3199,19 @@ wml::FoundryUtilities::splitStringWithEncs (string& s,
 		string::size_type range = string::npos;
 		if (nextIsEnc) {
 			DBG2 ("Searching for next instances of enc chars: >" << enclosureChars << "< ");
-			if ((b = s.find_first_of (currentEncChar, a)) != string::npos) {
+			c = a;
+			while ((b = s.find_first_of (currentEncChar, c)) != string::npos) {
+				// FIXME: Check we didn't find an escaped enclosureChar.
+				if (escapeChar) {
+					c = b; --c;
+					if (s[c] == escapeChar) {
+						// Skip b which is an escaped enclosure char
+						c = b; ++c;
+						continue;
+					}
+				}
 				range = b - a;
+				break;
 			}
 		} else {
 			DBG2 ("Searching for next instances of sep chars: >" << separatorChars << "< ");

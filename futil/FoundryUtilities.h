@@ -1073,10 +1073,15 @@ namespace wml {
 		 *
 		 * \param enclosureChars The characters used to
 		 * enclose a multi-word token ("\"\'")
+		 *
+		 * \param the escape character. If not set to \0, then
+		 * this is the character used to escape the enclosure
+		 * chars.
 		 */
 		static std::vector<std::string> splitStringWithEncs (std::string& s,
 								     std::string& separatorChars,
-								     std::string& enclosureChars);
+								     std::string& enclosureChars,
+								     const char escapeChar = '\0');
 
 		/*!
 		 * Highlight matching portions of search terms in <tag></tag> tags
