@@ -2096,7 +2096,12 @@ wml::FoundryUtilities::clearoutDir (string dirPath,
 				    string filePart)
 {
 	vector<string> files;
-	FoundryUtilities::readDirectoryTree (files, dirPath, olderThanSeconds);
+	try {
+		FoundryUtilities::readDirectoryTree (files, dirPath, olderThanSeconds);
+	} catch (const exception& e) {
+		DBG ("Failed to read dir tree: " << e.what());
+		return;
+	}
 	vector<string>::iterator i = files.begin();
 	while (i != files.end()) {
 		string fpath = dirPath + "/" + *i;
