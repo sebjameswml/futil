@@ -88,6 +88,11 @@ extern "C" {
 #define CUPS_QUEUENAME_SAFE_CHARS     CHARS_NUMERIC_ALPHA"!\"$\%&'()*+,-.:;<=>?@[\\]^_{|}~"
 
 /*!
+ * Excel doesn't like [ ] * \ / ? :
+ */
+#define EXCEL_SHEETNAME_SAFE_CHARS    CHARS_NUMERIC_ALPHA"_;!\"'£$\%^&()=+#~@;<>{}|.,"
+
+/*!
  * To make our life a bit easier, we'll disallow a number of queuename
  * characters which would otherwise be acceptable.
  *
