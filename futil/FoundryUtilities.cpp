@@ -1410,7 +1410,6 @@ wml::FoundryUtilities::fileModDatestamp (const char* filename)
 	return dstr;
 }
 
-// Same as get_lock() in wmlppctrl (libwmlppfilt)
 void
 wml::FoundryUtilities::getLock (int fd)
 {
@@ -1441,6 +1440,9 @@ wml::FoundryUtilities::getLock (int fd)
 void
 wml::FoundryUtilities::getLock (std::fstream& f)
 {
+	if (!f.is_open()) {
+		throw runtime_error ("Can't lock an un-open fstream");
+	}
 	int fd = fileno(f);
 	FoundryUtilities::getLock (fd);
 }
@@ -1476,6 +1478,9 @@ wml::FoundryUtilities::releaseLock (int fd)
 void
 wml::FoundryUtilities::releaseLock (std::fstream& f)
 {
+	if (!f.is_open()) {
+		throw runtime_error ("Can't release lock on an un-open fstream");
+	}
 	int fd = fileno(f);
 	FoundryUtilities::releaseLock (fd);
 }
