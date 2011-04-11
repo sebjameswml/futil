@@ -42,6 +42,7 @@
 
 #include "FoundryUtilities.h"
 #include "Process.h"
+#include "fileno.h"
 
 extern "C" {
 #include <errno.h>
@@ -61,13 +62,6 @@ extern "C" {
 #include <magic.h>
 #include <regex.h>
 }
-
-/*
- * A single global variable to hold the value of the file we need to
- * unlock. Used by FoundryUtilities::getLock() and
- * FoundryUtilities::releaseLock()
- */
-int lock_fd_glob = 0;
 
 using namespace std;
 
@@ -1421,7 +1415,7 @@ void
 wml::FoundryUtilities::getLock (int fd)
 {
 	if (fd > 0) {
-		lock_fd_glob = fd;
+		// Ok.
 	} else {
 		throw runtime_error ("Can't lock fd < 1");
 	}
@@ -1442,6 +1436,13 @@ wml::FoundryUtilities::getLock (int fd)
 		   __FUNCTION__, fd);
 
 	return;
+}
+
+void
+wml::FoundryUtilities::getLock (std::fstream& f)
+{
+	int fd = fileno(f);
+	FoundryUtilities::getLock (fd);
 }
 
 void
@@ -1470,6 +1471,13 @@ wml::FoundryUtilities::releaseLock (int fd)
 		   __FUNCTION__, fd);
 
 	return;
+}
+
+void
+wml::FoundryUtilities::releaseLock (std::fstream& f)
+{
+	int fd = fileno(f);
+	FoundryUtilities::releaseLock (fd);
 }
 
 void

@@ -611,9 +611,19 @@ namespace wml {
 		static void getLock (int fd);
 
 		/*!
+		 * Get flock on a C++ stream.
+		 */
+		static void getLock (std::fstream& f);
+
+		/*!
 		 * release an flock on the locked fd.
 		 */
 		static void releaseLock (int fd);
+
+		/*!
+		 * release an flock on the locked C++ stream.
+		 */
+		static void releaseLock (std::fstream& f);
 
 		/*!
 		 * Replace '\' with '\\' so that str is suitable to be
