@@ -158,6 +158,21 @@ if test "$futil_debug" = yes; then
   AC_DEFINE(DEBUG, 1, [Define if debug logging is enabled])
 fi
 
+dnl enable/disable debug logging, level 2, if specified
+AC_ARG_ENABLE(debug-logging2,
+  [  --enable-debug-logging2 enable extra noisy debug logging [default=no]],
+  [case "${enableval}" in
+    yes) futil_debug2=yes ;;
+    no)  futil_debug2=no ;;
+    *) AC_MSG_ERROR(bad value ${enableval} for --enable-debug-logging2) ;;
+  esac], futil_debug2=no)
+AC_MSG_CHECKING(whether to enable extra noisy debug logging - debug-logging2)
+AC_MSG_RESULT($futil_debug2)
+if test "$futil_debug2" = yes; then
+  AC_DEFINE(DEBUG, 1, [Define if debug logging is enabled])
+  AC_DEFINE(DEBUG2, 1, [Define if extra noisy debug logging is enabled])
+fi
+
 dnl Always output certain files
 AC_CONFIG_FILES([Makefile futil/Makefile doc/Makefile doc/Doxyfile])
 
