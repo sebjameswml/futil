@@ -41,12 +41,14 @@ int main(int argc, char** argv)
 
 	string fpath ("/tmp/my_file");
 	fstream f;
-	if (!FoundryUtilities::fileExists (fpath)) {
-		FoundryUtilities::touchFile (fpath);
+	try {
+		FoundryUtilities::openFilestreamForOverwrite (f, fpath);
+	} catch (const exception& e) {
+		cout << "Error opening '" << fpath << "': "
+		     << e.what()  << endl;
 	}
 
-	FoundryUtilities::openFilestreamForOverwrite (f, fpath);
-	if (f.is_open()) {
+	try {
 		cout << "Calling getLock (f)" << endl;
 		FoundryUtilities::getLock (f);
 		cout << "Sleeping" << endl;
@@ -54,10 +56,11 @@ int main(int argc, char** argv)
 		cout << "Releasing lock" << endl;
 		FoundryUtilities::releaseLock (f);
 
-		FoundryUtilities::closeFilestream (f);
-	} else {
-		cout << "Couldn't open file '" << fpath << "'" << endl;
+	} catch (const exception& e) {
+		cout << "Error getting/releasing lock on '" << fpath << "': "
+		     << e.what()  << endl;
 	}
+	FoundryUtilities::closeFilestream (f);
 
 	DBGCLOSE();
 
