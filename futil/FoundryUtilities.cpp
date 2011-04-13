@@ -2439,12 +2439,18 @@ wml::FoundryUtilities::dateToNum (std::string& dateStr)
 		return -3;
 	}
 
-	if (dateStr[4] < '0'
-	    || dateStr[4] > '9') {
+	bool bigEndian (true);
+
+	if (dateStr[2] < '0'
+	    || dateStr[2] > '9') {
+		separator = dateStr[2];
+		bigEndian = false;
+	} else if (dateStr[4] < '0'
+		   || dateStr[4] > '9') {
 		separator = dateStr[4];
-		if (dateStr.size() < 10) {
-			return -4;
-		}
+	}
+	if (separator != '\0' && dateStr.size() < 10) {
+		return -4;
 	}
 
 	string year;
@@ -2452,14 +2458,27 @@ wml::FoundryUtilities::dateToNum (std::string& dateStr)
 	string day;
 	unsigned int yearN=0, monthN=0, dayN=0;
 
-	year = dateStr.substr (0,4);
+	if (bigEndian) {
+		year = dateStr.substr (0,4);
 
-	if (separator == '\0') {
-		month = dateStr.substr (4,2);
-		day = dateStr.substr (6,2);
+		if (separator == '\0') {
+			month = dateStr.substr (4,2);
+			day = dateStr.substr (6,2);
+		} else {
+			month = dateStr.substr (5,2);
+			day = dateStr.substr (8,2);
+		}
+
 	} else {
-		month = dateStr.substr (5,2);
-		day = dateStr.substr (8,2);
+		day = dateStr.substr (0,2);
+
+		if (separator == '\0') {
+			month = dateStr.substr (2,2);
+			year = dateStr.substr (4,4);
+		} else {
+			month = dateStr.substr (3,2);
+			year = dateStr.substr (6,4);
+		}
 	}
 
 	stringstream yearss, monthss, dayss;
@@ -3168,8 +3187,8 @@ wml::FoundryUtilities::splitString (vector<string>& tokens,
 
 vector<string>
 wml::FoundryUtilities::splitStringWithEncs (string& s,
-					    string& separatorChars,
-					    string& enclosureChars,
+					    string separatorChars,
+					    string enclosureChars,
 					    const char escapeChar)
 {
 	DBG2 ("Called for string >" << s << "<");
@@ -3250,6 +3269,20 @@ wml::FoundryUtilities::splitStringWithEncs (string& s,
 	}
 
 	return theVec;
+}
+
+std::string
+wml::FoundryUtilities::htmlHighlightTerm (const string& term,
+					  const string& searchTerms,
+					  const string& tag)
+{
+	string sTerm (term);
+	string sTerms (searchTerms);
+	transform (sTerms.begin(), sTerms.end(),
+		   sTerms.begin(), wml::to_upper());
+	vector<string> searchTermsUC (FoundryUtilities::splitStringWithEncs (sTerms));
+	string sTag (tag);
+	return FoundryUtilities::htmlHighlightTerm (sTerm, searchTermsUC, sTag);
 }
 
 std::string

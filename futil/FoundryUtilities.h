@@ -1083,8 +1083,8 @@ namespace wml {
 		 *
 		 * \param s The string to split up
 		 *
-		 * \param separatorChars the chars used only to
-		 * separate tokens (" ,")
+		 * \param separatorChars The chars used only to
+		 * separate tokens (" ,;")
 		 *
 		 * \param enclosureChars The characters used to
 		 * enclose a multi-word token ("\"\'")
@@ -1094,8 +1094,8 @@ namespace wml {
 		 * chars.
 		 */
 		static std::vector<std::string> splitStringWithEncs (std::string& s,
-								     std::string& separatorChars,
-								     std::string& enclosureChars,
+								     std::string separatorChars = ";, ",
+								     std::string enclosureChars = "\"'",
 								     const char escapeChar = '\0');
 
 		/*!
@@ -1114,10 +1114,24 @@ namespace wml {
 		 *
 		 * \param tag The tag which will be used to highlight
 		 * the matching portion of term.
+		 *
+		 * \todo Highlight repeated search terms/occurrence
+		 * of all search terms in the search string.
 		 */
 		static std::string htmlHighlightTerm (std::string& term,
 						      std::vector<std::string>& searchTermsUC,
 						      std::string& tag);
+
+
+		/*!
+		 * Utility version of
+		 * htmlHighlightTerm(string&,vector<string>&,string&),
+		 * with search terms passed in as a string, and a
+		 * default tag value.
+		 */
+		static std::string htmlHighlightTerm (const std::string& term,
+						      const std::string& searchTerms,
+						      const std::string& tag = "strong");
 
 		/*!
 		 * Split line into substring of a given maximum
