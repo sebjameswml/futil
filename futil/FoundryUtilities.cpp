@@ -3689,7 +3689,7 @@ wml::FoundryUtilities::doIconv (const char * fromEncoding,
 
 		size_t iconv_rtn = 0;
 		iconv_rtn = iconv (cd, &ibp, &inbufleft, &obp, &outbufleft);
-		if (iconv_rtn == (size_t)-1) {
+		while (iconv_rtn == (size_t)-1) {
 
 			int theE = errno;
 
@@ -3700,25 +3700,21 @@ wml::FoundryUtilities::doIconv (const char * fromEncoding,
 				// character. If an input character
 				// does not belong to the input code
 				// set, no conversion is attempted on
-				// the unusable character. In
-				// InBytesLeft parameters indicates
-				// the bytes left to be converted,
+				// the unusable character. The
+				// InBufLeft parameter indicates the
+				// bytes left to be converted,
 				// including the first byte of the
 				// unusable character. InBuf parameter
 				// points to the first byte of the
 				// unusable character sequence.
-				DBG ("Unusable character in input buffer");
+				DBG ("Skipping unusable character in input buffer");
 				// Insert placeholder char in output buffer?
 				obp++;
 				outbufleft--;
 				ibp++;
 				inbufleft--;
+				// Call iconv on remainder of input buffer
 				iconv_rtn = iconv (cd, &ibp, &inbufleft, &obp, &outbufleft);
-				if (iconv_rtn == (size_t)-1) {
-					stringstream ee;
-					ee << __FUNCTION__ << ": Error in iconv(), errno: " << theE;
-					throw runtime_error (ee.str());
-				}
 			} else {
 				DBG ("doIconv() called on string '" << fromString
 				      << "' from " << fromEncoding
@@ -3728,8 +3724,6 @@ wml::FoundryUtilities::doIconv (const char * fromEncoding,
 				throw runtime_error (ee.str());
 			}
 
-		} else {
-			// cerr << "iconv() returned " << iconv_rtn << endl;
 		}
 		//cerr << "After iconv call, outbuf is '" << obp << "' and bytes used is "
 		//     << ICONV_OUTBUF_SIZE - outbufleft << "\n";
