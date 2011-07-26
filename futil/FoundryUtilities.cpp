@@ -3906,7 +3906,7 @@ wml::FoundryUtilities::check_tmp_messages (int megabytes)
 bool
 wml::FoundryUtilities::valid_ip (string ip_string)
 {
-	regex_t * ip_regex;
+	regex_t * ip_regex = (regex_t*)0;
 	int reg_error;
 	int valid = 0; /* The result of the validation. */
 
@@ -3922,10 +3922,16 @@ wml::FoundryUtilities::valid_ip (string ip_string)
 			 REG_EXTENDED);
 
 	if (reg_error) {
+		DBG ("Failed compiling basic numeric form regex check");
+		if (ip_regex != (regex_t*)0) {
+			regfree (ip_regex);
+			free (ip_regex);
+		}
 		return false;
 	}
 
 	valid = regexec (ip_regex, ip_string.c_str(), 0, NULL, 0) ? 0 : 1;
+	regfree (ip_regex); // clean up before second regcomp
 
 	/* Validation two. Make sure the IP is not 0.0.0.0. */
 	reg_error =
@@ -3934,12 +3940,20 @@ wml::FoundryUtilities::valid_ip (string ip_string)
 			 REG_EXTENDED);
 
 	if (reg_error) {
+		DBG ("Failed compiling 0.0.0.0 regex check");
+		if (ip_regex != (regex_t*)0) {
+			regfree (ip_regex);
+			free (ip_regex);
+		}
 		return false;
 	}
 
 	if (regexec (ip_regex, ip_string.c_str(), 0, NULL, 0) == 0) {
 		valid = 0;
 	}
+
+	regfree (ip_regex);
+	free (ip_regex);
 
 	if (valid > 0) {
 		return true;
