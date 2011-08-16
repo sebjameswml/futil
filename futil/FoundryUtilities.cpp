@@ -1576,6 +1576,21 @@ wml::FoundryUtilities::stripUnixPath (std::string& unixPath)
 	return;
 }
 
+void
+wml::FoundryUtilities::stripUnixFile (std::string& unixPath)
+{
+	string tmp;
+	string::size_type pos;
+
+	if ((pos = unixPath.find_last_of ('/', unixPath.size())) == string::npos) {
+		// No '/' character in path apparently
+		return;
+	}
+
+	tmp = unixPath.substr (0, pos);
+	unixPath = tmp;
+}
+
 std::string
 wml::FoundryUtilities::generateRandomFilename (const char* prefixPath)
 {

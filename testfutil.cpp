@@ -75,14 +75,24 @@ int main(int argc, char** argv)
 	string into("");
 	ifstream fromS;
 	fromS.open ("testFile");
-	FoundryUtilities::copyFileToString (fromS, into);
-	cout << "into is:\n" << into;
+	if (fromS.is_open()) {
+		FoundryUtilities::copyFileToString (fromS, into);
+		cout << "into is:\n" << into;
+	}
 
-	string fromFile ("/tmp/B108642.pdf");
-	stringstream ff;
-	FoundryUtilities::copyFile (fromFile, ff);
-	string toPath ("/tmp/new.pdf");
-	FoundryUtilities::copyFile (ff, toPath);
+	try {
+		string fromFile ("/tmp/B108642.pdf");
+		stringstream ff;
+		FoundryUtilities::copyFile (fromFile, ff);
+		string toPath ("/tmp/new.pdf");
+		FoundryUtilities::copyFile (ff, toPath);
+	} catch (const exception& e) {
+		cout << "Exception: " << e.what() << endl;
+	}
+
+	string uPath ("/path/to/afile");
+	FoundryUtilities::stripUnixFile (uPath);
+	cout << "Just the path is '" << uPath << "'\n";
 
 	DBGCLOSE();
 

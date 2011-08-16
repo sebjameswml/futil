@@ -661,6 +661,12 @@ namespace wml {
 		static void stripUnixPath (std::string& unixPath);
 
 		/*!
+		 * Given a path like /path/to/file in str, remove the
+		 * final filename, leaving just the path, "/path/to".
+		 */
+		static void stripUnixFile (std::string& unixPath);
+
+		/*!
 		 * Generate a uuid random string as a temporary random
 		 * filename. Pass in the path, and a prefix to
 		 * identify the way the file is to be used. prefixPath
