@@ -1331,6 +1331,27 @@ wml::FoundryUtilities::copyFile (const char* from, FILE * to)
 }
 
 void
+wml::FoundryUtilities::appendFile (std::string& from, std::ostream& appendTo)
+{
+	if (!appendTo.good()) {
+		throw runtime_error ("Can't append to appendTo, it's not good()");
+	}
+	ifstream in;
+	in.open (from.c_str(), ios::in);
+	if (!in.is_open()) {
+		throw runtime_error ("FoundryUtilities::copyFile(): Couldn't open FROM file");
+	}
+
+	char buf[64];
+	while (!in.eof() && appendTo.good()) {
+		in.read (buf, 63);
+		appendTo.write (buf, in.gcount());
+	}
+
+	in.close();
+}
+
+void
 wml::FoundryUtilities::moveFile (string from, string to)
 {
 	FoundryUtilities::copyFile (from, to);

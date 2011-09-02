@@ -508,6 +508,11 @@ namespace wml {
 		static void copyFileToString (std::istream& from, std::string& to);
 
 		/*!
+		 * Append the file from to the filestream appendTo
+		 */
+		static void appendFile (std::string& from, std::ostream& appendTo);
+
+		/*!
 		 * Calls basic_string::getline to copy from istrm into
 		 * line, setting inputComplete to true if eof is
 		 * reached and optionally copying to copystrm if it is
