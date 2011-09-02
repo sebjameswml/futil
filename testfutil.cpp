@@ -27,6 +27,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <stdlib.h>
 
 #include "futil/config.h"
 #include "WmlDbg.h"
@@ -80,19 +81,33 @@ int main(int argc, char** argv)
 		cout << "into is:\n" << into;
 	}
 
+	system ("echo \"contents\" > /tmp/B108642.pdf");
+
+	string fromFile ("/tmp/B108642.pdf");
+	string toPath ("/tmp/new.pdf");
 	try {
-		string fromFile ("/tmp/B108642.pdf");
 		stringstream ff;
 		FoundryUtilities::copyFile (fromFile, ff);
-		string toPath ("/tmp/new.pdf");
 		FoundryUtilities::copyFile (ff, toPath);
 	} catch (const exception& e) {
 		cout << "Exception: " << e.what() << endl;
 	}
 
-	string uPath ("/path/to/afile");
+	string uPath ("wmloutbatch:///tmp/outbatch/hp9300/");
 	FoundryUtilities::stripUnixFile (uPath);
 	cout << "Just the path is '" << uPath << "'\n";
+
+	uPath = "wmloutbatch:///tmp/outbatch/hp9300/";
+	FoundryUtilities::stripUnixPath (uPath);
+	cout << "Just the file is '" << uPath << "'\n";
+
+	ofstream appendTo;
+	appendTo.open (toPath.c_str(), ios::out|ios::app|ios::ate);
+	if (appendTo.is_open()) {
+		// /tmp/new.pdf should now have /tmp/B108642.pdf twice.
+		FoundryUtilities::appendFile (fromFile, appendTo);
+		appendTo.close();
+	}
 
 	DBGCLOSE();
 
