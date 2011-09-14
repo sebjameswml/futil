@@ -367,6 +367,12 @@ namespace wml {
 		static UINT64_TYPE freeSpaceKBytes (std::string dirPath);
 
 		/*!
+		 * Return the fractional amount of space on the
+		 * filesystem on which dirPath resides.
+		 */
+		static float freeSpaceFraction (std::string dirPath);
+
+		/*!
 		 * Return the total amount of space in KBytes on the
 		 * filesystem on which dirPath resides.
 		 */

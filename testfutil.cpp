@@ -109,6 +109,8 @@ int main(int argc, char** argv)
 		appendTo.close();
 	}
 
+	cout << "Free space: " << FoundryUtilities::freeSpaceFraction ("/tmp") << endl;
+
 	DBGCLOSE();
 
 	return 0;

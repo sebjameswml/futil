@@ -755,6 +755,24 @@ wml::FoundryUtilities::totalSpaceKBytes (string dirPath)
 	return total;
 }
 
+float
+wml::FoundryUtilities::freeSpaceFraction (string dirPath)
+{
+	struct statvfs dir;
+	memset (&dir, 0, sizeof(struct statvfs));
+	if (statvfs (dirPath.c_str(), &dir)) {
+		return 0;
+	}
+
+	UINT64_TYPE total = static_cast<UINT64_TYPE>(dir.f_blocks) * dir.f_frsize;
+	UINT64_TYPE available = static_cast<UINT64_TYPE>(dir.f_bavail) * dir.f_frsize;
+
+	float freefrac = static_cast<float>(available);
+	freefrac = freefrac / total;
+
+	return freefrac;
+}
+
 bool
 wml::FoundryUtilities::fileExists (std::string& path)
 {
