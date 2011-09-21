@@ -3187,9 +3187,9 @@ wml::FoundryUtilities::zeroFileCount (const char * filePath)
 	return 0;
 }
 
-// Similiar to FoundryUtilities::splitString()
+// Similiar to FoundryUtilities::splitString() but FASTER.
 vector<string>
-wml::FoundryUtilities::stringToVector (string& s, string& separator,
+wml::FoundryUtilities::stringToVector (const string& s, string& separator,
 				       bool ignoreTrailingEmptyVal)
 {
 	if (separator.empty()) {

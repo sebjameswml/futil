@@ -1071,16 +1071,21 @@ namespace wml {
 		 * will NOT cause an additional empty value in the
 		 * returned vector.
 		 *
-		 * Similar to FoundryUtilities::splitString.
+		 * Similar to FoundryUtilities::splitString but
+		 * FASTER. PREFER THIS OVER splitString.
 		 */
-		static std::vector<std::string> stringToVector (std::string& s, std::string& separator,
+		static std::vector<std::string> stringToVector (const std::string& s, std::string& separator,
 								bool ignoreTrailingEmptyVal = true);
 
 		/*!
 		 * Split a string into a set of strings using the
 		 * delimiter specified.
 		 *
-		 * Similar to FoundryUtilities::stringToVector.
+		 * Similar to FoundryUtilities::stringToVector but
+		 * SLOW. Perhaps because it runs recursively?
+		 *
+		 * Try not to use this - PREFER stringToVector OVER
+		 * this function.
 		 *
 		 * \param tokens The container into which the tokens
 		 * will be placed
