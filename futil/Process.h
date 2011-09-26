@@ -53,252 +53,252 @@ using namespace std;
 
 namespace wml {
 
-	/*!
-	 * \brief A set of virtual callbacks for use with the Process
-	 * class.
-	 *
-	 * A set of virtual callbacks. These should be derived in the
-	 * client code. They're called by Process via the
-	 * ProcessCallbacks* callbacks member variable.
-	 */
-	class ProcessCallbacks
-	{
-	public:
-		ProcessCallbacks() {}
-		virtual ~ProcessCallbacks() {}
-		virtual void startedSignal (string) {}
-		virtual void errorSignal (int) {}
-		virtual void processFinishedSignal (string) {}
-		virtual void readyReadStandardOutputSignal (void) {}
-		virtual void readyReadStandardErrorSignal (void) {}
-	};
+        /*!
+         * \brief A set of virtual callbacks for use with the Process
+         * class.
+         *
+         * A set of virtual callbacks. These should be derived in the
+         * client code. They're called by Process via the
+         * ProcessCallbacks* callbacks member variable.
+         */
+        class ProcessCallbacks
+        {
+        public:
+                ProcessCallbacks() {}
+                virtual ~ProcessCallbacks() {}
+                virtual void startedSignal (string) {}
+                virtual void errorSignal (int) {}
+                virtual void processFinishedSignal (string) {}
+                virtual void readyReadStandardOutputSignal (void) {}
+                virtual void readyReadStandardErrorSignal (void) {}
+        };
 
-	/*!
-	 * \brief A C++ class to exec processes without use of
-	 * system().
-	 *
-	 * Process is a simple replacement for the Qt class QProcess.
-	 */
-	class Process
-	{
-	public:
-		/*!
-		 * Just one constructor. Allocates memory for pollfd*
-		 * p.
-		 */
-		Process();
+        /*!
+         * \brief A C++ class to exec processes without use of
+         * system().
+         *
+         * Process is a simple replacement for the Qt class QProcess.
+         */
+        class Process
+        {
+        public:
+                /*!
+                 * Just one constructor. Allocates memory for pollfd*
+                 * p.
+                 */
+                Process();
 
-		/*!
-		 * Destructor. Deallocates memory for pollfd* p
-		 */
-		~Process();
+                /*!
+                 * Destructor. Deallocates memory for pollfd* p
+                 */
+                ~Process();
 
-		/*!
-		 * Reset the process ready to be used again. If this
-		 * process is still running, return false and don't do
-		 * the reset. Otherwise, reset member attributes and
-		 * return true.
-		 */
-		bool reset (void);
+                /*!
+                 * Reset the process ready to be used again. If this
+                 * process is still running, return false and don't do
+                 * the reset. Otherwise, reset member attributes and
+                 * return true.
+                 */
+                bool reset (void);
 
-		/*!
-		 * Write \arg input to the stdin of the process.
-		 */
-		void writeIn (string& input);
+                /*!
+                 * Write \arg input to the stdin of the process.
+                 */
+                void writeIn (string& input);
 
-		/*!
-		 * When Process::start() is called, pause useconds
-		 * before forking and exec-ing the program. This is a
-		 * setter for this->pauseBeforeStart.
-		 */
-		void setPauseBeforeStart (unsigned int useconds);
+                /*!
+                 * When Process::start() is called, pause useconds
+                 * before forking and exec-ing the program. This is a
+                 * setter for this->pauseBeforeStart.
+                 */
+                void setPauseBeforeStart (unsigned int useconds);
 
-		/*!
-		 * fork and exec the process.
-		 */
-		int start (const string& program, const list<string>& args);
+                /*!
+                 * fork and exec the process.
+                 */
+                int start (const string& program, const list<string>& args);
 
-		/*!
-		 * Send a TERM signal to the process.
-		 */
-		void terminate (void);
+                /*!
+                 * Send a TERM signal to the process.
+                 */
+                void terminate (void);
 
-		/*!
-		 * poll to see if there is data on stderr or stdout
-		 * and to see if the process has exited.
-		 *
-		 * This must be called on a scheduled basis. It checks
-		 * for any stdout/stderr data and also checks whether
-		 * the process is still running.
-		 */
-		void probeProcess (void);
+                /*!
+                 * poll to see if there is data on stderr or stdout
+                 * and to see if the process has exited.
+                 *
+                 * This must be called on a scheduled basis. It checks
+                 * for any stdout/stderr data and also checks whether
+                 * the process is still running.
+                 */
+                void probeProcess (void);
 
-		/*!
-		 * If the process is running - if pid > 0, return
-		 * true. Otherwise return false.
-		 */
-		bool running (void);
+                /*!
+                 * If the process is running - if pid > 0, return
+                 * true. Otherwise return false.
+                 */
+                bool running (void);
 
-		/*!
-		 * Accessors
-		 */
-		//@{
-		pid_t getPid (void);
-		int getError (void);
-		void setError (int e);
+                /*!
+                 * Accessors
+                 */
+                //@{
+                pid_t getPid (void);
+                int getError (void);
+                void setError (int e);
 
-		/*!
-		 * Setter for the callbacks.
-		 */
-		void setCallbacks (ProcessCallbacks * cb);
-		//@}
+                /*!
+                 * Setter for the callbacks.
+                 */
+                void setCallbacks (ProcessCallbacks * cb);
+                //@}
 
-		/*!
-		 * Slots
-		 */
-		//@{
-		string readAllStandardOutput (void);
-		string readAllStandardError (void);
+                /*!
+                 * Slots
+                 */
+                //@{
+                string readAllStandardOutput (void);
+                string readAllStandardError (void);
 
-		/*!
-		 * Wait for the process to get itself going. Do this
-		 * by looking at pid.  If no pid after a while,
-		 * return false.
-		 */
-		bool waitForStarted (void);
-		//@}
-	private:
-		/*!
-		 * The name of the program to execute
-		 */
-		string progName;
+                /*!
+                 * Wait for the process to get itself going. Do this
+                 * by looking at pid.  If no pid after a while,
+                 * return false.
+                 */
+                bool waitForStarted (void);
+                //@}
+        private:
+                /*!
+                 * The name of the program to execute
+                 */
+                string progName;
 
-		/*!
-		 * The environment and arguments of the program to execute
-		 */
-		list<string> environment;
+                /*!
+                 * The environment and arguments of the program to execute
+                 */
+                list<string> environment;
 
-		/*!
-		 * Number of micro seconds to pause (via a usleep()
-		 * call) before forking and execing the program
-		 * following the call to Process::start().
-		 */
-		unsigned int pauseBeforeStart;
+                /*!
+                 * Number of micro seconds to pause (via a usleep()
+                 * call) before forking and execing the program
+                 * following the call to Process::start().
+                 */
+                unsigned int pauseBeforeStart;
 
-		/*!
-		 * Holds a Process error, defined above. PROCESSNOERROR, etc.
-		 */
-		int error;
+                /*!
+                 * Holds a Process error, defined above. PROCESSNOERROR, etc.
+                 */
+                int error;
 
-		/*!
-		 * Process ID of the program
-		 */
-		pid_t pid;
+                /*!
+                 * Process ID of the program
+                 */
+                pid_t pid;
 
-		/*!
-		 * Set to true if the fact that the program has been
-		 * started has been signalled using the callback
-		 * callbacks->startedSignal
-		 */
-		bool signalledStart;
+                /*!
+                 * Set to true if the fact that the program has been
+                 * started has been signalled using the callback
+                 * callbacks->startedSignal
+                 */
+                bool signalledStart;
 
-		/*!
-		 * stdin parent to child
-		 */
-		int parentToChild[2];
+                /*!
+                 * stdin parent to child
+                 */
+                int parentToChild[2];
 
-		/*!
-		 * stdout child to parent
-		 */
-		int childToParent[2];
+                /*!
+                 * stdout child to parent
+                 */
+                int childToParent[2];
 
-		/*!
-		 * stderr child to parent
-		 */
-		int childErrToParent[2];
+                /*!
+                 * stderr child to parent
+                 */
+                int childErrToParent[2];
 
-		/*!
-		 * Used in the poll() call in probeProcess()
-		 */
-		struct pollfd * p;
+                /*!
+                 * Used in the poll() call in probeProcess()
+                 */
+                struct pollfd * p;
 
-		/*!
-		 * Pointer to a callback object
-		 */
-		ProcessCallbacks * callbacks;
-	};
+                /*!
+                 * Pointer to a callback object
+                 */
+                ProcessCallbacks * callbacks;
+        };
 
 
-	/*!
-	 * \brief A class used as a parent to a callback object.
-	 *
-	 * This class is used as a callback object parent when a
-	 * process is used within a static function, and as such no
-	 * parent object exists.
-	 *
-	 * Example of this usage can be found in WmlnetapuiUtilities.cpp
-	 */
-	class ProcessData
-	{
-	public:
-		/* \name Constructor and Destructor */
-		ProcessData (void);
-		~ProcessData (void);
+        /*!
+         * \brief A class used as a parent to a callback object.
+         *
+         * This class is used as a callback object parent when a
+         * process is used within a static function, and as such no
+         * parent object exists.
+         *
+         * Example of this usage can be found in WmlnetapuiUtilities.cpp
+         */
+        class ProcessData
+        {
+        public:
+                /* \name Constructor and Destructor */
+                ProcessData (void);
+                ~ProcessData (void);
 
-		/* \name Public Class Functions */
-		//@{
-		/*!
-		 * \brief Set the process finished message for a process
-		 */
-		void setProcessFinishedMsg (std::string message);
+                /* \name Public Class Functions */
+                //@{
+                /*!
+                 * \brief Set the process finished message for a process
+                 */
+                void setProcessFinishedMsg (std::string message);
 
-		/*!
-		 * \brief Set the error num for a process
-		 */
-		void setErrorNum (int err);
+                /*!
+                 * \brief Set the error num for a process
+                 */
+                void setErrorNum (int err);
 
-		/*!
-		 * \brief Set stdOutReady
-		 */
-		void setStdOutReady (bool ready);
+                /*!
+                 * \brief Set stdOutReady
+                 */
+                void setStdOutReady (bool ready);
 
-		/*!
-		 * \brief Set stdErrReady
-		 */
-		void setStdErrReady (bool ready);
+                /*!
+                 * \brief Set stdErrReady
+                 */
+                void setStdErrReady (bool ready);
 
-		/*!
-		 * \brief Getters
-		 */
-		std::string getProcessFinishedMsg (void);
-		int getErrorNum (void);
-		bool getStdOutReady (void);
-		bool getStdErrReady (void);
-		//@}
-	private:
-		/* \name Private Class Attributes */
-		//@{
-		/*!
-		 * \brief Holds the name of the process that finished
-		 */
-		std::string processFinishedMessage;
+                /*!
+                 * \brief Getters
+                 */
+                std::string getProcessFinishedMsg (void);
+                int getErrorNum (void);
+                bool getStdOutReady (void);
+                bool getStdErrReady (void);
+                //@}
+        private:
+                /* \name Private Class Attributes */
+                //@{
+                /*!
+                 * \brief Holds the name of the process that finished
+                 */
+                std::string processFinishedMessage;
 
-		/*!
-		 * \brief Holds a process error number
-		 */
-		int errorNum;
+                /*!
+                 * \brief Holds a process error number
+                 */
+                int errorNum;
 
-		/*!
-		 * \brief determines if std out is ready to be read from
-		 */
-		bool stdOutReady;
+                /*!
+                 * \brief determines if std out is ready to be read from
+                 */
+                bool stdOutReady;
 
-		/*!
-		 * \brief determines if std err is ready to be read from
-		 */
-		bool stdErrReady;
-		//@}
-	};
+                /*!
+                 * \brief determines if std err is ready to be read from
+                 */
+                bool stdErrReady;
+                //@}
+        };
 
 } // namespace wml
 

@@ -37,8 +37,8 @@ std::ofstream DBGSTREAM;
 
 int main ()
 {
-	FoundryUtilities::setPermissions ("/etc/wml/file.file", 0664);
-	FoundryUtilities::setOwnership ("/etc/wml/file.file", 17833, 528);
+        FoundryUtilities::setPermissions ("/etc/wml/file.file", 0664);
+        FoundryUtilities::setOwnership ("/etc/wml/file.file", 17833, 528);
 
-	return 0;
+        return 0;
 }

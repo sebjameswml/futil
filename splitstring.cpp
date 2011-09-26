@@ -49,23 +49,23 @@ int main(int argc, char** argv)
 {
         DBGOPEN ("splitstring.log");
 
-	vector<string> theResult;
-	int j = 0;
-	while (j < NUM_TIMES_TO_SPLIT) {
-		theResult.clear();
-		string delim (" ");
-		FoundryUtilities::splitString (theResult, stringtosplit, delim);
-		++j;
-	}
+        vector<string> theResult;
+        int j = 0;
+        while (j < NUM_TIMES_TO_SPLIT) {
+                theResult.clear();
+                string delim (" ");
+                FoundryUtilities::splitString (theResult, stringtosplit, delim);
+                ++j;
+        }
 
 #ifdef INCLUDE_OUTPUT
-	vector<string>::iterator i = theResult.begin();
-	while (i != theResult.end()) {
-		cout << *i << '\n';
-		++i;
-	}
+        vector<string>::iterator i = theResult.begin();
+        while (i != theResult.end()) {
+                cout << *i << '\n';
+                ++i;
+        }
 #endif
-	DBGCLOSE();
+        DBGCLOSE();
 
-	return 0;
+        return 0;
 }

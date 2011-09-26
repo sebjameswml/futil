@@ -17,70 +17,70 @@ using namespace wml;
 
 int main (int argc, char **argv)
 {
-	DBGOPEN ("./testSplitString.log");
-	try {
+        DBGOPEN ("./testSplitString.log");
+        try {
 
-		// Test splitString()
-		vector<string> tokens;
-		string s ("'this','is','a','string'");
-		string delim ("','");
+                // Test splitString()
+                vector<string> tokens;
+                string s ("'this','is','a','string'");
+                string delim ("','");
 
-		FoundryUtilities::splitString (tokens, s, delim);
+                FoundryUtilities::splitString (tokens, s, delim);
 
-		cout << "FoundryUtilities::splitString():" << endl;
-		vector<string>::iterator i;
-		for (i = tokens.begin(); i != tokens.end(); i++) {
-			cout << *i << "\n";
-		}
+                cout << "FoundryUtilities::splitString():" << endl;
+                vector<string>::iterator i;
+                for (i = tokens.begin(); i != tokens.end(); i++) {
+                        cout << *i << "\n";
+                }
 
-		cout << endl << "FoundryUtilities::stringToVector():" << endl;
-		// Test stringToVector()
-		//delim = ",";
-		vector<string> toks2 = FoundryUtilities::stringToVector (s, delim);
-		for (i = toks2.begin(); i != toks2.end(); i++) {
-			cout << *i << "\n";
-		}
+                cout << endl << "FoundryUtilities::stringToVector():" << endl;
+                // Test stringToVector()
+                //delim = ",";
+                vector<string> toks2 = FoundryUtilities::stringToVector (s, delim);
+                for (i = toks2.begin(); i != toks2.end(); i++) {
+                        cout << *i << "\n";
+                }
 
-		string str2 = FoundryUtilities::vectorToString (toks2, delim);
-		cout << str2 << endl;
+                string str2 = FoundryUtilities::vectorToString (toks2, delim);
+                cout << str2 << endl;
 
-		// Yet another way to deal with values, is to have a
-		// delimiting character and an enclosing
-		// char. Often, delimiting char is ',' and enclosing
-		// char is '"'.
+                // Yet another way to deal with values, is to have a
+                // delimiting character and an enclosing
+                // char. Often, delimiting char is ',' and enclosing
+                // char is '"'.
 
-		// Use s for this first test
-		string seps(" ,");
-		string encs("\"'");
-		vector<string> toks3 = FoundryUtilities::splitStringWithEncs (s, seps, encs);
-		cout << "Output of splitStringWithEncs for the string '" << s << "':\n";
-		for (i = toks3.begin(); i != toks3.end(); i++) {
-			cout << *i << "\n";
-		}
-		s = "'this\"' is, a, \"string";
-		toks3 = FoundryUtilities::splitStringWithEncs (s, seps, encs);
-		cout << "Output of splitStringWithEncs for the string '" << s << "':\n";
-		for (i = toks3.begin(); i != toks3.end(); i++) {
-			cout << *i << "\n";
-		}
+                // Use s for this first test
+                string seps(" ,");
+                string encs("\"'");
+                vector<string> toks3 = FoundryUtilities::splitStringWithEncs (s, seps, encs);
+                cout << "Output of splitStringWithEncs for the string '" << s << "':\n";
+                for (i = toks3.begin(); i != toks3.end(); i++) {
+                        cout << *i << "\n";
+                }
+                s = "'this\"' is, a, \"string";
+                toks3 = FoundryUtilities::splitStringWithEncs (s, seps, encs);
+                cout << "Output of splitStringWithEncs for the string '" << s << "':\n";
+                for (i = toks3.begin(); i != toks3.end(); i++) {
+                        cout << *i << "\n";
+                }
 
-		string forCount ("ababa");
-		cout << "In string '" << forCount << "':\n";
-		cout << "Number of a chars:" << FoundryUtilities::countChars (forCount, 'a') << endl;;
-		cout << "Number of b chars:" << FoundryUtilities::countChars (forCount, 'b') << endl;;
+                string forCount ("ababa");
+                cout << "In string '" << forCount << "':\n";
+                cout << "Number of a chars:" << FoundryUtilities::countChars (forCount, 'a') << endl;;
+                cout << "Number of b chars:" << FoundryUtilities::countChars (forCount, 'b') << endl;;
 
-		string emptyStr("");
-		cout << "Number of b chars in an empty string:"
-		     << FoundryUtilities::countChars (emptyStr, 'b') << endl;;
+                string emptyStr("");
+                cout << "Number of b chars in an empty string:"
+                     << FoundryUtilities::countChars (emptyStr, 'b') << endl;;
 
-	} catch (const exception& e) {
+        } catch (const exception& e) {
                 // handle error condition; should catch any
                 // exception thrown above
                 DBGSTREAM << "Exception: '" << e.what() << "'\n";
                 cerr << "Exception: '" << e.what() << "'\n";
                 DBGSTREAM.flush();
-	}
+        }
 
-	DBGCLOSE();
-	_exit(0);
+        DBGCLOSE();
+        _exit(0);
 }

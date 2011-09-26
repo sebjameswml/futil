@@ -40,17 +40,17 @@ int main(int argc, char** argv)
 {
         DBGOPEN ("testsymlinks.log");
 
-	// Suppose /etc/inetd.conf is a hanging symlink?
-	if (FoundryUtilities::fileExists ("/etc/inetd.conf")) {
-		cout << "true" << endl;
-	} else {
-		cout << "false" << endl;
-	}
-	// Answer: If it's a hanging symlink, fileExists returns
-	// false, if it's NOT a hanging symlink, fileExists returns
-	// true.
+        // Suppose /etc/inetd.conf is a hanging symlink?
+        if (FoundryUtilities::fileExists ("/etc/inetd.conf")) {
+                cout << "true" << endl;
+        } else {
+                cout << "false" << endl;
+        }
+        // Answer: If it's a hanging symlink, fileExists returns
+        // false, if it's NOT a hanging symlink, fileExists returns
+        // true.
 
-	DBGCLOSE();
+        DBGCLOSE();
 
-	return 0;
+        return 0;
 }

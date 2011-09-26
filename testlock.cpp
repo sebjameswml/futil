@@ -39,30 +39,30 @@ int main(int argc, char** argv)
 {
         DBGOPEN ("testlock.log");
 
-	string fpath ("/tmp/my_file");
-	fstream f;
-	try {
-		FoundryUtilities::openFilestreamForOverwrite (f, fpath);
-	} catch (const exception& e) {
-		cout << "Error opening '" << fpath << "': "
-		     << e.what()  << endl;
-	}
+        string fpath ("/tmp/my_file");
+        fstream f;
+        try {
+                FoundryUtilities::openFilestreamForOverwrite (f, fpath);
+        } catch (const exception& e) {
+                cout << "Error opening '" << fpath << "': "
+                     << e.what()  << endl;
+        }
 
-	try {
-		cout << "Calling getLock (f)" << endl;
-		FoundryUtilities::getLock (f);
-		cout << "Sleeping" << endl;
-		sleep (5);
-		cout << "Releasing lock" << endl;
-		FoundryUtilities::releaseLock (f);
+        try {
+                cout << "Calling getLock (f)" << endl;
+                FoundryUtilities::getLock (f);
+                cout << "Sleeping" << endl;
+                sleep (5);
+                cout << "Releasing lock" << endl;
+                FoundryUtilities::releaseLock (f);
 
-	} catch (const exception& e) {
-		cout << "Error getting/releasing lock on '" << fpath << "': "
-		     << e.what()  << endl;
-	}
-	FoundryUtilities::closeFilestream (f);
+        } catch (const exception& e) {
+                cout << "Error getting/releasing lock on '" << fpath << "': "
+                     << e.what()  << endl;
+        }
+        FoundryUtilities::closeFilestream (f);
 
-	DBGCLOSE();
+        DBGCLOSE();
 
-	return 0;
+        return 0;
 }

@@ -40,10 +40,10 @@ int main(int argc, char** argv)
 {
         DBGOPEN ("testdirperms.log");
 
-	// Suppose /etc/inetd.conf is a hanging symlink?
-	FoundryUtilities::createDir ("/etc/wml/pp/blah", 0775, 0, 7);
+        // Suppose /etc/inetd.conf is a hanging symlink?
+        FoundryUtilities::createDir ("/etc/wml/pp/blah", 0775, 0, 7);
 
-	DBGCLOSE();
+        DBGCLOSE();
 
-	return 0;
+        return 0;
 }

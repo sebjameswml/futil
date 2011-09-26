@@ -38,22 +38,22 @@ std::ofstream DBGSTREAM;
 
 int main ()
 {
-	string test;
+        string test;
 
-	test = "XmlNotAllowed";
-	cout << "Before condition, test is '" << test << "'\n";
-	FoundryUtilities::conditionAsXmlTag (test);
-	cout << "After  condition, test is '" << test << "'\n";
+        test = "XmlNotAllowed";
+        cout << "Before condition, test is '" << test << "'\n";
+        FoundryUtilities::conditionAsXmlTag (test);
+        cout << "After  condition, test is '" << test << "'\n";
 
-	test = "2NotAllowed";
-	cout << "Before condition, test is '" << test << "'\n";
-	FoundryUtilities::conditionAsXmlTag (test);
-	cout << "After  condition, test is '" << test << "'\n";
+        test = "2NotAllowed";
+        cout << "Before condition, test is '" << test << "'\n";
+        FoundryUtilities::conditionAsXmlTag (test);
+        cout << "After  condition, test is '" << test << "'\n";
 
-	test = "XML2Not&%All.o_wed";
-	cout << "Before condition, test is '" << test << "'\n";
-	FoundryUtilities::conditionAsXmlTag (test);
-	cout << "After  condition, test is '" << test << "'\n";
+        test = "XML2Not&%All.o_wed";
+        cout << "Before condition, test is '" << test << "'\n";
+        FoundryUtilities::conditionAsXmlTag (test);
+        cout << "After  condition, test is '" << test << "'\n";
 
-	return 0;
+        return 0;
 }

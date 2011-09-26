@@ -17,23 +17,23 @@ ofstream DBGSTREAM;
 
 int main (int argc, char** argv)
 {
-	DBGOPEN ("/tmp/testtotalspace.log");
+        DBGOPEN ("/tmp/testtotalspace.log");
 
-	try {
-		unsigned int total;
-		unsigned int available;
-		unsigned int used;
-		total = FoundryUtilities::totalSpaceKBytes ("/boot");
-		available = FoundryUtilities::freeSpaceKBytes ("/boot");
-		used = total - available;
+        try {
+                unsigned int total;
+                unsigned int available;
+                unsigned int used;
+                total = FoundryUtilities::totalSpaceKBytes ("/boot");
+                available = FoundryUtilities::freeSpaceKBytes ("/boot");
+                used = total - available;
 
-		cout << "Total space:        " << total << "\n";
-		cout << "Available space:    " << available << "\n";
-		cout << "Used space:         " << used << "\n";
-	} catch (const runtime_error& e) {
-		cout << "Error: " << e.what() << "\n";
-	}
+                cout << "Total space:        " << total << "\n";
+                cout << "Available space:    " << available << "\n";
+                cout << "Used space:         " << used << "\n";
+        } catch (const runtime_error& e) {
+                cout << "Error: " << e.what() << "\n";
+        }
 
-	DBGCLOSE();
-	_exit(0);
+        DBGCLOSE();
+        _exit(0);
 }

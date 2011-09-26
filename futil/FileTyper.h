@@ -46,81 +46,81 @@ namespace wml {
         /*!
          * \brief The types of files which are used in WMLPP
          * appliances.
-	 *
-	 * Why the MFT prefix? MFT stands for
+         *
+         * Why the MFT prefix? MFT stands for
          * "Macro File Type". When I first had to identify files it
          * was to determine what kind of PCL macro they were. The MFT
          * prefix has simply got stuck.
          */
         enum FILETYPE {
-		MFT_UNKNOWN,
-		MFT_FORM,
-		MFT_MACRO,
-		MFT_TYPE1_FONT,
-		MFT_TRUETYPE_FONT,
-		MFT_CONFIG,
-		MFT_UNICODE_FONT,
-		MFT_UNICODE_ARCHIVE,
-		MFT_ZIP,
-		MFT_PNG_IMAGE,
-		MFT_PDF_FILE,
-		MFT_CONVERT_INI,
-		MFT_USER_INI,
-		MFT_CSV,
-		MFT_XML,
-		MFT_LOG,
-		MFT_RAW_DATA,
-		MFT_AFM,
-		MFT_PPD,
-		MFT_PCL_FILE,
-		MFT_PRESCRIBE_DATA,
-		MFT_ASCII_TEXT,
-		MFT_ISO8859_TEXT,
-		MFT_BZ2_ARCHIVE,
-		MFT_GZIP_ARCHIVE,
-		MFT_RPM_PACKAGE,
-		MFT_DEBIAN_PACKAGE,
-		MFT_TAR,
-		MFT_POSTSCRIPT,
-		MFT_HP_PJL,
-		FILETYPE_N
-	};
+                MFT_UNKNOWN,
+                MFT_FORM,
+                MFT_MACRO,
+                MFT_TYPE1_FONT,
+                MFT_TRUETYPE_FONT,
+                MFT_CONFIG,
+                MFT_UNICODE_FONT,
+                MFT_UNICODE_ARCHIVE,
+                MFT_ZIP,
+                MFT_PNG_IMAGE,
+                MFT_PDF_FILE,
+                MFT_CONVERT_INI,
+                MFT_USER_INI,
+                MFT_CSV,
+                MFT_XML,
+                MFT_LOG,
+                MFT_RAW_DATA,
+                MFT_AFM,
+                MFT_PPD,
+                MFT_PCL_FILE,
+                MFT_PRESCRIBE_DATA,
+                MFT_ASCII_TEXT,
+                MFT_ISO8859_TEXT,
+                MFT_BZ2_ARCHIVE,
+                MFT_GZIP_ARCHIVE,
+                MFT_RPM_PACKAGE,
+                MFT_DEBIAN_PACKAGE,
+                MFT_TAR,
+                MFT_POSTSCRIPT,
+                MFT_HP_PJL,
+                FILETYPE_N
+        };
 
-	/*!
-	 * \brief A wrapper around libmagic
-	 *
-	 * Makes use of libmagic to identify files wrapping that api
-	 * up in a simple C++ interface.
-	 */
-	class FileTyper
-	{
-	public:
-		/*! Constructor and destructor */
-		//@{
-		FileTyper (void);
-		~FileTyper (void);
-		//@}
+        /*!
+         * \brief A wrapper around libmagic
+         *
+         * Makes use of libmagic to identify files wrapping that api
+         * up in a simple C++ interface.
+         */
+        class FileTyper
+        {
+        public:
+                /*! Constructor and destructor */
+                //@{
+                FileTyper (void);
+                ~FileTyper (void);
+                //@}
 
-		/*!
-		 * \brief Return a string containing information
-		 * on the type of file
-		 */
-		std::string getFileTypeStr (std::string filePath);
+                /*!
+                 * \brief Return a string containing information
+                 * on the type of file
+                 */
+                std::string getFileTypeStr (std::string filePath);
 
-		/*!
-		 * \brief Return a wml::FILETYPE based on what
-		 * type of file is passed in
-		 */
-		wml::FILETYPE getFileType (std::string filePath);
-	private:
-		/*!
-		 * Pointer to libmagic struct containing magic file type
-		 * rules
-		 * This is initialised in the constructor which allocates
-		 * memory and then uninitialised in the deconstructor
-		 */
-		struct magic_set* magic;
-	};
+                /*!
+                 * \brief Return a wml::FILETYPE based on what
+                 * type of file is passed in
+                 */
+                wml::FILETYPE getFileType (std::string filePath);
+        private:
+                /*!
+                 * Pointer to libmagic struct containing magic file type
+                 * rules
+                 * This is initialised in the constructor which allocates
+                 * memory and then uninitialised in the deconstructor
+                 */
+                struct magic_set* magic;
+        };
 }
 
 #endif

@@ -45,29 +45,29 @@ int main(int argc, char** argv)
 {
         DBGOPEN ("dateToEpoch.log");
 
-	string d;
-	cin >> d;
+        string d;
+        cin >> d;
 
-	if (d.empty() && argc < 2) {
-		cerr << "Usage: dateToEpoch datestr or echo datestr | dateToEpoch\n";
-		return -1;
-	}
+        if (d.empty() && argc < 2) {
+                cerr << "Usage: dateToEpoch datestr or echo datestr | dateToEpoch\n";
+                return -1;
+        }
 
-	if (d.empty()) {
-		d = argv[1];
-	}
+        if (d.empty()) {
+                d = argv[1];
+        }
 
-	time_t n = 0;
+        time_t n = 0;
 
-	try {
-	n = FoundryUtilities::dateTimeToNum (d);
-	cout << n;
-	} catch (const exception& e) {
-		cerr << "Date format error\n";
-		return -1;
-	}
+        try {
+                n = FoundryUtilities::dateTimeToNum (d);
+                cout << n;
+        } catch (const exception& e) {
+                cerr << "Date format error\n";
+                return -1;
+        }
 
-	DBGCLOSE();
+        DBGCLOSE();
 
-	return 0;
+        return 0;
 }

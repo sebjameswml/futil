@@ -41,17 +41,17 @@ int main(int argc, char** argv)
 {
         DBGOPEN ("testdates.log");
 
-	cout << "Running this program at time: "
-	     << FoundryUtilities::timeNow() << endl;
+        cout << "Running this program at time: "
+             << FoundryUtilities::timeNow() << endl;
 
-	string d("2009-01-21 23:59:55");
-	time_t n = FoundryUtilities::dateTimeToNum (d);
-	cout << d << " as unix epoch is: " << n << endl;
+        string d("2009-01-21 23:59:55");
+        time_t n = FoundryUtilities::dateTimeToNum (d);
+        cout << d << " as unix epoch is: " << n << endl;
 
-	cout << "Converted back to datestr: "
-	     << FoundryUtilities::numToDateTime (n, '-', ':') << endl;
+        cout << "Converted back to datestr: "
+             << FoundryUtilities::numToDateTime (n, '-', ':') << endl;
 
-	DBGCLOSE();
+        DBGCLOSE();
 
-	return 0;
+        return 0;
 }

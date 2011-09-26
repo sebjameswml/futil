@@ -38,34 +38,34 @@
  * To actually get the DBG messages into a file, any executables built
  * must be linked to libfutil and include these lines:
  *\code
-#include <futil/WmlDbg.h>
-std::ofstream DBGSTREAM;
-\endcode
+ #include <futil/WmlDbg.h>
+ std::ofstream DBGSTREAM;
+ \endcode
  *
  * Then, early in the main() function, open
  * the DBGSTREAM ofstream like this:
  *\code
-DBGOPEN ("/tmp/debug.log");
-\endcode
+ DBGOPEN ("/tmp/debug.log");
+ \endcode
  *
  * The standard way to have DEBUG defined is to have a configure.ac
  * stanza in your client module, which defines DEBUG in
  * mymodule/mymodule/config.h:
  *\verbatim
-dnl enable/disable debug logging, if specified
-AC_ARG_ENABLE(debug-logging,
-  [  --enable-debug-logging  enable debug logging for mymodule [default=no]],
-  [case "${enableval}" in
-    yes) mymodule_debug=yes ;;
-    no)  mymodule_debug=no ;;
-    *) AC_MSG_ERROR(bad value ${enableval} for --enable-debug-logging) ;;
-  esac], mymodule_debug=no)
-AC_MSG_CHECKING(whether to enable debug logging)
-AC_MSG_RESULT($mymodule_debug)
-if test "$mymodule_debug" = yes; then
-  AC_DEFINE(DEBUG, 1, [Define if debug logging is enabled])
-fi
-\endverbatim
+ dnl enable/disable debug logging, if specified
+ AC_ARG_ENABLE(debug-logging,
+ [  --enable-debug-logging  enable debug logging for mymodule [default=no]],
+ [case "${enableval}" in
+ yes) mymodule_debug=yes ;;
+ no)  mymodule_debug=no ;;
+ *) AC_MSG_ERROR(bad value ${enableval} for --enable-debug-logging) ;;
+ esac], mymodule_debug=no)
+ AC_MSG_CHECKING(whether to enable debug logging)
+ AC_MSG_RESULT($mymodule_debug)
+ if test "$mymodule_debug" = yes; then
+ AC_DEFINE(DEBUG, 1, [Define if debug logging is enabled])
+ fi
+ \endverbatim
  *
  * You then call ./configure with
  * --enable-debug-logging if you want DEBUG defined.
@@ -88,9 +88,9 @@ fi
  * debug message. The argument to DBG() can be used like a stream, so
  * this works:
  *\code
-int i = 1;
-DBG ("The integer is " << i);
-\endcode
+ int i = 1;
+ DBG ("The integer is " << i);
+ \endcode
  *
  * NB: Where we have previously used the cgicc LOGLN() macro (in our
  * webui stuff) we need to move to the DBG() macro.
@@ -101,10 +101,10 @@ DBG ("The integer is " << i);
  * including WmlDbg.h, include a new file, moduleDbg.h which adds
  * additional macros something like this:
  *\code
-#define DBGNEWFEATURE(s)  DBGSTREAM << "NEWFEATURE: "
-                                    << __FUNCTION__ << ": "
-                                    << s << endl;
-\endcode
+ #define DBGNEWFEATURE(s)  DBGSTREAM << "NEWFEATURE: "
+ << __FUNCTION__ << ": "
+ << s << endl;
+ \endcode
  *
  */
 
@@ -114,7 +114,7 @@ DBG ("The integer is " << i);
 #ifndef DBGSTREAM
 # define DBGSTREAM wmlDbg
 # include <fstream>
-  extern std::ofstream DBGSTREAM;
+extern std::ofstream DBGSTREAM;
 #endif
 
 /*
@@ -122,8 +122,8 @@ DBG ("The integer is " << i);
  * function.
  */
 #ifdef DEBUG
-# define DBGOPEN(s) DBGSTREAM.open (s, std::ios::out|std::ios::trunc); \
-DBGSTREAM << "**WML Debug File**\n";
+# define DBGOPEN(s) DBGSTREAM.open (s, std::ios::out|std::ios::trunc);  \
+        DBGSTREAM << "**WML Debug File**\n";
 #else
 # define DBGOPEN(s)
 #endif
@@ -133,8 +133,8 @@ DBGSTREAM << "**WML Debug File**\n";
  * be called early on in the main() function.
  */
 #ifdef DEBUG
-# define DBGAPPEND(s) DBGSTREAM.open (s, std::ios::out|std::ios::app); \
-DBGSTREAM << "**WML Debug File**\n";
+# define DBGAPPEND(s) DBGSTREAM.open (s, std::ios::out|std::ios::app);  \
+        DBGSTREAM << "**WML Debug File**\n";
 #else
 # define DBGAPPEND(s)
 #endif
