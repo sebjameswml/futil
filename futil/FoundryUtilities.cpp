@@ -3189,8 +3189,8 @@ wml::FoundryUtilities::zeroFileCount (const char * filePath)
 
 // Similiar to FoundryUtilities::splitString() but FASTER.
 vector<string>
-wml::FoundryUtilities::stringToVector (const string& s, string& separator,
-                                       bool ignoreTrailingEmptyVal)
+wml::FoundryUtilities::stringToVector (const string& s, const string& separator,
+                                       const bool ignoreTrailingEmptyVal)
 {
         if (separator.empty()) {
                 throw runtime_error ("Can't split the string; the separator is empty.");
@@ -3222,8 +3222,8 @@ wml::FoundryUtilities::stringToVector (const string& s, string& separator,
 // Similiar to FoundryUtilities::stringToVector()
 void
 wml::FoundryUtilities::splitString (vector<string>& tokens,
-                                    string& stringToSplit,
-                                    string& delim)
+                                    const string& stringToSplit,
+                                    const string& delim)
 {
         string::size_type pos;
         pos = stringToSplit.find (delim);
@@ -3240,9 +3240,9 @@ wml::FoundryUtilities::splitString (vector<string>& tokens,
 }
 
 vector<string>
-wml::FoundryUtilities::splitStringWithEncs (string& s,
-                                            string separatorChars,
-                                            string enclosureChars,
+wml::FoundryUtilities::splitStringWithEncs (const string& s,
+                                            const string separatorChars,
+                                            const string enclosureChars,
                                             const char escapeChar)
 {
         DBG2 ("Called for string >" << s << "<");
@@ -3424,14 +3424,14 @@ wml::FoundryUtilities::wrapLine (const std::string& line, unsigned int maxLength
 }
 
 string
-wml::FoundryUtilities::vectorToString (vector<string>& v,
-                                       string& separator)
+wml::FoundryUtilities::vectorToString (const vector<string>& v,
+                                       const string& separator)
 {
         if (separator.empty()) {
                 throw runtime_error ("Can't build the string; the separator is empty.");
         }
         stringstream ss;
-        vector<string>::iterator i = v.begin();
+        vector<string>::const_iterator i = v.begin();
         bool first(true);
         while (i != v.end()) {
                 if (first) {
@@ -3446,8 +3446,8 @@ wml::FoundryUtilities::vectorToString (vector<string>& v,
 }
 
 std::vector<std::string>
-wml::FoundryUtilities::csvToVector (std::string& csvList, char separator,
-                                    bool ignoreTrailingEmptyVal)
+wml::FoundryUtilities::csvToVector (const std::string& csvList, const char separator,
+                                    const bool ignoreTrailingEmptyVal)
 {
         vector<string> theVec;
         string csvl (csvList);
@@ -3474,7 +3474,7 @@ wml::FoundryUtilities::csvToVector (std::string& csvList, char separator,
 }
 
 std::list<std::string>
-wml::FoundryUtilities::csvToList (std::string& csvList, char separator)
+wml::FoundryUtilities::csvToList (const std::string& csvList, const char separator)
 {
         list<string> theList;
         string csvl (csvList);
@@ -3497,7 +3497,7 @@ wml::FoundryUtilities::csvToList (std::string& csvList, char separator)
 }
 
 std::set<std::string>
-wml::FoundryUtilities::csvToSet (std::string& csvList, char separator)
+wml::FoundryUtilities::csvToSet (const std::string& csvList, const char separator)
 {
         set<string> theSet;
         string csvl (csvList);
@@ -3520,9 +3520,9 @@ wml::FoundryUtilities::csvToSet (std::string& csvList, char separator)
 }
 
 std::string
-wml::FoundryUtilities::vectorToCsv (std::vector<std::string>& vecList, char separator)
+wml::FoundryUtilities::vectorToCsv (const std::vector<std::string>& vecList, const char separator)
 {
-        vector<string>::iterator i = vecList.begin();
+        vector<string>::const_iterator i = vecList.begin();
         bool first = true;
         stringstream ss;
         while (i != vecList.end()) {
@@ -3538,9 +3538,9 @@ wml::FoundryUtilities::vectorToCsv (std::vector<std::string>& vecList, char sepa
 }
 
 std::string
-wml::FoundryUtilities::listToCsv (std::list<std::string>& listList, char separator)
+wml::FoundryUtilities::listToCsv (const std::list<std::string>& listList, const char separator)
 {
-        list<string>::iterator i = listList.begin();
+        list<string>::const_iterator i = listList.begin();
         bool first = true;
         stringstream ss;
         while (i != listList.end()) {
@@ -3556,7 +3556,7 @@ wml::FoundryUtilities::listToCsv (std::list<std::string>& listList, char separat
 }
 
 std::string
-wml::FoundryUtilities::setToCsv (std::set<std::string>& setList, char separator)
+wml::FoundryUtilities::setToCsv (const std::set<std::string>& setList, const char separator)
 {
         set<string>::iterator i = setList.begin();
         bool first = true;
@@ -3574,7 +3574,7 @@ wml::FoundryUtilities::setToCsv (std::set<std::string>& setList, char separator)
 }
 
 map<string, string>
-wml::FoundryUtilities::csvToMap (const std::string& csvList, char relationship, char separator)
+wml::FoundryUtilities::csvToMap (const std::string& csvList, const char relationship, const char separator)
 {
         map<string, string> rtn;
         string theList (csvList);

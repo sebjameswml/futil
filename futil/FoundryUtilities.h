@@ -1059,9 +1059,9 @@ namespace wml {
                 /*!
                  * split csv into a vector
                  */
-                static std::vector<std::string> csvToVector (std::string& csvList,
-                                                             char separator = ',',
-                                                             bool ignoreTrailingEmptyVal = true);
+                static std::vector<std::string> csvToVector (const std::string& csvList,
+                                                             const char separator = ',',
+                                                             const bool ignoreTrailingEmptyVal = true);
 
                 /*!
                  * Split a string of values into a vector using the
@@ -1074,8 +1074,8 @@ namespace wml {
                  * Similar to FoundryUtilities::splitString but
                  * FASTER. PREFER THIS OVER splitString.
                  */
-                static std::vector<std::string> stringToVector (const std::string& s, std::string& separator,
-                                                                bool ignoreTrailingEmptyVal = true);
+                static std::vector<std::string> stringToVector (const std::string& s, const std::string& separator,
+                                                                const bool ignoreTrailingEmptyVal = true);
 
                 /*!
                  * Split a string into a set of strings using the
@@ -1097,8 +1097,8 @@ namespace wml {
                  * char or a multi-character token.
                  */
                 static void splitString (std::vector<std::string>& tokens,
-                                         std::string& stringToSplit,
-                                         std::string& delim);
+                                         const std::string& stringToSplit,
+                                         const std::string& delim);
 
                 /*!
                  * This splits up a "search style" string into tokens.
@@ -1115,9 +1115,9 @@ namespace wml {
                  * this is the character used to escape the enclosure
                  * chars.
                  */
-                static std::vector<std::string> splitStringWithEncs (std::string& s,
-                                                                     std::string separatorChars = ";, ",
-                                                                     std::string enclosureChars = "\"'",
+                static std::vector<std::string> splitStringWithEncs (const std::string& s,
+                                                                     const std::string separatorChars = ";, ",
+                                                                     const std::string enclosureChars = "\"'",
                                                                      const char escapeChar = '\0');
 
                 /*!
@@ -1167,44 +1167,45 @@ namespace wml {
                  * string separated by the separator string (not char)
                  * passed in as "separator".
                  */
-                static std::string vectorToString (std::vector<std::string>& s, std::string& separator);
+                static std::string vectorToString (const std::vector<std::string>& s,
+                                                   const std::string& separator);
 
 
                 /*!
                  * split csv into a list
                  */
-                static std::list<std::string> csvToList (std::string& csvList,
-                                                         char separator = ',');
+                static std::list<std::string> csvToList (const std::string& csvList,
+                                                         const char separator = ',');
                 /*!
                  * split csv into a set
                  */
-                static std::set<std::string> csvToSet (std::string& csvList,
-                                                       char separator = ',');
+                static std::set<std::string> csvToSet (const std::string& csvList,
+                                                       const char separator = ',');
 
                 /*!
                  * Output a vector of strings as a csv string.
                  */
-                static std::string vectorToCsv (std::vector<std::string>& vecList,
-                                                char separator = ',');
+                static std::string vectorToCsv (const std::vector<std::string>& vecList,
+                                                const char separator = ',');
 
                 /*!
                  * Output a list of strings as a csv string.
                  */
-                static std::string listToCsv (std::list<std::string>& listList,
-                                              char separator = ',');
+                static std::string listToCsv (const std::list<std::string>& listList,
+                                              const char separator = ',');
 
                 /*!
                  * Output a set of strings as a csv string.
                  */
-                static std::string setToCsv (std::set<std::string>& listList,
-                                             char separator = ',');
+                static std::string setToCsv (const std::set<std::string>& listList,
+                                             const char separator = ',');
 
                 /*!
                  * Split a comma-separated key/value pair list into a map.
                  */
                 static std::map<std::string, std::string> csvToMap (const std::string& csvList,
-                                                                    char relationship = '=',
-                                                                    char separator = ',');
+                                                                    const char relationship = '=',
+                                                                    const char separator = ',');
 
                 /*!
                  * Converts pdf files to a ghostscript device
