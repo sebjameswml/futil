@@ -119,6 +119,18 @@ wml::FoundryUtilities::stripTrailingWhitespace (std::string& input)
 }
 
 int
+wml::FoundryUtilities::stripChars (std::string& input, const std::string& charList)
+{
+        int rtn;
+        string::size_type pos;
+        while ((pos = input.find_last_of (charList)) != string::npos) {
+                input.erase (pos, 1);
+                ++rtn;
+        }
+        return rtn;
+}
+
+int
 wml::FoundryUtilities::stripTrailingSpaces (std::string& input)
 {
         return FoundryUtilities::stripTrailingChars (input);

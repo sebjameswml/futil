@@ -250,6 +250,12 @@ namespace wml {
                 static int stripWhitespace (std::string& input);
 
                 /*!
+                 * Strip any occurrences of the characters in charList
+                 * from input.
+                 */
+                static int stripChars (std::string& input, const std::string& charList);
+
+                /*!
                  * Do a search and replace, search for searchTerm,
                  * replacing with replaceTerm. if replaceAll is true,
                  * replace all occurrences of searchTerm, otherwise
