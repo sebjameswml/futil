@@ -63,7 +63,7 @@ wml::FileTyper::~FileTyper (void)
 }
 
 string
-wml::FileTyper::getFileTypeStr (string filePath)
+wml::FileTyper::getFileTypeStr (const string filePath)
 {
         const char* type = magic_file (this->magic, filePath.c_str());
         if (type == (const char*)0) {
@@ -78,7 +78,7 @@ wml::FileTyper::getFileTypeStr (string filePath)
 }
 
 wml::FILETYPE
-wml::FileTyper::getFileType (string filePath)
+wml::FileTyper::getFileType (const string filePath)
 {
         string fileTypeString = this->getFileTypeStr (filePath);
         if (fileTypeString.find ("Prescribe document") == 0) {
