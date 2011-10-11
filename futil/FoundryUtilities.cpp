@@ -137,7 +137,7 @@ wml::FoundryUtilities::stripTrailingSpaces (std::string& input)
 }
 
 int
-wml::FoundryUtilities::stripTrailingChars (std::string& input, char c)
+wml::FoundryUtilities::stripTrailingChars (std::string& input, const char c)
 {
         int i = 0;
         while (input.size()>0 && input[input.size()-1] == c) {
@@ -178,7 +178,7 @@ wml::FoundryUtilities::stripLeadingSpaces (std::string& input)
 }
 
 int
-wml::FoundryUtilities::stripLeadingChars (std::string& input, char c)
+wml::FoundryUtilities::stripLeadingChars (std::string& input, const char c)
 {
         int i = 0;
         while (input.size()>0 && input[0] == c) {
@@ -192,7 +192,7 @@ int
 wml::FoundryUtilities::searchReplace (const char* searchTerm,
                                       const char* replaceTerm,
                                       std::string& data,
-                                      bool replaceAll)
+                                      const bool replaceAll)
 {
         int count = 0;
         string::size_type pos = 0;
@@ -258,15 +258,13 @@ wml::FoundryUtilities::conditionAsXmlTag (std::string& str)
                 newStr += str;
                 str = newStr;
         }
-
-        return;
 }
 
 int
-wml::FoundryUtilities::searchReplace (std::string& searchTerm,
-                                      std::string& replaceTerm,
+wml::FoundryUtilities::searchReplace (const std::string& searchTerm,
+                                      const std::string& replaceTerm,
                                       std::string& data,
-                                      bool replaceAll)
+                                      const bool replaceAll)
 {
         const char* st = searchTerm.c_str();
         const char* rt = replaceTerm.c_str();
@@ -274,10 +272,10 @@ wml::FoundryUtilities::searchReplace (std::string& searchTerm,
 }
 
 int
-wml::FoundryUtilities::searchReplaceInFile (std::string searchTerm,
-                                            std::string replaceTerm,
+wml::FoundryUtilities::searchReplaceInFile (const std::string searchTerm,
+                                            const std::string replaceTerm,
                                             std::string fileName,
-                                            bool replaceAll)
+                                            const bool replaceAll)
 {
         int count(0);
 
@@ -317,9 +315,9 @@ wml::FoundryUtilities::searchReplaceInFile (std::string searchTerm,
 }
 
 int
-wml::FoundryUtilities::deleteLinesContaining (std::string searchTerm,
-                                              std::string fileName,
-                                              bool deleteEndOfLine)
+wml::FoundryUtilities::deleteLinesContaining (const std::string searchTerm,
+                                              const std::string fileName,
+                                              const bool deleteEndOfLine)
 {
         int count(0);
 
@@ -375,7 +373,7 @@ wml::FoundryUtilities::deleteLinesContaining (std::string searchTerm,
 }
 
 unsigned int
-wml::FoundryUtilities::countChars (std::string& line, const char c)
+wml::FoundryUtilities::countChars (const std::string& line, const char c)
 {
         unsigned int count(0);
         string::const_iterator i = line.begin();
@@ -668,7 +666,7 @@ wml::FoundryUtilities::getUptime (void)
 }
 
 string
-wml::FoundryUtilities::freeSpace (string dirPath)
+wml::FoundryUtilities::freeSpace (const string dirPath)
 {
         stringstream rtn;
         struct statvfs dir;
@@ -711,7 +709,7 @@ wml::FoundryUtilities::freeSpace (string dirPath)
 }
 
 UINT64_TYPE
-wml::FoundryUtilities::freeSpaceKBytes (string dirPath)
+wml::FoundryUtilities::freeSpaceKBytes (const string dirPath)
 {
         struct statvfs dir;
         if (statvfs (dirPath.c_str(), &dir)) {
@@ -768,7 +766,7 @@ wml::FoundryUtilities::totalSpaceKBytes (string dirPath)
 }
 
 float
-wml::FoundryUtilities::freeSpaceFraction (string dirPath)
+wml::FoundryUtilities::freeSpaceFraction (const string dirPath)
 {
         struct statvfs dir;
         memset (&dir, 0, sizeof(struct statvfs));
@@ -786,7 +784,7 @@ wml::FoundryUtilities::freeSpaceFraction (string dirPath)
 }
 
 bool
-wml::FoundryUtilities::fileExists (std::string& path)
+wml::FoundryUtilities::fileExists (const std::string& path)
 {
         struct stat * buf = NULL;
 
@@ -813,7 +811,7 @@ wml::FoundryUtilities::fileExists (std::string& path)
 }
 
 bool
-wml::FoundryUtilities::blockdevExists (std::string& path)
+wml::FoundryUtilities::blockdevExists (const std::string& path)
 {
         struct stat * buf = NULL;
 
@@ -835,7 +833,7 @@ wml::FoundryUtilities::blockdevExists (std::string& path)
 }
 
 bool
-wml::FoundryUtilities::regfileExists (std::string& path)
+wml::FoundryUtilities::regfileExists (const std::string& path)
 {
         struct stat * buf = NULL;
 
@@ -857,7 +855,7 @@ wml::FoundryUtilities::regfileExists (std::string& path)
 }
 
 bool
-wml::FoundryUtilities::socketExists (std::string& path)
+wml::FoundryUtilities::socketExists (const std::string& path)
 {
         struct stat * buf = NULL;
 
@@ -879,7 +877,7 @@ wml::FoundryUtilities::socketExists (std::string& path)
 }
 
 bool
-wml::FoundryUtilities::fifoExists (std::string& path)
+wml::FoundryUtilities::fifoExists (const std::string& path)
 {
         struct stat * buf = NULL;
 
@@ -901,7 +899,7 @@ wml::FoundryUtilities::fifoExists (std::string& path)
 }
 
 bool
-wml::FoundryUtilities::linkExists (std::string& path)
+wml::FoundryUtilities::linkExists (const std::string& path)
 {
         struct stat * buf = NULL;
 
@@ -923,7 +921,7 @@ wml::FoundryUtilities::linkExists (std::string& path)
 }
 
 bool
-wml::FoundryUtilities::chardevExists (std::string& path)
+wml::FoundryUtilities::chardevExists (const std::string& path)
 {
         struct stat * buf = NULL;
 
@@ -952,7 +950,7 @@ wml::FoundryUtilities::fileExists (const char * path)
 }
 
 bool
-wml::FoundryUtilities::dirExists (std::string& path)
+wml::FoundryUtilities::dirExists (const std::string& path)
 {
         DIR* d;
         if (!(d = opendir (path.c_str()))) {
@@ -966,9 +964,9 @@ wml::FoundryUtilities::dirExists (std::string& path)
 }
 
 void
-wml::FoundryUtilities::createDir (std::string path,
-                                  mode_t mode,
-                                  int uid, int gid)
+wml::FoundryUtilities::createDir (const std::string path,
+                                  const mode_t mode,
+                                  const int uid, const int gid)
 {
         DBG ("Called for path '" << path << "'");
         if (path.empty()) {
@@ -1080,7 +1078,7 @@ wml::FoundryUtilities::createDir (std::string path,
 }
 
 void
-wml::FoundryUtilities::setPermissions (string filepath, mode_t mode)
+wml::FoundryUtilities::setPermissions (const string filepath, const mode_t mode)
 {
         int rtn = chmod (filepath.c_str(), mode);
         if (rtn) {
@@ -1130,7 +1128,7 @@ wml::FoundryUtilities::setPermissions (string filepath, mode_t mode)
 }
 
 void
-wml::FoundryUtilities::setOwnership (string filepath, int uid, int gid)
+wml::FoundryUtilities::setOwnership (const string filepath, const int uid, const int gid)
 {
         int rtn = chown (filepath.c_str(), uid, gid);
         if (rtn) {
@@ -1180,7 +1178,7 @@ wml::FoundryUtilities::setOwnership (string filepath, int uid, int gid)
 }
 
 void
-wml::FoundryUtilities::touchFile (std::string path)
+wml::FoundryUtilities::touchFile (const std::string path)
 {
         ofstream f;
         f.open (path.c_str(), ios::out|ios::app);
@@ -1206,7 +1204,7 @@ wml::FoundryUtilities::dirExists (const char * path)
 }
 
 void
-wml::FoundryUtilities::copyFile (string& from, string& to)
+wml::FoundryUtilities::copyFile (const string& from, const string& to)
 {
         ofstream out;
 
@@ -1230,7 +1228,7 @@ wml::FoundryUtilities::copyFile (const char * from, const char * to)
 }
 
 void
-wml::FoundryUtilities::copyFile (string& from, ostream& to)
+wml::FoundryUtilities::copyFile (const string& from, ostream& to)
 {
         ifstream in;
 
@@ -1268,7 +1266,7 @@ wml::FoundryUtilities::copyFile (string& from, ostream& to)
 }
 
 void
-wml::FoundryUtilities::copyFile (istream& from, string& to)
+wml::FoundryUtilities::copyFile (istream& from, const string& to)
 {
         char buf[64];
         ofstream f;
@@ -1361,7 +1359,7 @@ wml::FoundryUtilities::copyFile (const char* from, FILE * to)
 }
 
 void
-wml::FoundryUtilities::appendFile (std::string& from, std::ostream& appendTo)
+wml::FoundryUtilities::appendFile (const std::string& from, std::ostream& appendTo)
 {
         if (!appendTo.good()) {
                 throw runtime_error ("Can't append to appendTo, it's not good()");
@@ -1382,14 +1380,14 @@ wml::FoundryUtilities::appendFile (std::string& from, std::ostream& appendTo)
 }
 
 void
-wml::FoundryUtilities::moveFile (string from, string to)
+wml::FoundryUtilities::moveFile (const string from, const string to)
 {
         FoundryUtilities::copyFile (from, to);
         FoundryUtilities::unlinkFile (from);
 }
 
 void
-wml::FoundryUtilities::unlinkFile (string fpath)
+wml::FoundryUtilities::unlinkFile (const string fpath)
 {
         int rtn = unlink (fpath.c_str());
         if (rtn) {
@@ -1462,7 +1460,7 @@ wml::FoundryUtilities::fileModDatestamp (const char* filename)
 }
 
 void
-wml::FoundryUtilities::getLock (int fd)
+wml::FoundryUtilities::getLock (const int fd)
 {
         if (fd > 0) {
                 // Ok.
@@ -1484,12 +1482,10 @@ wml::FoundryUtilities::getLock (int fd)
         debuglog2 (LOG_DEBUG,
                    "%s: flock(fd=%d, LOCK_EX) returned",
                    __FUNCTION__, fd);
-
-        return;
 }
 
 void
-wml::FoundryUtilities::getLock (std::fstream& f)
+wml::FoundryUtilities::getLock (const std::fstream& f)
 {
         if (!f.is_open()) {
                 throw runtime_error ("Can't lock an un-open fstream");
@@ -1499,7 +1495,7 @@ wml::FoundryUtilities::getLock (std::fstream& f)
 }
 
 void
-wml::FoundryUtilities::releaseLock (int fd)
+wml::FoundryUtilities::releaseLock (const int fd)
 {
         debuglog2 (LOG_DEBUG, "%s: Called", __FUNCTION__);
 
@@ -1522,12 +1518,10 @@ wml::FoundryUtilities::releaseLock (int fd)
         debuglog2 (LOG_DEBUG,
                    "%s: flock(fd=%d, LOCK_UN) returned",
                    __FUNCTION__, fd);
-
-        return;
 }
 
 void
-wml::FoundryUtilities::releaseLock (std::fstream& f)
+wml::FoundryUtilities::releaseLock (const std::fstream& f)
 {
         if (!f.is_open()) {
                 throw runtime_error ("Can't release lock on an un-open fstream");
@@ -1581,7 +1575,7 @@ wml::FoundryUtilities::slashEscape (std::string& str)
 }
 
 void
-wml::FoundryUtilities::sqlEscape (std::string& str, bool forPatternMatching)
+wml::FoundryUtilities::sqlEscape (std::string& str, const bool forPatternMatching)
 {
         for (unsigned int i=0; i<str.size(); i++) {
 
@@ -1608,7 +1602,6 @@ wml::FoundryUtilities::stripDosPath (std::string& dosPath)
 
         tmp = dosPath.substr (++pos);
         dosPath = tmp;
-        return;
 }
 
 void
@@ -1624,7 +1617,6 @@ wml::FoundryUtilities::stripUnixPath (std::string& unixPath)
 
         tmp = unixPath.substr (++pos);
         unixPath = tmp;
-        return;
 }
 
 void
@@ -1661,7 +1653,8 @@ wml::FoundryUtilities::generateRandomFilename (const char* prefixPath)
 }
 
 std::string
-wml::FoundryUtilities::generateRandomFilename (const char* prefixPath, unsigned int numChars)
+wml::FoundryUtilities::generateRandomFilename (const char* prefixPath,
+                                               const unsigned int numChars)
 {
         unsigned int length = numChars + strlen (prefixPath);
         string rtn = generateRandomFilename (prefixPath);
@@ -1695,11 +1688,11 @@ wml::FoundryUtilities::uuidPortion (unsigned int numChars)
 }
 
 std::string
-wml::FoundryUtilities::randomString (unsigned int numChars,
-                                     bool includeUppercase,
-                                     bool includeLowercase,
-                                     bool includeNumerals,
-                                     bool allowSimilars)
+wml::FoundryUtilities::randomString (const unsigned int numChars,
+                                     const bool includeUppercase,
+                                     const bool includeLowercase,
+                                     const bool includeNumerals,
+                                     const bool allowSimilars)
 {
         if (!includeUppercase && !includeLowercase && !includeNumerals) {
                 throw runtime_error ("No characters to return");
@@ -1759,7 +1752,7 @@ wml::FoundryUtilities::randomString (unsigned int numChars,
 }
 
 bool
-wml::FoundryUtilities::vectorContains (std::vector<unsigned int>& v, unsigned int i)
+wml::FoundryUtilities::vectorContains (const std::vector<unsigned int>& v, const unsigned int i)
 {
         for (unsigned int k = 0; k<v.size(); k++) {
                 if (v[k] == i) {
@@ -1770,7 +1763,7 @@ wml::FoundryUtilities::vectorContains (std::vector<unsigned int>& v, unsigned in
 }
 
 int
-wml::FoundryUtilities::strVectorContains (std::vector<string>& v, string s)
+wml::FoundryUtilities::strVectorContains (const std::vector<string>& v, const string s)
 {
         for (unsigned int k = 0; k<v.size(); k++) {
                 if (v[k] == s) {
@@ -1781,7 +1774,7 @@ wml::FoundryUtilities::strVectorContains (std::vector<string>& v, string s)
 }
 
 int
-wml::FoundryUtilities::strVectorMatches (std::vector<string>& v, string s)
+wml::FoundryUtilities::strVectorMatches (const std::vector<string>& v, const string s)
 {
         for (unsigned int k = 0; k<v.size(); k++) {
                 if (s.find (v[k], 0) != string::npos) {
@@ -1792,7 +1785,7 @@ wml::FoundryUtilities::strVectorMatches (std::vector<string>& v, string s)
 }
 
 int
-wml::FoundryUtilities::firstNotMatching (std::vector<string>& v, string s)
+wml::FoundryUtilities::firstNotMatching (const std::vector<string>& v, const string s)
 {
         for (unsigned int k = 0; k<v.size(); k++) {
                 if (v[k] != s) {
@@ -1803,9 +1796,9 @@ wml::FoundryUtilities::firstNotMatching (std::vector<string>& v, string s)
 }
 
 bool
-wml::FoundryUtilities::listContains (std::list<unsigned int>& l, unsigned int i)
+wml::FoundryUtilities::listContains (const std::list<unsigned int>& l, const unsigned int i)
 {
-        list<unsigned int>::iterator it = l.begin();
+        list<unsigned int>::const_iterator it = l.begin();
         while (it != l.end()) {
                 if ((*it) == i) {
                         return true;
@@ -1816,9 +1809,9 @@ wml::FoundryUtilities::listContains (std::list<unsigned int>& l, unsigned int i)
 }
 
 bool
-wml::FoundryUtilities::listContains (std::list<std::string>& l, std::string& s)
+wml::FoundryUtilities::listContains (const std::list<std::string>& l, const std::string& s)
 {
-        list<string>::iterator it = l.begin();
+        list<string>::const_iterator it = l.begin();
         while (it != l.end()) {
                 if ((*it) == s) {
                         return true;
@@ -1829,7 +1822,7 @@ wml::FoundryUtilities::listContains (std::list<std::string>& l, std::string& s)
 }
 
 bool
-wml::FoundryUtilities::pidLoaded (int pid)
+wml::FoundryUtilities::pidLoaded (const int pid)
 {
         stringstream path;
         ifstream f;
@@ -1854,7 +1847,7 @@ wml::FoundryUtilities::pidLoaded (int pid)
 }
 
 std::string
-wml::FoundryUtilities::pidCmdline (int pid)
+wml::FoundryUtilities::pidCmdline (const int pid)
 {
         stringstream path;
         ifstream f;
@@ -1875,7 +1868,7 @@ wml::FoundryUtilities::pidCmdline (int pid)
 }
 
 int
-wml::FoundryUtilities::getPid (std::string& programName)
+wml::FoundryUtilities::getPid (const std::string& programName)
 {
         // From processes, work out if any named processes are
         // running. Return pid of running OSK. If there is none, return -1;
@@ -1939,7 +1932,7 @@ wml::FoundryUtilities::getPid (std::string& programName)
 }
 
 int
-wml::FoundryUtilities::termKill (string& programName, int& pid)
+wml::FoundryUtilities::termKill (const string& programName, int& pid)
 {
         if (pid != -1) {
 
@@ -2097,11 +2090,10 @@ wml::FoundryUtilities::getMacAddr (unsigned int* mac)
         }
 
         close (sd);
-        return;
 }
 
 void
-wml::FoundryUtilities::strToMacAddr (std::string& macStr, unsigned int* mac)
+wml::FoundryUtilities::strToMacAddr (const std::string& macStr, unsigned int* mac)
 {
         // Initialise mac
         mac[0] = 0;
@@ -2141,12 +2133,10 @@ wml::FoundryUtilities::strToMacAddr (std::string& macStr, unsigned int* mac)
         sss << hex;
         sss >> n;
         mac[0] |= (n&0xff);
-
-        return;
 }
 
 std::string
-wml::FoundryUtilities::macAddrToStr (unsigned int* mac)
+wml::FoundryUtilities::macAddrToStr (const unsigned int* mac)
 {
         stringstream ss;
         int i = 0;
@@ -2170,9 +2160,9 @@ wml::FoundryUtilities::macAddrToStr (unsigned int* mac)
 }
 
 void
-wml::FoundryUtilities::clearoutDir (string dirPath,
-                                    unsigned int olderThanSeconds,
-                                    string filePart)
+wml::FoundryUtilities::clearoutDir (const string dirPath,
+                                    const unsigned int olderThanSeconds,
+                                    const string filePart)
 {
         vector<string> files;
         try {
@@ -2203,8 +2193,8 @@ wml::FoundryUtilities::clearoutDir (string dirPath,
 
 void
 wml::FoundryUtilities::readDirectoryTree (vector<string>& vec,
-                                          string dirPath,
-                                          unsigned int olderThanSeconds)
+                                          const string dirPath,
+                                          const unsigned int olderThanSeconds)
 {
         FoundryUtilities::readDirectoryTree (vec, dirPath.c_str(), "", olderThanSeconds);
 }
@@ -2213,7 +2203,7 @@ void
 wml::FoundryUtilities::readDirectoryTree (vector<string>& vec,
                                           const char* baseDirPath,
                                           const char* subDirPath,
-                                          unsigned int olderThanSeconds)
+                                          const unsigned int olderThanSeconds)
 {
         DIR* d;
         struct dirent *ep;
@@ -2317,12 +2307,11 @@ wml::FoundryUtilities::readDirectoryTree (vector<string>& vec,
         }
 
         (void) closedir (d);
-        return;
 }
 
 void
 wml::FoundryUtilities::readDirectoryDirs (std::set<std::string>& dset,
-                                          std::string dirPath)
+                                          const std::string dirPath)
 {
         DIR* d;
         struct dirent *ep;
@@ -2349,7 +2338,6 @@ wml::FoundryUtilities::readDirectoryDirs (std::set<std::string>& dset,
         }
 
         (void) closedir (d);
-        return;
 }
 
 std::string
@@ -2399,7 +2387,7 @@ wml::FoundryUtilities::dateNow (void)
 }
 
 string
-wml::FoundryUtilities::monthStr (int month, bool shortFormat)
+wml::FoundryUtilities::monthStr (const int month, const bool shortFormat)
 {
         string rtn("");
 
@@ -2493,7 +2481,7 @@ wml::FoundryUtilities::monthStr (int month, bool shortFormat)
 }
 
 time_t
-wml::FoundryUtilities::dateToNum (std::string& dateStr)
+wml::FoundryUtilities::dateToNum (const std::string& dateStr)
 {
         char separator = '\0';
 
@@ -2694,9 +2682,9 @@ wml::FoundryUtilities::dateTimeToNum (std::string dateTimeStr)
 }
 
 std::string
-wml::FoundryUtilities::numToDateTime (time_t epochSeconds,
-                                      char dateSeparator,
-                                      char timeSeparator)
+wml::FoundryUtilities::numToDateTime (const time_t epochSeconds,
+                                      const char dateSeparator,
+                                      const char timeSeparator)
 {
         if (epochSeconds == 0) {
                 return "unknown";
@@ -2756,8 +2744,8 @@ wml::FoundryUtilities::numToDateTime (time_t epochSeconds,
 }
 
 std::string
-wml::FoundryUtilities::numToDate (time_t epochSeconds,
-                                  char separator)
+wml::FoundryUtilities::numToDate (const time_t epochSeconds,
+                                  const char separator)
 {
         struct tm * t;
         time_t es = epochSeconds;
@@ -2805,8 +2793,8 @@ wml::FoundryUtilities::timeNow (void)
 }
 
 unsigned int
-wml::FoundryUtilities::getMonthFromLog (std::string& filePath,
-                                        unsigned int lineNum)
+wml::FoundryUtilities::getMonthFromLog (const std::string& filePath,
+                                        const unsigned int lineNum)
 {
         unsigned int month = 0;
 
@@ -2871,8 +2859,8 @@ wml::FoundryUtilities::getMonthFromLog (std::string& filePath,
 
 void
 wml::FoundryUtilities::getCSS (std::stringstream& rCSS,
-                               std::string cssFile,
-                               bool inlineOutput)
+                               const std::string cssFile,
+                               const bool inlineOutput)
 {
         FoundryUtilities::getScript (SCRIPT_CSS, rCSS, cssFile, inlineOutput);
 }
@@ -2880,7 +2868,7 @@ wml::FoundryUtilities::getCSS (std::stringstream& rCSS,
 void
 wml::FoundryUtilities::getJavascript (std::stringstream& rJavascript,
                                       std::string jsFile,
-                                      bool inlineOutput)
+                                      const bool inlineOutput)
 {
         if (inlineOutput == true
             && FoundryUtilities::dirExists ("/etc/wml/js/")){
@@ -2904,10 +2892,10 @@ wml::FoundryUtilities::getJavascript (std::stringstream& rJavascript,
 }
 
 void
-wml::FoundryUtilities::getScript (SCRIPT_TYPE script,
+wml::FoundryUtilities::getScript (const SCRIPT_TYPE script,
                                   std::stringstream& rScript,
                                   std::string scriptFile,
-                                  bool inlineOutput)
+                                  const bool inlineOutput)
 {
         if (inlineOutput == true) {
 
@@ -2993,7 +2981,6 @@ wml::FoundryUtilities::getScript (SCRIPT_TYPE script,
                 }
                 rScript << openingTag << scriptFile << closingTag << endl;
         }
-        return;
 }
 
 void
@@ -3017,12 +3004,10 @@ wml::FoundryUtilities::unicodeize (std::string& str)
         }
 
         str = utf8.str();
-
-        return;
 }
 
 bool
-wml::FoundryUtilities::containsOnlyNumerals (std::string& str)
+wml::FoundryUtilities::containsOnlyNumerals (const std::string& str)
 {
         for (unsigned int i=0; i<str.size(); i++) {
                 if (static_cast<unsigned int>(str[i]) < 48 ||
@@ -3037,7 +3022,7 @@ wml::FoundryUtilities::containsOnlyNumerals (std::string& str)
 void
 wml::FoundryUtilities::sanitize (std::string& str,
                                  const char* allowed,
-                                 bool eraseForbidden)
+                                 const bool eraseForbidden)
 {
         string allowedStr(allowed);
         FoundryUtilities::sanitize (str, allowedStr, eraseForbidden);
@@ -3045,8 +3030,8 @@ wml::FoundryUtilities::sanitize (std::string& str,
 
 void
 wml::FoundryUtilities::sanitize (std::string& str,
-                                 std::string& allowed,
-                                 bool eraseForbidden)
+                                 const std::string& allowed,
+                                 const bool eraseForbidden)
 {
         unsigned int i=0;
         while (i<str.size()) {
@@ -3068,8 +3053,8 @@ wml::FoundryUtilities::sanitize (std::string& str,
 
 void
 wml::FoundryUtilities::sanitizeReplace (std::string& str,
-                                        std::string allowed,
-                                        char replaceChar)
+                                        const std::string allowed,
+                                        const char replaceChar)
 {
         unsigned int i=0;
         while (i<str.size()) {
@@ -3099,11 +3084,10 @@ wml::FoundryUtilities::coutFile (const char* filePath)
         }
 
         f.close();
-        return;
 }
 
 void
-wml::FoundryUtilities::coutFile (std::string filePath)
+wml::FoundryUtilities::coutFile (const std::string filePath)
 {
         ifstream f;
         f.open (filePath.c_str(), ios::in);
@@ -3120,11 +3104,10 @@ wml::FoundryUtilities::coutFile (std::string filePath)
         }
 
         f.close();
-        return;
 }
 
 int
-wml::FoundryUtilities::fileSize (string filePath)
+wml::FoundryUtilities::fileSize (const string filePath)
 {
         struct stat buf;
         memset (&buf, 0, sizeof(struct stat));
@@ -3247,7 +3230,6 @@ wml::FoundryUtilities::splitString (vector<string>& tokens,
                 FoundryUtilities::splitString (tokens, newString, delim);
         } else {
                 tokens.push_back (stringToSplit);
-                return;
         }
 }
 
@@ -3352,15 +3334,15 @@ wml::FoundryUtilities::htmlHighlightTerm (const string& term,
 }
 
 std::string
-wml::FoundryUtilities::htmlHighlightTerm (std::string& term,
-                                          vector<string>& searchTermsUC,
-                                          std::string& tag)
+wml::FoundryUtilities::htmlHighlightTerm (const std::string& term,
+                                          const vector<string>& searchTermsUC,
+                                          const std::string& tag)
 {
         string rtn("");
         string termUC = term;
         string::size_type p1 = string::npos, p2 = string::npos;
         transform (termUC.begin(), termUC.end(), termUC.begin(), wml::to_upper());
-        vector<string>::iterator i = searchTermsUC.begin();
+        vector<string>::const_iterator i = searchTermsUC.begin();
         while (i != searchTermsUC.end()) {
                 if ((p1 = termUC.find (*i, 0)) != string::npos) {
                         p2 = p1 + i->size() - 1;
@@ -3401,7 +3383,7 @@ wml::FoundryUtilities::htmlHighlightTerm (std::string& term,
 }
 
 vector<string>
-wml::FoundryUtilities::wrapLine (const std::string& line, unsigned int maxLength)
+wml::FoundryUtilities::wrapLine (const std::string& line, const unsigned int maxLength)
 {
         string::size_type len (line.length()), pos = 0, pos1 = 0;
         vector<string> rtn;
@@ -3618,7 +3600,7 @@ wml::FoundryUtilities::csvToMap (const std::string& csvList, const char relation
 }
 
 std::string
-wml::FoundryUtilities::suffix (int n)
+wml::FoundryUtilities::suffix (const int n)
 {
         string suf("th"); // Most numbers end in "th" (in English)
         int leastSig = n%10;     // Right most, least significant numeral
@@ -3648,10 +3630,10 @@ wml::FoundryUtilities::suffix (int n)
 }
 
 void
-wml::FoundryUtilities::pdfConversion (string inputPath,
-                                      string outputDevice, string outputPath,
-                                      unsigned int width, unsigned int height,
-                                      bool wait, unsigned int resolution)
+wml::FoundryUtilities::pdfConversion (const string inputPath,
+                                      const string outputDevice, const string outputPath,
+                                      const unsigned int width, const unsigned int height,
+                                      const bool wait, const unsigned int resolution)
 {
         string widthS, heightS, resS;
         stringstream tempSS, returnSS;
@@ -3691,17 +3673,17 @@ wml::FoundryUtilities::pdfConversion (string inputPath,
 }
 
 void
-wml::FoundryUtilities::pdfToJpeg (string inputPath, string outputPath,
-                                  unsigned int width, unsigned int height,
-                                  bool wait, unsigned int resolution)
+wml::FoundryUtilities::pdfToJpeg (const string inputPath, const string outputPath,
+                                  const unsigned int width, const unsigned int height,
+                                  const bool wait, const unsigned int resolution)
 {
         pdfConversion (inputPath, "jpeg", outputPath, width, height, wait, resolution);
 }
 
 void
-wml::FoundryUtilities::pdfToPng (string inputPath, string outputPath,
-                                 unsigned int width, unsigned int height,
-                                 bool wait, unsigned int resolution)
+wml::FoundryUtilities::pdfToPng (const string inputPath, const string outputPath,
+                                 const unsigned int width,const  unsigned int height,
+                                 const bool wait, const unsigned int resolution)
 {
         pdfConversion (inputPath, "pngalpha", outputPath, width, height, wait, resolution);
 }
@@ -3713,7 +3695,7 @@ wml::FoundryUtilities::pdfToPng (string inputPath, string outputPath,
 void
 wml::FoundryUtilities::doIconv (const char * fromEncoding,
                                 const char * toEncoding,
-                                std::string& fromString,
+                                const std::string& fromString,
                                 std::string& toString)
 {
         // We'll read ICONV_INBUF_SIZE bytes at a time from fromString into inbuf...
@@ -3806,7 +3788,6 @@ wml::FoundryUtilities::doIconv (const char * fromEncoding,
         toString = ss.str();
 
         iconv_close (cd);
-        return;
 }
 
 void
@@ -3838,14 +3819,12 @@ wml::FoundryUtilities::openFilestreamForAppend (fstream& f, const char * filepat
                 errss << "Failed to open file '" << filepath << "' for appending.";
                 throw runtime_error (errss.str());
         }
-        return;
 }
 
 void
 wml::FoundryUtilities::openFilestreamForAppend (fstream& f, const string& filepath)
 {
         FoundryUtilities::openFilestreamForAppend (f, filepath.c_str());
-        return;
 }
 
 void
@@ -3866,14 +3845,12 @@ wml::FoundryUtilities::openFilestreamForOverwrite (fstream& f, const char * file
                 errss << "Failed to open file '" << filepath << "' for overwriting";
                 throw runtime_error (errss.str());
         }
-        return;
 }
 
 void
 wml::FoundryUtilities::openFilestreamForOverwrite (fstream& f, const string& filepath)
 {
         FoundryUtilities::openFilestreamForOverwrite (f, filepath.c_str());
-        return;
 }
 
 void
@@ -3889,7 +3866,6 @@ wml::FoundryUtilities::closeFilestream (fstream& f)
                         throw runtime_error (errss.str());
                 }
         }
-        return;
 }
 
 void
@@ -3906,11 +3882,10 @@ wml::FoundryUtilities::clearFilestreamFlags (fstream& f)
                 errss << "exception clearing filestream flags: " << e.what();
                 throw runtime_error (errss.str());
         }
-        return;
 }
 
 void
-wml::FoundryUtilities::check_tmp_messages (int megabytes)
+wml::FoundryUtilities::check_tmp_messages (const int megabytes)
 {
         /*
          * /tmp/logrotate.conf is created if the file doesn't exist.
@@ -3970,7 +3945,7 @@ wml::FoundryUtilities::check_tmp_messages (int megabytes)
 }
 
 bool
-wml::FoundryUtilities::valid_ip (string ip_string)
+wml::FoundryUtilities::valid_ip (const string ip_string)
 {
         regex_t * ip_regex = (regex_t*)0;
         int reg_error;
@@ -4032,7 +4007,7 @@ wml::FoundryUtilities::getlineWithCopy (std::istream* istrm,
                                         std::string& line,
                                         std::ofstream& copystrm,
                                         bool& inputComplete,
-                                        char eolChar)
+                                        const char eolChar)
 {
 #ifdef DEBUG2
         if (istrm->good()) { DBG2 ("good is set in istrm"); }
