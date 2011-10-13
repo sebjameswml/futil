@@ -662,6 +662,10 @@ namespace wml {
                  */
                 static void sqlEscape (std::string& str, const bool forPatternMatching);
 
+                /*!
+                 * As above, but returns the escaped string.
+                 */
+                static std::string sqlEscapeRtn (const std::string& str, const bool forPatternMatching);
 
                 /*!
                  * Given a path like C:\\path\\to\\file in str, remove

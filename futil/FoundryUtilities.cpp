@@ -1589,6 +1589,23 @@ wml::FoundryUtilities::sqlEscape (std::string& str, const bool forPatternMatchin
         }
 }
 
+string
+wml::FoundryUtilities::sqlEscapeRtn (const std::string& str, const bool forPatternMatching)
+{
+        string rtn(str);
+        for (unsigned int i=0; i<rtn.size(); i++) {
+
+                if (rtn[i] == '\\'
+                    || rtn[i] == '\''
+                    || rtn[i] == '"'
+                    || (forPatternMatching && rtn[i] == '\%')
+                    || (forPatternMatching && rtn[i] == '_')) {
+                        rtn.insert ((i++), "\\");
+                }
+        }
+        return rtn;
+}
+
 void
 wml::FoundryUtilities::stripDosPath (std::string& dosPath)
 {
