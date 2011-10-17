@@ -38,6 +38,9 @@
 # pragma interface
 #endif
 
+#include "config.h"
+#include <glibmm/ustring.h>
+
 extern "C" {
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -210,13 +213,19 @@ namespace wml {
                  * Erase trailing spaces from input. Return the
                  * number of spaces removed.
                  */
+                //@{
                 static int stripTrailingSpaces (std::string& input);
+                static int stripTrailingSpaces (Glib::ustring& input);
+                //@}
 
                 /*!
                  * Erase trailing chars c from input. Return the
                  * number of chars removed.
                  */
+                //@{
                 static int stripTrailingChars (std::string& input, const char c = ' ');
+                static int stripTrailingChars (Glib::ustring& input, const gunichar c = ' ');
+                //@}
 
                 /*!
                  * Erase trailing whitespace from input. Return the
@@ -228,13 +237,19 @@ namespace wml {
                  * Erase leading spaces from input. Return the
                  * number of spaces removed.
                  */
+                //@{
                 static int stripLeadingSpaces (std::string& input);
+                static int stripLeadingSpaces (Glib::ustring& input);
+                //@}
 
                 /*!
                  * Erase any leading character c from input. Return the
                  * number of chars removed.
                  */
+                //@{
                 static int stripLeadingChars (std::string& input, const char c = ' ');
+                static int stripLeadingChars (Glib::ustring& input, const gunichar c = ' ');
+                //@}
 
                 /*!
                  * Erase leading whitespace from input. Return the
@@ -1087,6 +1102,10 @@ namespace wml {
                 static std::vector<std::string> stringToVector (const std::string& s, const std::string& separator,
                                                                 const bool ignoreTrailingEmptyVal = true);
 
+                static std::vector<Glib::ustring> stringToVector (const Glib::ustring& s,
+                                                                  const Glib::ustring& separator,
+                                                                  const bool ignoreTrailingEmptyVal = true);
+
                 /*!
                  * Split a string into a set of strings using the
                  * delimiter specified.
@@ -1129,6 +1148,11 @@ namespace wml {
                                                                      const std::string separatorChars = ";, ",
                                                                      const std::string enclosureChars = "\"'",
                                                                      const char escapeChar = '\0');
+
+                static std::vector<Glib::ustring> splitStringWithEncs (const Glib::ustring& s,
+                                                                       const Glib::ustring separatorChars = ";, ",
+                                                                       const Glib::ustring enclosureChars = "\"'",
+                                                                       const gunichar escapeChar = 0);
 
                 /*!
                  * Highlight matching portions of search terms in <tag></tag> tags

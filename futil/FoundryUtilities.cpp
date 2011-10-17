@@ -137,7 +137,24 @@ wml::FoundryUtilities::stripTrailingSpaces (std::string& input)
 }
 
 int
+wml::FoundryUtilities::stripTrailingSpaces (Glib::ustring& input)
+{
+        return FoundryUtilities::stripTrailingChars (input);
+}
+
+int
 wml::FoundryUtilities::stripTrailingChars (std::string& input, const char c)
+{
+        int i = 0;
+        while (input.size()>0 && input[input.size()-1] == c) {
+                input.erase (input.size()-1, 1);
+                i++;
+        }
+        return i;
+}
+
+int
+wml::FoundryUtilities::stripTrailingChars (Glib::ustring& input, const gunichar c)
 {
         int i = 0;
         while (input.size()>0 && input[input.size()-1] == c) {
@@ -178,7 +195,24 @@ wml::FoundryUtilities::stripLeadingSpaces (std::string& input)
 }
 
 int
+wml::FoundryUtilities::stripLeadingSpaces (Glib::ustring& input)
+{
+        return FoundryUtilities::stripLeadingChars (input);
+}
+
+int
 wml::FoundryUtilities::stripLeadingChars (std::string& input, const char c)
+{
+        int i = 0;
+        while (input.size()>0 && input[0] == c) {
+                input.erase (0, 1);
+                i++;
+        }
+        return i;
+}
+
+int
+wml::FoundryUtilities::stripLeadingChars (Glib::ustring& input, const gunichar c)
 {
         int i = 0;
         while (input.size()>0 && input[0] == c) {
@@ -3199,6 +3233,38 @@ wml::FoundryUtilities::zeroFileCount (const char * filePath)
         return 0;
 }
 
+vector<Glib::ustring>
+wml::FoundryUtilities::stringToVector (const Glib::ustring& s,
+                                       const Glib::ustring& separator,
+                                       const bool ignoreTrailingEmptyVal)
+{
+        if (separator.empty()) {
+                throw runtime_error ("Can't split the string; the separator is empty.");
+        }
+        vector<Glib::ustring> theVec;
+        string entry("");
+        Glib::ustring::size_type sepLen = separator.size();
+        Glib::ustring::size_type a=0, b=0;
+        while (a < s.size()
+               && (b = s.find (separator, a)) != Glib::ustring::npos) {
+                entry = s.substr (a, b-a);
+                theVec.push_back (entry);
+                a=b+sepLen;
+        }
+        // Last one has no separator
+        if (a < s.size()) {
+                b = s.size();
+                entry = s.substr (a, b-a);
+                theVec.push_back (entry);
+        } else {
+                if (!ignoreTrailingEmptyVal) {
+                        theVec.push_back ("");
+                }
+        }
+
+        return theVec;
+}
+
 // Similiar to FoundryUtilities::splitString() but FASTER.
 vector<string>
 wml::FoundryUtilities::stringToVector (const string& s, const string& separator,
@@ -3261,6 +3327,92 @@ wml::FoundryUtilities::splitStringWithEncs (const string& s,
         // enclosure chars and finding tokens based on those.
 
         vector<string> theVec;
+        string entry("");
+        string::size_type a=0, b=0, c=0;
+
+        while (a < s.size()) {
+
+                // Find the first character which isn't space, comma, etc (as provided in args)
+                if ((a = s.find_first_not_of (separatorChars, a)) == string::npos) {
+                        DBG ("Nothing but separator chars in string");
+                        return theVec;
+                }
+
+                // See if this is an escape char, in which case, we
+                // skip it, and the char it escapes.
+                if (escapeChar && s[a] == escapeChar) {
+                        ++a; ++a;
+                        continue;
+                }
+
+                // If true, then the thing we're searching for is an enclosure
+                // char, otherwise, it's a separator char.
+                bool nextIsEnc(false);
+                char currentEncChar = '\0';
+
+                DBG2 ("See if " << s[a] << " at pos " << a
+                      << " is found in enclosure chars >" << enclosureChars << "<");
+
+                if ((enclosureChars.find_first_of (static_cast<char>(s[a]), 0)) != string::npos) {
+                        // First char is an enclosure char, so we're tokenising a phrase.
+                        nextIsEnc = true;
+                        currentEncChar = s[a];
+                        ++a; // Skip the enclosure char
+                }
+
+                // Check we didn't over-run
+                if (a >= s.size()) { break; }
+
+                // Now get the token
+                string::size_type range = string::npos;
+                if (nextIsEnc) {
+                        DBG2 ("Searching for next instances of enc chars: >" << enclosureChars << "< ");
+                        c = a;
+                        while ((b = s.find_first_of (currentEncChar, c)) != string::npos) {
+                                // FIXME: Check we didn't find an escaped enclosureChar.
+                                if (escapeChar) {
+                                        c = b; --c;
+                                        if (s[c] == escapeChar) {
+                                                // Skip b which is an escaped enclosure char
+                                                c = b; ++c;
+                                                continue;
+                                        }
+                                }
+                                range = b - a;
+                                break;
+                        }
+                } else {
+                        DBG2 ("Searching for next instances of sep chars: >" << separatorChars << "< ");
+                        if ((b = s.find_first_of (separatorChars, a)) != string::npos) {
+                                range = b - a;
+                        }
+                }
+
+                entry = s.substr (a, range);
+                theVec.push_back (entry);
+
+                DBG2 ("Adding " << range + 1 << " to a (" << a << ")");
+                if (range != string::npos) {
+                        a+=range+1;
+                } else {
+                        a = range;
+                }
+        }
+
+        return theVec;
+}
+
+vector<Glib::ustring>
+wml::FoundryUtilities::splitStringWithEncs (const Glib::ustring& s,
+                                            const Glib::ustring separatorChars,
+                                            const Glib::ustring enclosureChars,
+                                            const gunichar escapeChar)
+{
+        DBG2 ("Called for string >" << s << "<");
+        // Run through the string, searching for separator and
+        // enclosure chars and finding tokens based on those.
+
+        vector<Glib::ustring> theVec;
         string entry("");
         string::size_type a=0, b=0, c=0;
 
