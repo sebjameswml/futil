@@ -6,46 +6,46 @@ SUBDIRS = futil doc
 bin_PROGRAMS = testDoIconv testXmlCondition testfutil testsymlinks testdirperms testSetPerm testdates dateToEpoch testSplitString testtotalspace testRandomString testlock splitstring stringtovector
 
 testdirperms_SOURCES = testdirperms.cpp
-testdirperms_LDADD = futil/libfutil.la -luuid -lmagic -lglib-2.0 -lglibmm-2.4
+testdirperms_LDADD = futil/libfutil.la -luuid -lmagic $(GLIBMM_LIBS)
 
 testRandomString_SOURCES = testRandomString.cpp
-testRandomString_LDADD = futil/libfutil.la -luuid -lmagic -lglib-2.0 -lglibmm-2.4
+testRandomString_LDADD = futil/libfutil.la -luuid -lmagic $(GLIBMM_LIBS)
 
 testsymlinks_SOURCES = testsymlinks.cpp
-testsymlinks_LDADD = futil/libfutil.la -luuid -lmagic -lglib-2.0 -lglibmm-2.4
+testsymlinks_LDADD = futil/libfutil.la -luuid -lmagic $(GLIBMM_LIBS)
 
 testfutil_SOURCES = testfutil.cpp
-testfutil_LDADD = futil/libfutil.la -luuid -lmagic -lglib-2.0 -lglibmm-2.4
+testfutil_LDADD = futil/libfutil.la -luuid -lmagic $(GLIBMM_LIBS)
 
 splitstring_SOURCES = splitstring.cpp stringtosplit.h
-splitstring_LDADD = futil/libfutil.la -luuid -lmagic -lglib-2.0 -lglibmm-2.4
+splitstring_LDADD = futil/libfutil.la -luuid -lmagic $(GLIBMM_LIBS)
 
 stringtovector_SOURCES = stringtovector.cpp stringtosplit.h
-stringtovector_LDADD = futil/libfutil.la -luuid -lmagic -lglib-2.0 -lglibmm-2.4
+stringtovector_LDADD = futil/libfutil.la -luuid -lmagic $(GLIBMM_LIBS)
 
 testdates_SOURCES = testdates.cpp
-testdates_LDADD = futil/libfutil.la -luuid -lmagic -lglib-2.0 -lglibmm-2.4
+testdates_LDADD = futil/libfutil.la -luuid -lmagic $(GLIBMM_LIBS)
 
 dateToEpoch_SOURCES = dateToEpoch.cpp
-dateToEpoch_LDADD = futil/libfutil.la -luuid -lmagic -lglib-2.0 -lglibmm-2.4
+dateToEpoch_LDADD = futil/libfutil.la -luuid -lmagic $(GLIBMM_LIBS)
 
 testDoIconv_SOURCES = testDoIconv.cpp
-testDoIconv_LDADD = futil/libfutil.la -luuid -lmagic -lglib-2.0 -lglibmm-2.4
+testDoIconv_LDADD = futil/libfutil.la -luuid -lmagic $(GLIBMM_LIBS)
 
 testXmlCondition_SOURCES = testXmlCondition.cpp
-testXmlCondition_LDADD = futil/libfutil.la -luuid -lmagic -lglib-2.0 -lglibmm-2.4
+testXmlCondition_LDADD = futil/libfutil.la -luuid -lmagic $(GLIBMM_LIBS)
 
 testSetPerm_SOURCES = testSetPerm.cpp
-testSetPerm_LDADD = futil/libfutil.la -luuid -lmagic -lglib-2.0 -lglibmm-2.4
+testSetPerm_LDADD = futil/libfutil.la -luuid -lmagic $(GLIBMM_LIBS)
 
 testSplitString_SOURCES = testSplitString.cpp
-testSplitString_LDADD = futil/libfutil.la -luuid -lmagic -lglib-2.0 -lglibmm-2.4
+testSplitString_LDADD = futil/libfutil.la -luuid -lmagic $(GLIBMM_LIBS)
 
 testtotalspace_SOURCES = testtotalspace.cpp
-testtotalspace_LDADD = futil/libfutil.la -luuid -lmagic -lglib-2.0 -lglibmm-2.4
+testtotalspace_LDADD = futil/libfutil.la -luuid -lmagic $(GLIBMM_LIBS)
 
 testlock_SOURCES = testlock.cpp
-testlock_LDADD = futil/libfutil.la -luuid -lmagic -lglib-2.0 -lglibmm-2.4
+testlock_LDADD = futil/libfutil.la -luuid -lmagic $(GLIBMM_LIBS)
 
 INCLUDES = -I./futil $(GLIBMM_CFLAGS)
 
