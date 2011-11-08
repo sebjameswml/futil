@@ -578,11 +578,17 @@ namespace wml {
                  * reflected in the vector entries. So, a directory
                  * structure might lead to the following entries in vec:
                  *
-                 * file1
                  * file2
-                 * dir1/file1
-                 * dir2/file1
+                 * file1
                  * dir2/file2
+                 * dir2/file1
+                 * dir1/file1
+                 *
+                 * Note that the order of the files is REVERSED from
+                 * what you might expect. This is the way that
+                 * readdir() seems to work. If it's important to
+                 * iterate through the vector<string>& vec, then use a
+                 * reverse_iterator.
                  *
                  * The base directory path baseDirPath should have NO
                  * TRAILING '/'. The subDirPath should have NO INITIAL
