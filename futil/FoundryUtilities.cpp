@@ -2339,9 +2339,9 @@ wml::FoundryUtilities::readDirectoryTree (vector<string>& vec,
                                         continue;
                                 }
 
-                                if (static_cast<unsigned int>(time(NULL)) - buf.st_atime
+                                if (static_cast<unsigned int>(time(NULL)) - buf.st_mtime
                                     <= olderThanSeconds) {
-                                        // The age of the last access is less
+                                        // The age of the last modification is less
                                         // than olderThanSeconds, so skip
                                         // (we're only returning the OLDER
                                         // files)
