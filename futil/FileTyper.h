@@ -63,6 +63,7 @@ namespace wml {
                 MFT_UNICODE_ARCHIVE,
                 MFT_ZIP,
                 MFT_PNG_IMAGE,
+                MFT_JPEG_IMAGE,
                 MFT_PDF_FILE,
                 MFT_CONVERT_INI,
                 MFT_USER_INI,
