@@ -1112,6 +1112,56 @@ wml::FoundryUtilities::createDir (const std::string path,
 }
 
 void
+wml::FoundryUtilities::removeDir (const std::string path)
+{
+        int rtn = rmdir (path.c_str());
+        if (rtn) {
+                int e = errno;
+                stringstream emsg;
+                emsg << "setPermissions(): chmod() set error: ";
+                switch (e) {
+                case EACCES:
+                        emsg << "Permission is denied";
+                        break;
+                case EBUSY:
+                        emsg << "Path in use";
+                        break;
+                case EFAULT:
+                        emsg << "Bad address";
+                        break;
+                case EINVAL:
+                        emsg << "Path has . as last component";
+                        break;
+                case ELOOP:
+                        emsg << "Too many symlinks";
+                        break;
+                case ENAMETOOLONG:
+                        emsg << "File name too long";
+                        break;
+                case ENOENT:
+                        emsg << "Path invalid (part or all of it)";
+                        break;
+                case ENOMEM:
+                        emsg << "Out of kernel memory";
+                        break;
+                case ENOTDIR:
+                        emsg << "component of the path is not a directory";
+                        break;
+                case EPERM:
+                        emsg << "file system doesn't support directory creation";
+                        break;
+                case EROFS:
+                        emsg << "path refers to location on read only filesystem";
+                        break;
+                default:
+                        emsg << "unknown error";
+                        break;
+                }
+                throw runtime_error (emsg.str());
+        }
+}
+
+void
 wml::FoundryUtilities::setPermissions (const string filepath, const mode_t mode)
 {
         int rtn = chmod (filepath.c_str(), mode);
@@ -2385,6 +2435,148 @@ wml::FoundryUtilities::readDirectoryDirs (std::set<std::string>& dset,
 
                         // All other directories are added to vec
                         dset.insert (ep->d_name);
+                }
+        }
+
+        (void) closedir (d);
+}
+
+void
+wml::FoundryUtilities::readDirectoryEmptyDirs (std::set<std::string>& dset,
+                                               const std::string& baseDirPath,
+                                               const std::string& subDir)
+{
+        DBG ("Called for baseDirPath '" << baseDirPath << "' and subDir '" << subDir << "'");
+        DIR* d;
+        struct dirent *ep;
+        size_t entry_len = 0;
+
+        string dirPath (baseDirPath);
+        if (!subDir.empty()) {
+                dirPath += "/" + subDir;
+        }
+
+        if (!(d = opendir (dirPath.c_str()))) {
+                string msg = "Failed to open directory " + dirPath;
+                throw runtime_error (msg);
+        }
+
+        unsigned int levelDirCount = 0;
+        while ((ep = readdir (d))) {
+
+                if (ep->d_type == DT_DIR) {
+                        // Skip "." and ".." directories
+                        if ( ((entry_len = strlen (ep->d_name)) > 0 && ep->d_name[0] == '.') &&
+                             (ep->d_name[1] == '\0' || ep->d_name[1] == '.') ) {
+                                continue;
+                        }
+
+                        ++levelDirCount;
+                        // Because we found a directory, this current
+                        // directory ain't empty - recurse with a new
+                        // directory in the subDir path:
+                        string newSubDir;
+                        if (subDir.empty()) {
+                                newSubDir = (const char*)ep->d_name;
+                        } else {
+                                newSubDir = subDir + "/" + (const char*)ep->d_name;
+                        }
+                        FoundryUtilities::readDirectoryEmptyDirs (dset, baseDirPath, newSubDir);
+                }
+        }
+
+        if (levelDirCount == 0) {
+                // No directories found here, check for files
+                vector<string> foundfiles;
+                FoundryUtilities::readDirectoryTree (foundfiles, dirPath);
+                DBG ("readDirectoryTree() found " << foundfiles.size() << " files in " << dirPath);
+
+                if (foundfiles.empty()) {
+                        DBG ("INSERT " << subDir
+                             << " as " << dirPath << " contains no files or dirs");
+                        dset.insert (subDir);
+                } else {
+                        DBG ("NOT adding " << subDir
+                             << " as " << dirPath << " contains " << foundfiles.size() << " files");
+                }
+        }
+
+        (void) closedir (d);
+}
+
+void
+wml::FoundryUtilities::removeUnusedDirs (std::set<std::string>& dset,
+                                         const std::string& dirPath)
+{
+        set<string> onepass;
+        do {
+                onepass.clear();
+                FoundryUtilities::removeEmptySubDirs (onepass, dirPath);
+                dset.insert (onepass.begin(), onepass.end());
+        } while (!onepass.empty());
+}
+
+void
+wml::FoundryUtilities::removeEmptySubDirs (std::set<std::string>& dset,
+                                           const std::string& baseDirPath,
+                                           const std::string& subDir)
+{
+        DBG ("Called for baseDirPath '" << baseDirPath << "' and subDir '" << subDir << "'");
+        DIR* d;
+        struct dirent *ep;
+        size_t entry_len = 0;
+
+        string dirPath (baseDirPath);
+        if (!subDir.empty()) {
+                dirPath += "/" + subDir;
+        }
+
+        if (!(d = opendir (dirPath.c_str()))) {
+                string msg = "Failed to open directory " + dirPath;
+                throw runtime_error (msg);
+        }
+
+        unsigned int levelDirCount = 0;
+        while ((ep = readdir (d))) {
+
+                if (ep->d_type == DT_DIR) {
+                        // Skip "." and ".." directories
+                        if ( ((entry_len = strlen (ep->d_name)) > 0 && ep->d_name[0] == '.') &&
+                             (ep->d_name[1] == '\0' || ep->d_name[1] == '.') ) {
+                                continue;
+                        }
+
+                        ++levelDirCount;
+                        // Because we found a directory, this current
+                        // directory ain't empty - recurse with a new
+                        // directory in the subDir path:
+                        string newSubDir;
+                        if (subDir.empty()) {
+                                newSubDir = (const char*)ep->d_name;
+                        } else {
+                                newSubDir = subDir + "/" + (const char*)ep->d_name;
+                        }
+                        FoundryUtilities::removeEmptySubDirs (dset, baseDirPath, newSubDir);
+                }
+        }
+
+        if (levelDirCount == 0) {
+                // No directories found here, check for files
+                vector<string> foundfiles;
+                FoundryUtilities::readDirectoryTree (foundfiles, dirPath);
+                DBG ("readDirectoryTree() found " << foundfiles.size() << " files in " << dirPath);
+
+                if (foundfiles.empty()) {
+                        if (subDir.empty()) {
+                                DBG ("Not removing baseDirPath");
+                        } else {
+                                DBG ("RMDIR " << subDir
+                                     << " as " << dirPath << " contains no files or dirs");
+                                FoundryUtilities::removeDir (dirPath);
+                                dset.insert (subDir);
+                        }
+                } else {
+                        DBG ("NOT Removing " << dirPath << " which contains " << foundfiles.size() << " files");
                 }
         }
 

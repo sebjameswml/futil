@@ -485,6 +485,11 @@ namespace wml {
                                        const int uid = -1, const int gid = -1);
 
                 /*!
+                 * Attempt to rmdir path.
+                 */
+                static void removeDir (const std::string path);
+
+                /*!
                  * Set the permissions for the provided file
                  */
                 static void setPermissions (const std::string filepath,
@@ -631,11 +636,47 @@ namespace wml {
                  * dir2/file2
                  * dir2/aDirectory
                  *
-                 * The set dset would be filled only with dir1,
-                 * dir2.
+                 * The set dset would be filled only with dir2, dir1.
                  */
                 static void readDirectoryDirs (std::set<std::string>& dset,
                                                const std::string dirPath);
+
+                /*!
+                 * Return empty subdirectories in
+                 * dirPath/subDir. Recursive partner to
+                 * readDirectoryEmptyDirs(set<string>&, const string&).
+                 *
+                 * The base directory path baseDirPath should have NO
+                 * TRAILING '/'. The subDirPath should have NO INITIAL
+                 * '/' character.
+                 */
+                static void readDirectoryEmptyDirs (std::set<std::string>& dset,
+                                                    const std::string& baseDirPath,
+                                                    const std::string& subDir = "");
+
+                /*!
+                 * Attempts to remove all the unused directories in a tree.
+                 *
+                 * May throw exceptions.
+                 */
+                static void removeUnusedDirs (std::set<std::string>& dset,
+                                              const std::string& dirPath);
+
+                /*!
+                 * Recursively remove all empty directories in baseDirPath(/subDir)
+                 *
+                 * Removed directories are inserted into dset, so you
+                 * know what you got rid of.
+                 *
+                 * This won't remove baseDirPath itself, even if that is empty.
+                 *
+                 * This does one "pass" - it removes all empty
+                 * end-of-directories in a tree. If you want to remove
+                 * all "unused" directories in a tree, use removeUnusedDirs()
+                 */
+                static void removeEmptySubDirs (std::set<std::string>& dset,
+                                                const std::string& baseDirPath,
+                                                const std::string& subDir = "");
 
                 /*!
                  * Return a datestamp - st_mtime; the file
