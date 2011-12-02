@@ -1735,6 +1735,21 @@ wml::FoundryUtilities::stripUnixFile (std::string& unixPath)
         unixPath = tmp;
 }
 
+void
+wml::FoundryUtilities::stripFileSuffix (std::string& unixPath)
+{
+        string::size_type pos;
+        pos = unixPath.rfind('.');
+        if (pos == string::npos) {
+                return;
+        }
+        // We have a '.' character
+        string tmp = unixPath.substr (0, pos);
+        if (!tmp.empty()) {
+                unixPath = tmp;
+        }
+}
+
 std::string
 wml::FoundryUtilities::generateRandomFilename (const char* prefixPath)
 {

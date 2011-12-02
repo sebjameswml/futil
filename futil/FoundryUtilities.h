@@ -750,6 +750,12 @@ namespace wml {
                 static void stripUnixFile (std::string& unixPath);
 
                 /*!
+                 * Given a path like /path/to/file.ext or just
+                 * file.ext in str, remove the file suffix.
+                 */
+                static void stripFileSuffix (std::string& unixPath);
+
+                /*!
                  * Generate a uuid random string as a temporary random
                  * filename. Pass in the path, and a prefix to
                  * identify the way the file is to be used. prefixPath
