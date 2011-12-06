@@ -496,6 +496,20 @@ namespace wml {
                                             const mode_t mode);
 
                 /*!
+                 * Check read/write access for the specified file.
+                 *
+                 * Checks whether read/write access, as indicated by
+                 * the accessType string, is available for the
+                 * specified file.
+                 *
+                 * \param filepath File to check.
+                 * \param accessType Indicates which access type(s) to
+                 * check. r=read, w=write.
+                 */
+                static bool checkAccess (const std::string& filepath,
+                                         const std::string& accessType);
+
+                /*!
                  * Set the ownership for the provided file
                  */
                 static void setOwnership (const std::string filepath,

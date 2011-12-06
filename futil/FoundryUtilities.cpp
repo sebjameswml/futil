@@ -1211,6 +1211,29 @@ wml::FoundryUtilities::setPermissions (const string filepath, const mode_t mode)
         }
 }
 
+bool
+wml::FoundryUtilities::checkAccess (const std::string& filepath,
+                                    const std::string& accessType)
+{
+        if (accessType.find("r") != string::npos) {
+                ifstream in;
+                in.open (filepath.c_str(), ios::in);
+                if (!in.is_open()) {
+                        return false;
+                }
+                in.close();
+        }
+        if (accessType.find("w") != string::npos) {
+                ofstream out;
+                out.open (filepath.c_str(), ios::out);
+                if (!out.is_open()) {
+                        return false;
+                }
+                out.close();
+        }
+        return true;
+}
+
 void
 wml::FoundryUtilities::setOwnership (const string filepath, const int uid, const int gid)
 {
