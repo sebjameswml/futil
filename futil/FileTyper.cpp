@@ -100,6 +100,8 @@ wml::FileTyper::getFileType (const string filePath)
                 return MFT_ASCII_TEXT;
         } else if (fileTypeString.find ("ISO-8859") == 0) {
                 return MFT_ISO8859_TEXT;
+        } else if (fileTypeString.find ("UTF-8 Unicode") == 0) {
+                return MFT_UTF8_TEXT;
         } else if (fileTypeString.find ("bzip2 compressed data") == 0) {
                 return MFT_BZ2_ARCHIVE;
         } else if (fileTypeString.find ("gzip compressed data") == 0) {

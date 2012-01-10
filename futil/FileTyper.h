@@ -77,6 +77,7 @@ namespace wml {
                 MFT_PRESCRIBE_DATA,
                 MFT_ASCII_TEXT,
                 MFT_ISO8859_TEXT,
+                MFT_UTF8_TEXT,
                 MFT_BZ2_ARCHIVE,
                 MFT_GZIP_ARCHIVE,
                 MFT_RPM_PACKAGE,
