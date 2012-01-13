@@ -744,6 +744,16 @@ namespace wml {
                 static std::string sqlEscapeRtn (const std::string& str, const bool forPatternMatching);
 
                 /*!
+                 * Escape characters to produce string suitable as XML
+                 * content.
+                 *
+                 * Replaces characters that may cause problems in XML
+                 * content: &, <, >, ', ", and, optionally, characters
+                 * outside the ASCII character set.
+                 */
+                static std::string xmlEscape (const std::string& s, bool replaceNonAscii = true);
+
+                /*!
                  * Given a path like C:\\path\\to\\file in str, remove
                  * all the preceding C:\\ stuff to leave just the
                  * filename.
