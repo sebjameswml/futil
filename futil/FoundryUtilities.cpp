@@ -1713,6 +1713,41 @@ wml::FoundryUtilities::sqlEscapeRtn (const std::string& str, const bool forPatte
         return rtn;
 }
 
+string
+wml::FoundryUtilities::xmlEscape (const std::string& s, bool replaceNonAscii)
+{
+        ostringstream oss;
+        string::const_iterator iS = s.begin(), sEnd = s.end();
+        while (iS != sEnd) {
+                unsigned char c (static_cast<unsigned char>(*iS));
+                switch (c) {
+                case '&':
+                        oss << "&amp;";
+                        break;
+                case '<':
+                        oss << "&lt;";
+                        break;
+                case '>':
+                        oss << "&gt;";
+                        break;
+                case '"':
+                        oss << "&quot;";
+                        break;
+                case '\'':
+                        oss << "&apos;";
+                        break;
+                default:
+                        if (replaceNonAscii && (c < 0x20 || c > 0x7e)) {
+                                oss << "&#" << static_cast<unsigned int>(c) << ";";
+                        } else {
+                                oss << c;
+                        }
+                }
+                ++iS;
+        }
+        return oss.str();
+}
+
 void
 wml::FoundryUtilities::stripDosPath (std::string& dosPath)
 {
