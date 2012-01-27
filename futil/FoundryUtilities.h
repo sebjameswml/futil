@@ -388,6 +388,12 @@ namespace wml {
                 static UINT64_TYPE freeSpaceKBytes (const std::string dirPath);
 
                 /*!
+                 * Return the amount of space in KBytes used by the
+                 * files listed in \param fileList.
+                 */
+                static UINT64_TYPE KBytesUsedBy (const std::vector<std::string>& fileList);
+
+                /*!
                  * Return the fractional amount of space on the
                  * filesystem on which dirPath resides.
                  */

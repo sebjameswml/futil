@@ -30,6 +30,14 @@ int main (int argc, char** argv)
                 cout << "Total space:        " << total << "\n";
                 cout << "Available space:    " << available << "\n";
                 cout << "Used space:         " << used << "\n";
+
+                vector<string> flist;
+                flist.push_back ("1.file");
+                flist.push_back ("2.file");
+                flist.push_back ("3.file");
+                unsigned int filelistused  = FoundryUtilities::KBytesUsedBy (flist);
+                cout << "File list uses      " << filelistused << "\n";
+
         } catch (const runtime_error& e) {
                 cout << "Error: " << e.what() << "\n";
         }
