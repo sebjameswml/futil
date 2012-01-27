@@ -788,8 +788,20 @@ wml::FoundryUtilities::KBytesUsedBy (const vector<string>& fileList)
         UINT64_TYPE used = 0;
         vector<string>::const_iterator i = fileList.begin();
         while (i != fileList.end()) {
-                // Stat the file
                 used = used + static_cast<UINT64_TYPE>((FoundryUtilities::fileSize (*i) >> 10));
+                ++i;
+        }
+        return used;
+}
+
+UINT64_TYPE
+wml::FoundryUtilities::KBytesUsedBy (const vector<string>& fileList, const string& dirPath)
+{
+        UINT64_TYPE used = 0;
+        vector<string>::const_iterator i = fileList.begin();
+        while (i != fileList.end()) {
+                string fpath = dirPath + "/" + *i;
+                used = used + static_cast<UINT64_TYPE>((FoundryUtilities::fileSize (fpath) >> 10));
                 ++i;
         }
         return used;

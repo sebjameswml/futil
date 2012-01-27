@@ -389,9 +389,17 @@ namespace wml {
 
                 /*!
                  * Return the amount of space in KBytes used by the
-                 * files listed in \param fileList.
+                 * absolute file paths listed in \param fileList.
                  */
                 static UINT64_TYPE KBytesUsedBy (const std::vector<std::string>& fileList);
+
+                /*!
+                 * Return the amount of space in KBytes used by the
+                 * relative file paths listed in \param fileList,
+                 * which all start from the directory \param dirPath.
+                 */
+                static UINT64_TYPE KBytesUsedBy (const std::vector<std::string>& fileList,
+                                                 const std::string& dirPath);
 
                 /*!
                  * Return the fractional amount of space on the
