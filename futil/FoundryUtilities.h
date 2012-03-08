@@ -1240,10 +1240,20 @@ namespace wml {
                                                                      const std::string enclosureChars = "\"'",
                                                                      const char escapeChar = '\0');
 
+                static std::list<std::string> splitStringWithEncsToList (const std::string& s,
+                                                                         const std::string separatorChars = ";, ",
+                                                                         const std::string enclosureChars = "\"'",
+                                                                         const char escapeChar = '\0');
+
                 static std::vector<Glib::ustring> splitStringWithEncs (const Glib::ustring& s,
                                                                        const Glib::ustring separatorChars = ";, ",
                                                                        const Glib::ustring enclosureChars = "\"'",
                                                                        const gunichar escapeChar = 0);
+
+                static std::list<Glib::ustring> splitStringWithEncsToList (const Glib::ustring& s,
+                                                                           const Glib::ustring separatorChars = ";, ",
+                                                                           const Glib::ustring enclosureChars = "\"'",
+                                                                           const gunichar escapeChar = 0);
 
                 /*!
                  * Highlight matching portions of search terms in <tag></tag> tags

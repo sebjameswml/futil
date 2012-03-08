@@ -3692,6 +3692,92 @@ wml::FoundryUtilities::splitStringWithEncs (const string& s,
         return theVec;
 }
 
+list<string>
+wml::FoundryUtilities::splitStringWithEncsToList (const string& s,
+                                                  const string separatorChars,
+                                                  const string enclosureChars,
+                                                  const char escapeChar)
+{
+        DBG2 ("Called for string >" << s << "<");
+        // Run through the string, searching for separator and
+        // enclosure chars and finding tokens based on those.
+
+        list<string> theList;
+        string entry("");
+        string::size_type a=0, b=0, c=0;
+
+        while (a < s.size()) {
+
+                // Find the first character which isn't space, comma, etc (as provided in args)
+                if ((a = s.find_first_not_of (separatorChars, a)) == string::npos) {
+                        DBG ("Nothing but separator chars in string");
+                        return theList;
+                }
+
+                // See if this is an escape char, in which case, we
+                // skip it, and the char it escapes.
+                if (escapeChar && s[a] == escapeChar) {
+                        ++a; ++a;
+                        continue;
+                }
+
+                // If true, then the thing we're searching for is an enclosure
+                // char, otherwise, it's a separator char.
+                bool nextIsEnc(false);
+                char currentEncChar = '\0';
+
+                DBG2 ("See if " << s[a] << " at pos " << a
+                      << " is found in enclosure chars >" << enclosureChars << "<");
+
+                if ((enclosureChars.find_first_of (static_cast<char>(s[a]), 0)) != string::npos) {
+                        // First char is an enclosure char, so we're tokenising a phrase.
+                        nextIsEnc = true;
+                        currentEncChar = s[a];
+                        ++a; // Skip the enclosure char
+                }
+
+                // Check we didn't over-run
+                if (a >= s.size()) { break; }
+
+                // Now get the token
+                string::size_type range = string::npos;
+                if (nextIsEnc) {
+                        DBG2 ("Searching for next instances of enc chars: >" << enclosureChars << "< ");
+                        c = a;
+                        while ((b = s.find_first_of (currentEncChar, c)) != string::npos) {
+                                // FIXME: Check we didn't find an escaped enclosureChar.
+                                if (escapeChar) {
+                                        c = b; --c;
+                                        if (s[c] == escapeChar) {
+                                                // Skip b which is an escaped enclosure char
+                                                c = b; ++c;
+                                                continue;
+                                        }
+                                }
+                                range = b - a;
+                                break;
+                        }
+                } else {
+                        DBG2 ("Searching for next instances of sep chars: >" << separatorChars << "< ");
+                        if ((b = s.find_first_of (separatorChars, a)) != string::npos) {
+                                range = b - a;
+                        }
+                }
+
+                entry = s.substr (a, range);
+                theList.push_back (entry);
+
+                DBG2 ("Adding " << range + 1 << " to a (" << a << ")");
+                if (range != string::npos) {
+                        a+=range+1;
+                } else {
+                        a = range;
+                }
+        }
+
+        return theList;
+}
+
 vector<Glib::ustring>
 wml::FoundryUtilities::splitStringWithEncs (const Glib::ustring& s,
                                             const Glib::ustring separatorChars,
@@ -3777,6 +3863,93 @@ wml::FoundryUtilities::splitStringWithEncs (const Glib::ustring& s,
         }
 
         return theVec;
+}
+
+list<Glib::ustring>
+wml::FoundryUtilities::splitStringWithEncsToList (const Glib::ustring& s,
+                                                  const Glib::ustring separatorChars,
+                                                  const Glib::ustring enclosureChars,
+                                                  const gunichar escapeChar)
+{
+        DBG2 ("Called for string >" << s.raw() << "<");
+        // Run through the string, searching for separator and
+        // enclosure chars and finding tokens based on those.
+
+        list<Glib::ustring> theList;
+        Glib::ustring entry("");
+        Glib::ustring::size_type a=0, b=0, c=0;
+
+        while (a < s.size()) {
+
+                // Find the first character which isn't space, comma, etc (as provided in args)
+                if ((a = s.find_first_not_of (separatorChars, a)) == Glib::ustring::npos) {
+                        DBG ("Nothing but separator chars in string");
+                        return theList;
+                }
+
+                // See if this is an escape char, in which case, we
+                // skip it, and the char it escapes.
+                if (escapeChar && s[a] == escapeChar) {
+                        ++a; ++a;
+                        continue;
+                }
+
+                // If true, then the thing we're searching for is an enclosure
+                // char, otherwise, it's a separator char.
+                bool nextIsEnc(false);
+                char currentEncChar = '\0';
+
+                DBG2 ("See if " << s[a] << " at pos " << a
+                      << " is found in enclosure chars >" << enclosureChars.raw() << "<");
+
+                if ((enclosureChars.find_first_of (static_cast<char>(s[a]), 0)) != Glib::ustring::npos) {
+                        // First char is an enclosure char, so we're tokenising a phrase.
+                        nextIsEnc = true;
+                        currentEncChar = s[a];
+                        ++a; // Skip the enclosure char
+                }
+
+                // Check we didn't over-run
+                if (a >= s.size()) { break; }
+
+                // Now get the token
+                Glib::ustring::size_type range = Glib::ustring::npos;
+                if (nextIsEnc) {
+                        DBG2 ("Searching for next instances of enc chars: >" << enclosureChars.raw() << "< ");
+                        c = a;
+                        while ((b = s.find_first_of (currentEncChar, c)) != Glib::ustring::npos) {
+                                // FIXME: Check we didn't find an escaped enclosureChar.
+                                if (escapeChar) {
+                                        c = b; --c;
+                                        if (s[c] == escapeChar) {
+                                                // Skip b which is an escaped enclosure char
+                                                c = b; ++c;
+                                                continue;
+                                        }
+                                }
+                                range = b - a;
+                                break;
+                        }
+                } else {
+                        DBG2 ("Searching for next instances of sep chars: >" << separatorChars.raw() << "< ");
+                        if ((b = s.find_first_of (separatorChars, a)) != Glib::ustring::npos) {
+                                range = b - a;
+                        }
+                }
+
+                entry = s.substr (a, range);
+                DBG2 ("Add the entry: " << entry.raw());
+                theList.push_back (entry);
+
+                DBG2 ("Adding " << range + 1 << " to a (" << a << ")");
+                if (range != Glib::ustring::npos) {
+                        a+=range+1;
+                } else {
+                        a = range;
+                }
+        }
+
+        return theList;
 }
 
 std::string
