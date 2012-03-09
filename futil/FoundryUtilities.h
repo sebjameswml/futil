@@ -268,7 +268,12 @@ namespace wml {
                  * Strip any occurrences of the characters in charList
                  * from input.
                  */
+                //@{
                 static int stripChars (std::string& input, const std::string& charList);
+                static int stripChars (std::string& input, const char& charList);
+                static int stripChars (Glib::ustring& input, const Glib::ustring& charList);
+                static int stripChars (Glib::ustring& input, const gunichar& charList);
+                //@}
 
                 /*!
                  * Do a search and replace, search for searchTerm,

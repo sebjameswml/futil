@@ -131,6 +131,42 @@ wml::FoundryUtilities::stripChars (std::string& input, const std::string& charLi
 }
 
 int
+wml::FoundryUtilities::stripChars (std::string& input, const char& charList)
+{
+        int rtn;
+        string::size_type pos;
+        while ((pos = input.find_last_of (charList)) != string::npos) {
+                input.erase (pos, 1);
+                ++rtn;
+        }
+        return rtn;
+}
+
+int
+wml::FoundryUtilities::stripChars (Glib::ustring& input, const Glib::ustring& charList)
+{
+        int rtn;
+        string::size_type pos;
+        while ((pos = input.find_last_of (charList)) != Glib::ustring::npos) {
+                input.erase (pos, 1);
+                ++rtn;
+        }
+        return rtn;
+}
+
+int
+wml::FoundryUtilities::stripChars (Glib::ustring& input, const gunichar& singleChar)
+{
+        int rtn;
+        string::size_type pos;
+        while ((pos = input.find_last_of (singleChar)) != Glib::ustring::npos) {
+                input.erase (pos, 1);
+                ++rtn;
+        }
+        return rtn;
+}
+
+int
 wml::FoundryUtilities::stripTrailingSpaces (std::string& input)
 {
         return FoundryUtilities::stripTrailingChars (input);
@@ -3357,6 +3393,7 @@ wml::FoundryUtilities::containsOnlyNumerals (const std::string& str)
                         return false;
                 }
         }
+        // NB: An EMPTY string contains NO numerals, but we return true in that case.
         return true;
 }
 
@@ -3674,11 +3711,21 @@ wml::FoundryUtilities::splitStringWithEncs (const string& s,
                 } else {
                         DBG2 ("Searching for next instances of sep chars: >" << separatorChars << "< ");
                         if ((b = s.find_first_of (separatorChars, a)) != string::npos) {
+                                // Check it wasn't an escaped separator:
+                                if (escapeChar) {
+                                        c = b; --c;
+                                        if (s[c] == escapeChar) {
+                                                DBG2 ("Found escaped separator character");
+                                                c = b; ++c;
+                                                continue;
+                                        }
+                                }
                                 range = b - a;
                         }
                 }
 
                 entry = s.substr (a, range);
+                FoundryUtilities::stripChars (entry, escapeChar);
                 theVec.push_back (entry);
 
                 DBG2 ("Adding " << range + 1 << " to a (" << a << ")");
@@ -3760,11 +3807,21 @@ wml::FoundryUtilities::splitStringWithEncsToList (const string& s,
                 } else {
                         DBG2 ("Searching for next instances of sep chars: >" << separatorChars << "< ");
                         if ((b = s.find_first_of (separatorChars, a)) != string::npos) {
+                                // Check it wasn't an escaped separator:
+                                if (escapeChar) {
+                                        c = b; --c;
+                                        if (s[c] == escapeChar) {
+                                                DBG2 ("Found escaped separator character");
+                                                c = b; ++c;
+                                                continue;
+                                        }
+                                }
                                 range = b - a;
                         }
                 }
 
                 entry = s.substr (a, range);
+                FoundryUtilities::stripChars (entry, escapeChar);
                 theList.push_back (entry);
 
                 DBG2 ("Adding " << range + 1 << " to a (" << a << ")");
@@ -3831,7 +3888,7 @@ wml::FoundryUtilities::splitStringWithEncs (const Glib::ustring& s,
                         DBG2 ("Searching for next instances of enc chars: >" << enclosureChars.raw() << "< ");
                         c = a;
                         while ((b = s.find_first_of (currentEncChar, c)) != Glib::ustring::npos) {
-                                // FIXME: Check we didn't find an escaped enclosureChar.
+                                // Check we didn't find an escaped enclosureChar:
                                 if (escapeChar) {
                                         c = b; --c;
                                         if (s[c] == escapeChar) {
@@ -3846,11 +3903,21 @@ wml::FoundryUtilities::splitStringWithEncs (const Glib::ustring& s,
                 } else {
                         DBG2 ("Searching for next instances of sep chars: >" << separatorChars.raw() << "< ");
                         if ((b = s.find_first_of (separatorChars, a)) != Glib::ustring::npos) {
+                                // Check it wasn't an escaped separator:
+                                if (escapeChar) {
+                                        c = b; --c;
+                                        if (s[c] == escapeChar) {
+                                                DBG2 ("Found escaped separator character");
+                                                c = b; ++c;
+                                                continue;
+                                        }
+                                }
                                 range = b - a;
                         }
                 }
 
                 entry = s.substr (a, range);
+                FoundryUtilities::stripChars (entry, escapeChar);
                 DBG2 ("Add the entry: " << entry.raw());
                 theVec.push_back (entry);
 
@@ -3902,7 +3969,7 @@ wml::FoundryUtilities::splitStringWithEncsToList (const Glib::ustring& s,
                 DBG2 ("See if " << s[a] << " at pos " << a
                       << " is found in enclosure chars >" << enclosureChars.raw() << "<");
 
-                if ((enclosureChars.find_first_of (static_cast<char>(s[a]), 0)) != Glib::ustring::npos) {
+                if ((enclosureChars.find_first_of (s[a], 0)) != Glib::ustring::npos) {
                         // First char is an enclosure char, so we're tokenising a phrase.
                         nextIsEnc = true;
                         currentEncChar = s[a];
@@ -3918,7 +3985,7 @@ wml::FoundryUtilities::splitStringWithEncsToList (const Glib::ustring& s,
                         DBG2 ("Searching for next instances of enc chars: >" << enclosureChars.raw() << "< ");
                         c = a;
                         while ((b = s.find_first_of (currentEncChar, c)) != Glib::ustring::npos) {
-                                // FIXME: Check we didn't find an escaped enclosureChar.
+                                // Check we didn't find an escaped enclosureChar:
                                 if (escapeChar) {
                                         c = b; --c;
                                         if (s[c] == escapeChar) {
@@ -3932,12 +3999,25 @@ wml::FoundryUtilities::splitStringWithEncsToList (const Glib::ustring& s,
                         }
                 } else {
                         DBG2 ("Searching for next instances of sep chars: >" << separatorChars.raw() << "< ");
-                        if ((b = s.find_first_of (separatorChars, a)) != Glib::ustring::npos) {
+                        c = a;
+                        while ((b = s.find_first_of (separatorChars, c)) != Glib::ustring::npos) {
+                                // Check it wasn't an escaped separator:
+                                if (escapeChar) {
+                                        c = b; --c;
+                                        if (s[c] == escapeChar) {
+                                                DBG2 ("Found escaped separator character");
+                                                // NB: We remove it in the copy, later on.
+                                                c = b; ++c;
+                                                continue;
+                                        }
+                                }
                                 range = b - a;
+                                break;
                         }
                 }
 
                 entry = s.substr (a, range);
+                FoundryUtilities::stripChars (entry, escapeChar);
                 DBG2 ("Add the entry: " << entry.raw());
                 theList.push_back (entry);
 
