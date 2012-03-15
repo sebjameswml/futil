@@ -36,6 +36,7 @@ Makefile
 config.*
 doc/Doxyfile
 doc/html/
+*.log
 
 futil/stamp-h1
 libtool
@@ -54,3 +55,5 @@ testlock
 testsymlinks
 testtotalspace
 dateToEpoch
+testXmlEscape
+testStringToWords

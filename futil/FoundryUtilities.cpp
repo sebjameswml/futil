@@ -3561,6 +3561,52 @@ wml::FoundryUtilities::zeroFileCount (const char * filePath)
 }
 
 vector<Glib::ustring>
+wml::FoundryUtilities::stringToWords (const Glib::ustring& s, bool ignoreTrailingEmptyVal)
+{
+        vector<Glib::ustring> theVec;
+        Glib::ustring entry("");
+        Glib::ustring separators ("");
+        separators += static_cast<gunichar>(0x0020); // space
+        separators += static_cast<gunichar>(0x00A0); // U+00A0  NO-BREAK SPACE
+        separators += static_cast<gunichar>(0x1680); // U+1680 OGHAM SPACE MARK
+        separators += static_cast<gunichar>(0x180E); // U+180E MONGOLIAN VOWEL SEPARATOR
+        separators += static_cast<gunichar>(0x2000); // U+2000 EN QUAD
+        separators += static_cast<gunichar>(0x2001); // U+2001 EM QUAD
+        separators += static_cast<gunichar>(0x2002); // U+2002 EN SPACE
+        separators += static_cast<gunichar>(0x2003); // U+2003 EM SPACE
+        separators += static_cast<gunichar>(0x2004); // U+2004 THREE-PER-EM SPACE
+        separators += static_cast<gunichar>(0x2005); // U+2005 FOUR-PER-EM SPACE
+        separators += static_cast<gunichar>(0x2006); // U+2006 SIX-PER-EM SPACE
+        separators += static_cast<gunichar>(0x2007); // U+2007 FIGURE SPACE
+        separators += static_cast<gunichar>(0x2008); // U+2008 PUNCTUATION SPACE
+        separators += static_cast<gunichar>(0x2009); // U+2009 THIN SPACE
+        separators += static_cast<gunichar>(0x200A); // U+200A HAIR SPACE
+        separators += static_cast<gunichar>(0x202F); // U+202F NARROW NO-BREAK SPACE
+        separators += static_cast<gunichar>(0x205F); // U+205F MEDIUM MATHEMATICAL SPACE
+        separators += static_cast<gunichar>(0x3000); // U+3000 IDEOGRAPHIC SPACE
+
+        Glib::ustring::size_type a=0, b=0;
+        while (a < s.size() && (b = s.find_first_of (separators, a)) != Glib::ustring::npos) {
+                entry = s.substr (a, b-a);
+                theVec.push_back (entry);
+                Glib::ustring sep("");
+                sep += s.at(b);
+                a=b+sep.size();
+        }
+        // Last one has no separator
+        if (a < s.size()) {
+                b = s.size();
+                entry = s.substr (a, b-a);
+                theVec.push_back (entry);
+        } else {
+                if (!ignoreTrailingEmptyVal) {
+                        theVec.push_back ("");
+                }
+        }
+        return theVec;
+}
+
+vector<Glib::ustring>
 wml::FoundryUtilities::stringToVector (const Glib::ustring& s,
                                        const Glib::ustring& separator,
                                        const bool ignoreTrailingEmptyVal)

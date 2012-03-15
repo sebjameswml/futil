@@ -1185,6 +1185,33 @@ namespace wml {
                                                              const bool ignoreTrailingEmptyVal = true);
 
                 /*!
+                 * \brief Split a string into 'words', where words are
+                 * units delimited by space characters.
+                 *
+                 * Simplistic string splitting algorithm using Unicode
+                 * 'Separator, Space' characters to determine word
+                 * boundaries.
+                 *
+                 * Note that this is meaningful with ASCII/Latin
+                 * encodings only and does NOT follow the
+                 * recommendations for word-breaking in UAX#29:
+                 * http://unicode.org/reports/tr29/#Word_Boundaries
+                 *
+                 * May wish to strip/separate punctuation e.g.
+                 * The quick ("brown") fox can't jump 32.3 feet, right?
+                 * contains the words
+                 * The  quick  brown  fox  can't  jump  32.3  feet  right
+                 *
+                 * \param s The string to split into words.
+                 * \param ignoreTrailingSpace Whether to ignore a
+                 * trailing space. If set to false, a trailing space
+                 * will cause an empty 'word' to be added to the end
+                 * of the returned vector.
+                 */
+                static std::vector<Glib::ustring> stringToWords (const Glib::ustring& s,
+                                                                 bool ignoreTrailingSpace = true);
+
+                /*!
                  * Split a string of values into a vector using the
                  * separator string (not char) passed in as
                  * "separator". If ignoreTrailingEmptyVal is true,
