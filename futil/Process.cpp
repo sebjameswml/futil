@@ -117,14 +117,21 @@ wml::Process::start (const string& program, const list<string>& args)
         // NB: The first item in the args list should be the program name.
         this->progName = program;
 
-        // Set up our pipes
+        // Set up our pipes. These may run out. Typically you get 1024
+        // which means that if you call Process::start more than 341
+        // times you'll run out, unless in your client program you
+        // call setrlimit() to change RLIMIT_NOFILE.
         if (pipe(parentToChild) == -1 || pipe(childToParent) == -1 || pipe(childErrToParent) == -1) {
+                DBG ("Failed to set up pipes, return PROCESS_FAILURE" << flush);
+                this->error = PROCESSNOMOREPIPES;
                 return PROCESS_FAILURE;
         }
 
         this->pid = fork();
         switch (this->pid) {
         case -1:
+                DBG ("fork() returned -1, return PROCESS_FAILURE" << flush);
+                this->error = PROCESSFORKFAILED;
                 return PROCESS_FAILURE;
         case 0:
                 // This is the CHILD process
@@ -222,9 +229,8 @@ wml::Process::waitForStarted (void)
                 if (this->callbacks != (ProcessCallbacks*)0) {
                         this->callbacks->errorSignal (this->error);
                 }
-                return false;
         }
-
+        return false;
 }
 
 // Send a TERM signal to the process.

@@ -48,6 +48,9 @@ extern "C" {
 #define PROCESSWRITEERR      4
 #define PROCESSREADERR       5
 #define PROCESSUNKNOWN       6
+#define PROCESSNOMOREPIPES   7
+#define PROCESSFORKFAILED    8
+
 
 using namespace std;
 
