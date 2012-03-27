@@ -4420,7 +4420,11 @@ wml::FoundryUtilities::pdfConversion (const string inputPath,
         args.push_back ("-sDEVICE=" + outputDevice);
         args.push_back ("-sOutputFile=" + outputPath);
         args.push_back (inputPath);
-        ghostScript.start (processPath, args);
+        int rtn = ghostScript.start (processPath, args);
+        if (rtn == PROCESS_FAILURE) {
+                DBG ("Failed to start the process for ghostScript");
+                return;
+        }
 
         if (wait == true) {
                 ghostScript.waitForStarted();
