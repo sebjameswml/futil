@@ -65,11 +65,63 @@ wml::Process::Process () :
 
         // Initialise the callbacks to 0
         this->callbacks = (ProcessCallbacks*)0;
+
+        // Initialise pipes to 0
+        this->parentToChild[WRITING_END] = 0;
+        this->parentToChild[READING_END] = 0;
+        this->childToParent[READING_END] = 0;
+        this->childToParent[WRITING_END] = 0;
+        this->childErrToParent[READING_END] = 0;
+        this->childErrToParent[WRITING_END] = 0;
 }
 
 // Destructor
 wml::Process::~Process ()
 {
+        // Close pipes
+        if (this->parentToChild[WRITING_END] > 0) {
+                if (close (this->parentToChild[WRITING_END])) {
+                        // Normally succeeds
+                        DBG ("Failed to close parentToChild[WRITING_END]");
+                }
+        }
+
+        if (this->parentToChild[READING_END] > 0) {
+                if (close (this->parentToChild[READING_END])) {
+                        // Normally already closed in Process::start
+                        DBG ("Failed to close parentToChild[READING_END]");
+                }
+        }
+
+        if (this->childToParent[READING_END] > 0) {
+                if (close (this->childToParent[READING_END])) {
+                        // Normally succeeds
+                        DBG ("Failed to close childToParent[READING_END]");
+                }
+        }
+
+        if (this->childToParent[WRITING_END] > 0) {
+                if (close (this->childToParent[WRITING_END])) {
+                        // Normally already closed in Process::start
+                        DBG ("Failed to close childToParent[WRITING_END]");
+                }
+        }
+
+        if (this->childErrToParent[READING_END] > 0) {
+                if (close (this->childErrToParent[READING_END])) {
+                        // Normally succeeds
+                        DBG ("Failed to close childErrToParent[READING_END]");
+                }
+        }
+
+        if (this->childErrToParent[WRITING_END] > 0) {
+                if (!close (this->childErrToParent[WRITING_END])) {
+                        // Normally already closed in Process::start
+                        DBG ("Failed to close childErrToParent[READING_END]");
+                }
+        }
+
+        // Free polling struct
         free (this->p);
 }
 
@@ -121,7 +173,9 @@ wml::Process::start (const string& program, const list<string>& args)
         // which means that if you call Process::start more than 341
         // times you'll run out, unless in your client program you
         // call setrlimit() to change RLIMIT_NOFILE.
-        if (pipe(parentToChild) == -1 || pipe(childToParent) == -1 || pipe(childErrToParent) == -1) {
+        if (pipe(this->parentToChild) == -1
+            || pipe(this->childToParent) == -1
+            || pipe(this->childErrToParent) == -1) {
                 DBG ("Failed to set up pipes, return PROCESS_FAILURE" << flush);
                 this->error = PROCESSNOMOREPIPES;
                 return PROCESS_FAILURE;
@@ -137,16 +191,19 @@ wml::Process::start (const string& program, const list<string>& args)
                 // This is the CHILD process
 
                 // Close unwanted ends of the pipes
-                close (parentToChild[WRITING_END]);
-                close (childToParent[READING_END]);
-                close (childErrToParent[READING_END]);
+                close (this->parentToChild[WRITING_END]);
+                this->parentToChild[WRITING_END] = 0;
+                close (this->childToParent[READING_END]);
+                this->childToParent[READING_END] = 0;
+                close (this->childErrToParent[READING_END]);
+                this->childErrToParent[READING_END] = 0;
 
                 // Now all we have to do is make the writing file
                 // descriptors 0,1 or 2 and they will be used instead
                 // of stdout, stderr and stdin.
-                if ((dup2 (parentToChild[READING_END], STDIN)) == -1  ||
-                    (dup2 (childToParent[WRITING_END], STDOUT)) == -1 ||
-                    (dup2 (childErrToParent[WRITING_END], STDERR)) == -1) {
+                if ((dup2 (this->parentToChild[READING_END], STDIN)) == -1  ||
+                    (dup2 (this->childToParent[WRITING_END], STDOUT)) == -1 ||
+                    (dup2 (this->childErrToParent[WRITING_END], STDERR)) == -1) {
                         theError = errno;
                         cout << "ERROR! Couldn't get access to stdin/out/err! errno was " << theError << endl;
                         return PROCESS_FAILURE;
@@ -180,9 +237,12 @@ wml::Process::start (const string& program, const list<string>& args)
                 this->error = PROCESSCRASHED;
 
                 // In this case, we close the pipes to signal to the parent that we crashed
-                close (parentToChild[READING_END]);
-                close (childToParent[WRITING_END]);
-                close (childErrToParent[WRITING_END]);
+                close (this->parentToChild[READING_END]);
+                this->parentToChild[READING_END] = 0;
+                close (this->childToParent[WRITING_END]);
+                this->childToParent[WRITING_END] = 0;
+                close (this->childErrToParent[WRITING_END]);
+                this->childErrToParent[WRITING_END] = 0;
 
                 // Child should exit now.
                 _exit(-1);
@@ -191,9 +251,12 @@ wml::Process::start (const string& program, const list<string>& args)
                 // This is the PARENT process
 
                 // Close unwanted ends of the pipes
-                close (parentToChild[READING_END]);
-                close (childToParent[WRITING_END]);
-                close (childErrToParent[WRITING_END]);
+                close (this->parentToChild[READING_END]);
+                this->parentToChild[READING_END] = 0;
+                close (this->childToParent[WRITING_END]);
+                this->childToParent[WRITING_END] = 0;
+                close (this->childErrToParent[WRITING_END]);
+                this->childErrToParent[WRITING_END] = 0;
 
                 // Write to this->parentToChild[WRITING_END] to write to stdin of the child
                 // Read from this->childToParent[READING_END] to read from stdout of child
@@ -275,7 +338,7 @@ wml::Process::probeProcess (void)
         }
 
         // Why can't these 4 lines go in contructor? Because
-        // childeToParent etc aren't set up until Process::start()?
+        // this->childToParent etc aren't set up until Process::start().
         this->p[0].fd = this->childToParent[READING_END];
         this->p[0].events = POLLIN | POLLPRI;
         this->p[1].fd = this->childErrToParent[READING_END];

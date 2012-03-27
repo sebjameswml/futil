@@ -206,17 +206,23 @@ namespace wml {
                 bool signalledStart;
 
                 /*!
-                 * stdin parent to child
+                 * stdin parent to child. Initialised as zeros. If
+                 * these are non-zero at destruction, close() is
+                 * called.
                  */
                 int parentToChild[2];
 
                 /*!
-                 * stdout child to parent
+                 * stdout child to parent. Initialised as zeros. If
+                 * these are non-zero at destruction, close() is
+                 * called.
                  */
                 int childToParent[2];
 
                 /*!
-                 * stderr child to parent
+                 * stderr child to parent. Initialised as zeros. If
+                 * these are non-zero at destruction, close() is
+                 * called.
                  */
                 int childErrToParent[2];
 
