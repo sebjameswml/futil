@@ -578,6 +578,14 @@ namespace wml {
                 static void appendFile (const std::string& from, std::ostream& appendTo);
 
                 /*!
+                 * Make a copy of \param bytes bytes of the file at
+                 * \param original to the file \param truncated.
+                 */
+                static void truncateFile (const std::string& original,
+                                          const std::string& truncated,
+                                          const unsigned int bytes);
+
+                /*!
                  * Calls basic_string::getline to copy from istrm into
                  * line, setting inputComplete to true if eof is
                  * reached and optionally copying to copystrm if it is

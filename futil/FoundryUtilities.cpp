@@ -1434,6 +1434,70 @@ wml::FoundryUtilities::copyFile (const string& from, ostream& to)
 }
 
 void
+wml::FoundryUtilities::truncateFile (const std::string& from,
+                                     const std::string& to,
+                                     const unsigned int bytes)
+{
+        ofstream out;
+
+        out.open (to.c_str(), ios::out|ios::trunc);
+        if (!out.is_open()) {
+                string emsg = "FoundryUtilities::copyFile(): Couldn't open TO file '" + to + "'";
+                throw runtime_error (emsg);
+        }
+
+        ifstream in;
+
+        // Test that "from" is a regular file
+        if (!FoundryUtilities::regfileExists (from)) {
+                stringstream ee;
+                ee << "FoundryUtilities::truncateFile(): FROM file '"
+                   << from << "' is not a regular file";
+                throw runtime_error (ee.str());
+        }
+
+        in.open (from.c_str(), ios::in);
+        if (!in.is_open()) {
+                throw runtime_error ("FoundryUtilities::truncateFile(): Couldn't open FROM file");
+        }
+
+        if (!out) {
+                throw runtime_error ("FoundryUtilities::truncateFile(): Error occurred in TO stream");
+        }
+
+        unsigned int loops(0);
+        unsigned int maxLoops = bytes / 63;
+        unsigned int remaining = bytes % 63;
+        char buf[64];
+        while (!in.eof() && loops < maxLoops) {
+                in.read (buf, 63);
+                // Find out how many were read
+                unsigned int bytesCopied = in.gcount();
+                // and write that many to the output stream
+                out.write (buf, bytesCopied);
+                ++loops;
+        }
+        // Copy remaining
+        if (!in.eof()) {
+                in.read (buf, remaining);
+                // Find out how many were read
+                unsigned int bytesCopied = in.gcount();
+                if (bytesCopied != remaining) {
+                        throw runtime_error ("copy error bytesCopied != remaining");
+                }
+                // and write that many to the output stream
+                out.write (buf, bytesCopied);
+        }
+
+        // Make sure output buffer is flushed.
+        out.flush();
+
+        // Finally, close the input and output
+        in.close();
+        out.close();
+}
+
+void
 wml::FoundryUtilities::copyFile (istream& from, const string& to)
 {
         char buf[64];
