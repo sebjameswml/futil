@@ -5,9 +5,9 @@ SUBDIRS = futil doc
 
 bin_PROGRAMS = testDoIconv testXmlCondition testfutil testsymlinks testdirperms testSetPerm testdates dateToEpoch testSplitString testtotalspace testRandomString testlock splitstring stringtovector emptydirs
 
-check_PROGRAMS = testXmlEscape testStringToWords
+check_PROGRAMS = testXmlEscape testStringToWords testFilesDiffer
 
-TESTS = testXmlEscape testStringToWords
+TESTS = testXmlEscape testStringToWords testFilesDiffer
 
 testdirperms_SOURCES = testdirperms.cpp
 testdirperms_LDADD = futil/libfutil.la -luuid -lmagic $(GLIBMM_LIBS)
@@ -59,6 +59,9 @@ testXmlEscape_LDADD = futil/libfutil.la -luuid -lmagic $(GLIBMM_LIBS)
 
 testStringToWords_SOURCES = testStringToWords.cpp
 testStringToWords_LDADD = futil/libfutil.la -luuid -lmagic $(GLIBMM_LIBS)
+
+testFilesDiffer_SOURCES = testFilesDiffer.cpp
+testFilesDiffer_LDADD = futil/libfutil.la -luuid -lmagic $(GLIBMM_LIBS)
 
 INCLUDES = -I./futil $(GLIBMM_CFLAGS)
 

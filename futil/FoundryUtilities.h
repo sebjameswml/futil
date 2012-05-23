@@ -726,6 +726,11 @@ namespace wml {
                 static std::string fileModDatestamp (const char* filename);
 
                 /*!
+                 * Check whether the specified files differ.
+                 */
+                static bool filesDiffer (const std::string& first, const std::string& second);
+
+                /*!
                  * get an flock on the given file.
                  */
                 static void getLock (const int fd);

@@ -1691,6 +1691,20 @@ wml::FoundryUtilities::fileModDatestamp (const char* filename)
         return dstr;
 }
 
+bool
+wml::FoundryUtilities::filesDiffer (const string& first, const string& second)
+{
+        if (!(FoundryUtilities::regfileExists (first)
+              && FoundryUtilities::regfileExists (second))) {
+                throw runtime_error ("Error: expecting two regular files");
+        }
+        string diffcmd = "diff " + first + " " + second + " >/dev/null 2>&1";
+        DBG ("About to call system() with cmd: " << diffcmd);
+        // diff returns zero if files are identical, non-zero if files
+        // differ.
+        return (system (diffcmd.c_str()) != 0);
+}
+
 void
 wml::FoundryUtilities::getLock (const int fd)
 {
