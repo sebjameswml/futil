@@ -4585,7 +4585,8 @@ wml::FoundryUtilities::doIconv (const char * fromEncoding,
                         if (theE == EINVAL) {
                                 throw runtime_error ("Need to deal with this... (memmove?)");
                         } else if (theE == EILSEQ) {
-                                // EILSEQ Indicates an unusable
+                                // EILSEQ Illegal input
+                                // sequence. Indicates an unusable
                                 // character. If an input character
                                 // does not belong to the input code
                                 // set, no conversion is attempted on
@@ -4596,6 +4597,14 @@ wml::FoundryUtilities::doIconv (const char * fromEncoding,
                                 // unusable character. InBuf parameter
                                 // points to the first byte of the
                                 // unusable character sequence.
+
+                                // N.B. It appears that this error is
+                                // _also_ emitted when iconv()
+                                // encounters a character in the input
+                                // buffer that is valid, but for which
+                                // an identical character does not
+                                // exist in the target codeset.
+
                                 DBG ("Skipping unusable character in input buffer");
                                 // Insert placeholder char in output buffer?
                                 obp++;
