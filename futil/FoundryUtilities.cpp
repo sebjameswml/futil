@@ -4220,28 +4220,32 @@ wml::FoundryUtilities::htmlHighlightTerm (const std::string& term,
 }
 
 vector<string>
-wml::FoundryUtilities::wrapLine (const std::string& line, const unsigned int maxLength)
+wml::FoundryUtilities::wrapLine (const std::string& line, unsigned int maxLength, char wrapAfter)
 {
         string::size_type len (line.length()), pos = 0, pos1 = 0;
         vector<string> rtn;
         string tmp("");
+        string separators (" "); // space
+        if (wrapAfter != '\0') {
+                separators += wrapAfter;
+        }
         while (pos1 != string::npos) {
                 DBG ("Pos: " << pos << ", pos1: " << pos1 << ", len: " << len);
 
                 if (len - pos > maxLength) {
-                        pos1 = line.find_last_of (" ", pos + maxLength);
+                        pos1 = line.find_last_of (separators, pos + maxLength);
                         if (pos1 < pos) {
                                 // Likely found a string with no
                                 // spaces and maxLength chars so increment
                                 // allowable line length
-                                DBG ("Breaking on a non-space");
+                                DBG ("Breaking on a non-space/non-wrapping char");
                                 pos1 = pos + maxLength;
                                 tmp = line.substr(pos, pos1 - pos);
                                 tmp += "\\"; // Add a "continues on next line" char
                                 pos1--; // Because we don't have a space to skip
                         } else {
-                                DBG ("Found a space at: " << pos1);
-                                tmp = line.substr(pos, pos1 - pos);
+                                DBG ("Found a space/wrapping char at: " << pos1);
+                                tmp = line.substr(pos, pos1 - pos + 1);
                         }
                 } else {
                         pos1 = string::npos;
