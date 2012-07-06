@@ -37,7 +37,6 @@ using namespace std;
 
 wml::FileTyper::FileTyper (void)
 {
-        //struct magic_set* magic;
         this->magic = magic_open (MAGIC_CHECK); // Can OR in MAGIC_MIME,
                                                 // MAGIC_RAW, etc for
                                                 // additional features. See
@@ -130,6 +129,8 @@ wml::FileTyper::getFileType (const string filePath)
                 } else {
                         return MFT_HP_PJL;
                 }
+        } else if (fileTypeString.find ("CUPS banner form") == 0) {
+                return MFT_CUPS_BANNER;
         } else {
                 return MFT_UNKNOWN;
         }

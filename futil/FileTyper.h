@@ -85,6 +85,7 @@ namespace wml {
                 MFT_TAR,
                 MFT_POSTSCRIPT,
                 MFT_HP_PJL,
+                MFT_CUPS_BANNER,
                 FILETYPE_N
         };
 
