@@ -121,7 +121,7 @@ wml::FoundryUtilities::stripTrailingWhitespace (std::string& input)
 int
 wml::FoundryUtilities::stripChars (std::string& input, const std::string& charList)
 {
-        int rtn;
+        int rtn = 0;
         string::size_type pos;
         while ((pos = input.find_last_of (charList)) != string::npos) {
                 input.erase (pos, 1);
@@ -133,7 +133,7 @@ wml::FoundryUtilities::stripChars (std::string& input, const std::string& charLi
 int
 wml::FoundryUtilities::stripChars (std::string& input, const char& charList)
 {
-        int rtn;
+        int rtn = 0;
         string::size_type pos;
         while ((pos = input.find_last_of (charList)) != string::npos) {
                 input.erase (pos, 1);
@@ -3573,6 +3573,7 @@ wml::FoundryUtilities::fileSize (const string filePath)
                 debuglog (LOG_ERR,
                           "%s: Failed to stat %s, errno=%d",
                           __FUNCTION__, filePath.c_str(), the_error);
+                DBG ("Failed to stat " << filePath << ", errno=" << the_error);
 #endif
                 return 0;
         }
