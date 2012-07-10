@@ -121,7 +121,7 @@ wml::FoundryUtilities::stripTrailingWhitespace (std::string& input)
 int
 wml::FoundryUtilities::stripChars (std::string& input, const std::string& charList)
 {
-        int rtn = 0;
+        int rtn(0);
         string::size_type pos;
         while ((pos = input.find_last_of (charList)) != string::npos) {
                 input.erase (pos, 1);
@@ -133,7 +133,7 @@ wml::FoundryUtilities::stripChars (std::string& input, const std::string& charLi
 int
 wml::FoundryUtilities::stripChars (std::string& input, const char& charList)
 {
-        int rtn = 0;
+        int rtn(0);
         string::size_type pos;
         while ((pos = input.find_last_of (charList)) != string::npos) {
                 input.erase (pos, 1);
@@ -527,8 +527,8 @@ wml::FoundryUtilities::searchReplace (const std::string& searchTerm,
 }
 
 int
-wml::FoundryUtilities::searchReplaceInFile (const std::string searchTerm,
-                                            const std::string replaceTerm,
+wml::FoundryUtilities::searchReplaceInFile (const std::string& searchTerm,
+                                            const std::string& replaceTerm,
                                             std::string fileName,
                                             const bool replaceAll)
 {
@@ -570,8 +570,8 @@ wml::FoundryUtilities::searchReplaceInFile (const std::string searchTerm,
 }
 
 int
-wml::FoundryUtilities::deleteLinesContaining (const std::string searchTerm,
-                                              const std::string fileName,
+wml::FoundryUtilities::deleteLinesContaining (const std::string& searchTerm,
+                                              const std::string& fileName,
                                               const bool deleteEndOfLine)
 {
         int count(0);
@@ -921,7 +921,7 @@ wml::FoundryUtilities::getUptime (void)
 }
 
 string
-wml::FoundryUtilities::freeSpace (const string dirPath)
+wml::FoundryUtilities::freeSpace (const string& dirPath)
 {
         stringstream rtn;
         struct statvfs dir;
@@ -964,7 +964,7 @@ wml::FoundryUtilities::freeSpace (const string dirPath)
 }
 
 UINT64_TYPE
-wml::FoundryUtilities::freeSpaceKBytes (const string dirPath)
+wml::FoundryUtilities::freeSpaceKBytes (const string& dirPath)
 {
         struct statvfs dir;
         if (statvfs (dirPath.c_str(), &dir)) {
@@ -1046,7 +1046,7 @@ wml::FoundryUtilities::totalSpaceKBytes (string dirPath)
 }
 
 float
-wml::FoundryUtilities::freeSpaceFraction (const string dirPath)
+wml::FoundryUtilities::freeSpaceFraction (const string& dirPath)
 {
         struct statvfs dir;
         memset (&dir, 0, sizeof(struct statvfs));
@@ -1244,7 +1244,7 @@ wml::FoundryUtilities::dirExists (const std::string& path)
 }
 
 void
-wml::FoundryUtilities::createDir (const std::string path,
+wml::FoundryUtilities::createDir (const std::string& path,
                                   const mode_t mode,
                                   const int uid, const int gid)
 {
@@ -1358,7 +1358,7 @@ wml::FoundryUtilities::createDir (const std::string path,
 }
 
 void
-wml::FoundryUtilities::removeDir (const std::string path)
+wml::FoundryUtilities::removeDir (const std::string& path)
 {
         int rtn = rmdir (path.c_str());
         if (rtn) {
@@ -1408,7 +1408,7 @@ wml::FoundryUtilities::removeDir (const std::string path)
 }
 
 void
-wml::FoundryUtilities::setPermissions (const string filepath, const mode_t mode)
+wml::FoundryUtilities::setPermissions (const string& filepath, const mode_t mode)
 {
         int rtn = chmod (filepath.c_str(), mode);
         if (rtn) {
@@ -1481,7 +1481,7 @@ wml::FoundryUtilities::checkAccess (const std::string& filepath,
 }
 
 void
-wml::FoundryUtilities::setOwnership (const string filepath, const int uid, const int gid)
+wml::FoundryUtilities::setOwnership (const string& filepath, const int uid, const int gid)
 {
         int rtn = chown (filepath.c_str(), uid, gid);
         if (rtn) {
@@ -1531,7 +1531,7 @@ wml::FoundryUtilities::setOwnership (const string filepath, const int uid, const
 }
 
 void
-wml::FoundryUtilities::touchFile (const std::string path)
+wml::FoundryUtilities::touchFile (const std::string& path)
 {
         ofstream f;
         f.open (path.c_str(), ios::out|ios::app);
@@ -1797,14 +1797,14 @@ wml::FoundryUtilities::appendFile (const std::string& from, std::ostream& append
 }
 
 void
-wml::FoundryUtilities::moveFile (const string from, const string to)
+wml::FoundryUtilities::moveFile (const string& from, const string& to)
 {
         FoundryUtilities::copyFile (from, to);
         FoundryUtilities::unlinkFile (from);
 }
 
 void
-wml::FoundryUtilities::unlinkFile (const string fpath)
+wml::FoundryUtilities::unlinkFile (const string& fpath)
 {
         int rtn = unlink (fpath.c_str());
         if (rtn) {
@@ -2038,7 +2038,7 @@ wml::FoundryUtilities::sqlEscapeRtn (const std::string& str, const bool forPatte
 }
 
 string
-wml::FoundryUtilities::xmlEscape (const std::string& s, bool replaceNonAscii)
+wml::FoundryUtilities::xmlEscape (const std::string& s, const bool replaceNonAscii)
 {
         ostringstream oss;
         string::const_iterator iS = s.begin(), sEnd = s.end();
@@ -2658,9 +2658,9 @@ wml::FoundryUtilities::macAddrToStr (const unsigned int* mac)
 }
 
 void
-wml::FoundryUtilities::clearoutDir (const string dirPath,
+wml::FoundryUtilities::clearoutDir (const string& dirPath,
                                     const unsigned int olderThanSeconds,
-                                    const string filePart)
+                                    const string& filePart)
 {
         vector<string> files;
         try {
@@ -3210,7 +3210,7 @@ wml::FoundryUtilities::dateToNum (const std::string& dateStr)
 }
 
 time_t
-wml::FoundryUtilities::dateTimeToNum (std::string dateTimeStr)
+wml::FoundryUtilities::dateTimeToNum (const std::string &dateTimeStr)
 {
         char dateSeparator = '\0';
         char timeSeparator = '\0';
@@ -3728,7 +3728,7 @@ wml::FoundryUtilities::coutFile (const char* filePath)
 }
 
 void
-wml::FoundryUtilities::coutFile (const std::string filePath)
+wml::FoundryUtilities::coutFile (const std::string& filePath)
 {
         ifstream f;
         f.open (filePath.c_str(), ios::in);
@@ -3748,7 +3748,7 @@ wml::FoundryUtilities::coutFile (const std::string filePath)
 }
 
 int
-wml::FoundryUtilities::fileSize (const string filePath)
+wml::FoundryUtilities::fileSize (const string& filePath)
 {
         struct stat buf;
         memset (&buf, 0, sizeof(struct stat));
@@ -3825,7 +3825,7 @@ wml::FoundryUtilities::zeroFileCount (const char * filePath)
 }
 
 vector<Glib::ustring>
-wml::FoundryUtilities::stringToWords (const Glib::ustring& s, bool ignoreTrailingEmptyVal)
+wml::FoundryUtilities::stringToWords (const Glib::ustring& s, const bool ignoreTrailingEmptyVal)
 {
         vector<Glib::ustring> theVec;
         Glib::ustring entry("");
@@ -4406,7 +4406,7 @@ wml::FoundryUtilities::htmlHighlightTerm (const std::string& term,
 }
 
 vector<string>
-wml::FoundryUtilities::wrapLine (const std::string& line, unsigned int maxLength, char wrapAfter)
+wml::FoundryUtilities::wrapLine (const std::string& line, const unsigned int maxLength, const char wrapAfter)
 {
         string::size_type len (line.length()), pos = 0, pos1 = 0;
         vector<string> rtn;
@@ -4657,8 +4657,8 @@ wml::FoundryUtilities::suffix (const int n)
 }
 
 void
-wml::FoundryUtilities::pdfConversion (const string inputPath,
-                                      const string outputDevice, const string outputPath,
+wml::FoundryUtilities::pdfConversion (const string& inputPath,
+                                      const string& outputDevice, const string& outputPath,
                                       const unsigned int width, const unsigned int height,
                                       const bool wait, const unsigned int resolution)
 {
@@ -4704,7 +4704,7 @@ wml::FoundryUtilities::pdfConversion (const string inputPath,
 }
 
 void
-wml::FoundryUtilities::pdfToJpeg (const string inputPath, const string outputPath,
+wml::FoundryUtilities::pdfToJpeg (const string& inputPath, const string& outputPath,
                                   const unsigned int width, const unsigned int height,
                                   const bool wait, const unsigned int resolution)
 {
@@ -4712,7 +4712,7 @@ wml::FoundryUtilities::pdfToJpeg (const string inputPath, const string outputPat
 }
 
 void
-wml::FoundryUtilities::pdfToPng (const string inputPath, const string outputPath,
+wml::FoundryUtilities::pdfToPng (const string& inputPath, const string& outputPath,
                                  const unsigned int width,const  unsigned int height,
                                  const bool wait, const unsigned int resolution)
 {
@@ -4985,7 +4985,7 @@ wml::FoundryUtilities::check_tmp_messages (const int megabytes)
 }
 
 bool
-wml::FoundryUtilities::valid_ip (const string ip_string)
+wml::FoundryUtilities::valid_ip (const string& ip_string)
 {
         regex_t * ip_regex = (regex_t*)0;
         int reg_error;

@@ -108,13 +108,13 @@ namespace wml {
                  * \brief Return a string containing information
                  * on the type of file
                  */
-                std::string getFileTypeStr (const std::string filePath);
+                std::string getFileTypeStr (const std::string& filePath) const;
 
                 /*!
                  * \brief Return a wml::FILETYPE based on what
                  * type of file is passed in
                  */
-                wml::FILETYPE getFileType (const std::string filePath);
+                wml::FILETYPE getFileType (const std::string& filePath) const;
         private:
                 /*!
                  * Pointer to libmagic struct containing magic file type

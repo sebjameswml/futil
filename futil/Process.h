@@ -107,14 +107,14 @@ namespace wml {
                 /*!
                  * Write \arg input to the stdin of the process.
                  */
-                void writeIn (string& input);
+                void writeIn (const string& input) const;
 
                 /*!
                  * When Process::start() is called, pause useconds
                  * before forking and exec-ing the program. This is a
                  * setter for this->pauseBeforeStart.
                  */
-                void setPauseBeforeStart (unsigned int useconds);
+                void setPauseBeforeStart (const unsigned int useconds);
 
                 /*!
                  * fork and exec the process.
@@ -140,15 +140,15 @@ namespace wml {
                  * If the process is running - if pid > 0, return
                  * true. Otherwise return false.
                  */
-                bool running (void);
+                bool running (void) const;
 
                 /*!
                  * Accessors
                  */
                 //@{
-                pid_t getPid (void);
-                int getError (void);
-                void setError (int e);
+                pid_t getPid (void) const;
+                int getError (void) const;
+                void setError (const int e);
 
                 /*!
                  * Setter for the callbacks.
@@ -160,8 +160,8 @@ namespace wml {
                  * Slots
                  */
                 //@{
-                string readAllStandardOutput (void);
-                string readAllStandardError (void);
+                string readAllStandardOutput (void) const;
+                string readAllStandardError (void) const;
 
                 /*!
                  * Wait for the process to get itself going. Do this
@@ -259,30 +259,30 @@ namespace wml {
                 /*!
                  * \brief Set the process finished message for a process
                  */
-                void setProcessFinishedMsg (std::string message);
+                void setProcessFinishedMsg (const std::string& message);
 
                 /*!
                  * \brief Set the error num for a process
                  */
-                void setErrorNum (int err);
+                void setErrorNum (const int err);
 
                 /*!
                  * \brief Set stdOutReady
                  */
-                void setStdOutReady (bool ready);
+                void setStdOutReady (const bool ready);
 
                 /*!
                  * \brief Set stdErrReady
                  */
-                void setStdErrReady (bool ready);
+                void setStdErrReady (const bool ready);
 
                 /*!
                  * \brief Getters
                  */
-                std::string getProcessFinishedMsg (void);
-                int getErrorNum (void);
-                bool getStdOutReady (void);
-                bool getStdErrReady (void);
+                std::string getProcessFinishedMsg (void) const;
+                int getErrorNum (void) const;
+                bool getStdOutReady (void) const;
+                bool getStdErrReady (void) const;
                 //@}
         private:
                 /* \name Private Class Attributes */
