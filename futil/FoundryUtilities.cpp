@@ -167,6 +167,191 @@ wml::FoundryUtilities::stripChars (Glib::ustring& input, const gunichar& singleC
 }
 
 int
+wml::FoundryUtilities::convertCHexCharSequences (std::string& input)
+{
+        // This converts a string containing C style hex sequences
+        // like "\x41\x42\x43" into the corresponding characters
+        // ("ABC" for the example).
+
+        string::iterator readPos = input.begin();
+        string::iterator writePos = input.begin();
+        string::size_type newSize = 0;
+        char n1 = '\0', n2 = '\0'; // two Ns in "1xNN"
+        char c = 0;
+        int count = 0;
+
+        while (readPos != input.end()) {
+
+                c = *readPos;
+
+                if (*readPos == '\\') {
+                        // We have a possible hex escape sequence.
+                        ++readPos;
+                        if (readPos != input.end() && *readPos == 'x') {
+                                // We have a hex escape sequence. Read in next two chars
+                                ++readPos;
+                                if (readPos != input.end()) {
+                                        n1 = *readPos;
+                                        ++readPos;
+                                        if (readPos != input.end()) {
+                                                n2 = *readPos;
+                                                ++count;
+                                                // Now create the replacement for c.
+                                                c = 0;
+                                                switch (n1) {
+                                                case '0':
+                                                        // c |= 0 << 4;
+                                                        break;
+                                                case '1':
+                                                        c |= 1 << 4;
+                                                        break;
+                                                case '2':
+                                                        c |= 2 << 4;
+                                                        break;
+                                                case '3':
+                                                        c |= 3 << 4;
+                                                        break;
+                                                case '4':
+                                                        c |= 4 << 4;
+                                                        break;
+                                                case '5':
+                                                        c |= 5 << 4;
+                                                        break;
+                                                case '6':
+                                                        c |= 6 << 4;
+                                                        break;
+                                                case '7':
+                                                        c |= 7 << 4;
+                                                        break;
+                                                case '8':
+                                                        c |= 8 << 4;
+                                                        break;
+                                                case '9':
+                                                        c |= 9 << 4;
+                                                        break;
+                                                case 'a':
+                                                case 'A':
+                                                        c |= 10 << 4;
+                                                        break;
+                                                case 'b':
+                                                case 'B':
+                                                        c |= 11 << 4;
+                                                        break;
+                                                case 'c':
+                                                case 'C':
+                                                        c |= 12 << 4;
+                                                        break;
+                                                case 'd':
+                                                case 'D':
+                                                        c |= 13 << 4;
+                                                        break;
+                                                case 'e':
+                                                case 'E':
+                                                        c |= 14 << 4;
+                                                        break;
+                                                case 'f':
+                                                case 'F':
+                                                        c |= 15 << 4;
+                                                        break;
+                                                default:
+                                                        break;
+                                                }
+
+                                                switch (n2) {
+                                                case '0':
+                                                        // c |= 0;
+                                                        break;
+                                                case '1':
+                                                        c |= 1;
+                                                        break;
+                                                case '2':
+                                                        c |= 2;
+                                                        break;
+                                                case '3':
+                                                        c |= 3;
+                                                        break;
+                                                case '4':
+                                                        c |= 4;
+                                                        break;
+                                                case '5':
+                                                        c |= 5;
+                                                        break;
+                                                case '6':
+                                                        c |= 6;
+                                                        break;
+                                                case '7':
+                                                        c |= 7;
+                                                        break;
+                                                case '8':
+                                                        c |= 8;
+                                                        break;
+                                                case '9':
+                                                        c |= 9;
+                                                        break;
+                                                case 'a':
+                                                case 'A':
+                                                        c |= 10;
+                                                        break;
+                                                case 'b':
+                                                case 'B':
+                                                        c |= 11;
+                                                        break;
+                                                case 'c':
+                                                case 'C':
+                                                        c |= 12;
+                                                        break;
+                                                case 'd':
+                                                case 'D':
+                                                        c |= 13;
+                                                        break;
+                                                case 'e':
+                                                case 'E':
+                                                        c |= 14;
+                                                        break;
+                                                case 'f':
+                                                case 'F':
+                                                        c |= 15;
+                                                        break;
+                                                default:
+                                                        break;
+                                                }
+
+                                        } else {
+                                                // Nothing following "\xN", step back 3.
+                                                --readPos;
+                                                --readPos;
+                                                --readPos;
+                                        }
+                                } else {
+                                        // Nothing following "\x", step back 2.
+                                        --readPos;
+                                        --readPos;
+                                }
+
+                        } else {
+                                // Not an escape sequence, just a '\' character. Step back 1.
+                                --readPos;
+                        }
+
+                } else {
+                        // We already set writePos to readPos and c to *readPos.
+                }
+
+                // if need to write
+                *writePos = c;
+                ++writePos;
+                ++newSize;
+
+                ++readPos;
+        }
+
+        // Terminate the now possibly shorter string:
+        input.resize (newSize);
+
+        return count;
+}
+
+int
 wml::FoundryUtilities::stripTrailingSpaces (std::string& input)
 {
         return FoundryUtilities::stripTrailingChars (input);

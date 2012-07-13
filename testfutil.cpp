@@ -111,6 +111,11 @@ int main(int argc, char** argv)
 
         cout << "Free space: " << FoundryUtilities::freeSpaceFraction ("/tmp") << endl;
 
+        string withHexEscapes("\\x41\\x42\\x43");
+        cout << "Unconverted string: " << withHexEscapes << endl;
+        FoundryUtilities::convertCHexCharSequences (withHexEscapes);
+        cout << "Converted string: " << withHexEscapes << endl;
+
         DBGCLOSE();
 
         return 0;

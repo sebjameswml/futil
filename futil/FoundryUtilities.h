@@ -276,6 +276,18 @@ namespace wml {
                 //@}
 
                 /*!
+                 * Convert any C-style hex character sequence into its
+                 * corresponding character.
+                 *
+                 * E.g. "\x41" becomes "A" "\x1b" becomes an escape
+                 * char, etc.
+                 *
+                 * \return The number of hex sequences replaced in
+                 * \param input.
+                 */
+                static int convertCHexCharSequences (std::string& input);
+
+                /*!
                  * Do a search and replace, search for searchTerm,
                  * replacing with replaceTerm. if replaceAll is true,
                  * replace all occurrences of searchTerm, otherwise
