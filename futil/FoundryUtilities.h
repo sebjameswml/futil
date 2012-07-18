@@ -296,17 +296,10 @@ namespace wml {
                  *
                  * \return the number of terms replaced.
                  */
-                //@{
-                static int searchReplace (const char* searchTerm,
-                                          const char* replaceTerm,
-                                          std::string& data,
-                                          const bool replaceAll = true);
                 static int searchReplace (const std::string& searchTerm,
                                           const std::string& replaceTerm,
                                           std::string& data,
                                           const bool replaceAll = true);
-                //@}
-
 
                 /*!
                  * Do a search and replace in the file fileName,
@@ -434,10 +427,7 @@ namespace wml {
                  * Stat a file, return true if the file exists and is
                  * any kind of file except a directory.
                  */
-                //@{
                 static bool fileExists (const std::string& path);
-                static bool fileExists (const char * path);
-                //@}
 
                 /*!
                  * Stat a file, return true if the file exists and is
@@ -477,10 +467,7 @@ namespace wml {
                  * Stat a directory, return true if the directory
                  * exists.
                  */
-                //@{
                 static bool dirExists (const std::string& path);
-                static bool dirExists (const char * path);
-                //@}
 
                 /*!
                  * Create the directory and any parent directories
@@ -564,12 +551,10 @@ namespace wml {
                  */
                 //@{
                 static void copyFile (const std::string& from, const std::string& to);
-                static void copyFile (const char * from, const char * to);
                 static void copyFile (const std::string& from, std::ostream& to);
-                static void copyFile (const char * from, std::ostream& to);
                 static void copyFile (FILE* from, const std::string& to);
                 static void copyFile (std::istream& from, const std::string& to);
-                static void copyFile (const char * from, FILE* to);
+                static void copyFile (const std::string& from, FILE* to);
                 //@}
 
                 /*!
@@ -735,7 +720,7 @@ namespace wml {
                  * Return a datestamp - st_mtime; the file
                  * modification time for the given file.
                  */
-                static std::string fileModDatestamp (const char* filename);
+                static std::string fileModDatestamp (const std::string& filename);
 
                 /*!
                  * Check whether the specified files differ.
@@ -826,24 +811,19 @@ namespace wml {
                 /*!
                  * Generate a uuid random string as a temporary random
                  * filename. Pass in the path, and a prefix to
-                 * identify the way the file is to be used. prefixPath
-                 * might be, for example, "/tmp/xml-" and the
-                 * resulting file could be:
+                 * identify the way the file is to be used. For
+                 * example, with prefixPath "/tmp/xml-", the resulting
+                 * file could be:
                  * /tmp/xml-814b3393-e55a-449e-b16b-b5241497b532
+                 *
+                 * If numChars is non-zero, it indicates the number of
+                 * characters of the UUID to include. For example,
+                 * with prefixPath "/tmp/xml-" and numChars equal to
+                 * 8, the resulting file could be:
+                 * /tmp/xml-814b3393
                  */
-                static std::string generateRandomFilename (const char* prefixPath);
-
-                /*!
-                 * Generate a uuid random string as a temporary random
-                 * filename. Pass in the path, including a prefix to
-                 * identify the way the file is to be used, and the
-                 * number of characters of the uuid string to
-                 * include. For example with prefixPath "/tmp/xml-"
-                 * and numChars equal to 8, the resulting file could
-                 * be: /tmp/xml-814b3393
-                 */
-                static std::string generateRandomFilename (const char* prefixPath,
-                                                           const unsigned int numChars);
+                static std::string generateRandomFilename (const std::string& prefixPath,
+                                                           const unsigned int numChars = 0);
 
                 /*!
                  * Return a portion of a random UUID string. numChars
@@ -933,8 +913,8 @@ namespace wml {
                  * Populate a vector of directories in /proc
                  */
                 static void readProcDirs (std::vector<std::string>& vec,
-                                          const char* baseDirPath,
-                                          const char* subDirPath);
+                                          const std::string& baseDirPath,
+                                          const std::string& subDirPath);
 
                 /*!
                  * \brief Get the first PID whose program name matches the
@@ -1154,11 +1134,9 @@ namespace wml {
                  * throwing a runtime error.
                  */
                 static void sanitize (std::string& str,
-                                      const char* allowed,
-                                      const bool eraseForbidden = false);
-                static void sanitize (std::string& str,
                                       const std::string& allowed,
                                       const bool eraseForbidden = false);
+
                 /*!
                  * Modification of sanitize in which the offending
                  * characters are replaced with replaceChar.
@@ -1171,7 +1149,6 @@ namespace wml {
                  * Read filePath and output to stdout. Useful for
                  * outputting static html.
                  */
-                static void coutFile (const char* filePath);
                 static void coutFile (const std::string& filePath);
 
                 /*!
@@ -1184,14 +1161,14 @@ namespace wml {
                  * filePath. Return the new value of the count, or -1
                  * on error.
                  */
-                static int incFileCount (const char * filePath);
+                static int incFileCount (const std::string& filePath);
 
                 /*!
                  * Increment the count stored in the file given by
                  * filePath. Return the new value of the count, or -1
                  * on error.
                  */
-                static int decFileCount (const char * filePath);
+                static int decFileCount (const std::string& filePath);
 
                 /*!
                  * Zero the file count in filePath, ENSURING that the
@@ -1200,7 +1177,7 @@ namespace wml {
                  * re-created, then "0" is inserted into it. Return
                  * the new value of the count (0), or -1 on error.
                  */
-                static int zeroFileCount (const char * filePath);
+                static int zeroFileCount (const std::string& filePath);
 
                 /*!
                  * split csv into a vector
@@ -1460,8 +1437,8 @@ namespace wml {
                  * @param toString A container into which the
                  * transcoded string will be placed.
                  */
-                static void doIconv (const char * fromEncoding,
-                                     const char * toEncoding,
+                static void doIconv (const std::string& fromEncoding,
+                                     const std::string& toEncoding,
                                      const std::string& fromString,
                                      std::string& toString);
 
@@ -1470,21 +1447,7 @@ namespace wml {
                  * correct state for overwriting.
                  */
                 static void openFilestreamForOverwrite (std::fstream& f,
-                                                        const char * filepath);
-
-                /*!
-                 * Opens (or re-opens) the referenced filestream in the
-                 * correct state for overwriting.
-                 */
-                static void openFilestreamForOverwrite (std::fstream& f,
                                                         const std::string& filepath);
-
-                /*!
-                 * Opens (or re-opens) the referenced filestream in the
-                 * correct state for appending.
-                 */
-                static void openFilestreamForAppend (std::fstream& f,
-                                                     const char * filepath);
 
                 /*!
                  * Opens (or re-opens) the referenced filestream in the
