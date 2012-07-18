@@ -122,7 +122,7 @@ int
 wml::FoundryUtilities::stripChars (std::string& input, const std::string& charList)
 {
         int rtn(0);
-        string::size_type pos;
+        string::size_type pos(0);
         while ((pos = input.find_last_of (charList)) != string::npos) {
                 input.erase (pos, 1);
                 ++rtn;
@@ -134,7 +134,7 @@ int
 wml::FoundryUtilities::stripChars (std::string& input, const char charList)
 {
         int rtn(0);
-        string::size_type pos;
+        string::size_type pos(0);
         while ((pos = input.find_last_of (charList)) != string::npos) {
                 input.erase (pos, 1);
                 ++rtn;
@@ -145,8 +145,8 @@ wml::FoundryUtilities::stripChars (std::string& input, const char charList)
 int
 wml::FoundryUtilities::stripChars (Glib::ustring& input, const Glib::ustring& charList)
 {
-        int rtn;
-        string::size_type pos;
+        int rtn(0);
+        string::size_type pos(0);
         while ((pos = input.find_last_of (charList)) != Glib::ustring::npos) {
                 input.erase (pos, 1);
                 ++rtn;
@@ -157,8 +157,8 @@ wml::FoundryUtilities::stripChars (Glib::ustring& input, const Glib::ustring& ch
 int
 wml::FoundryUtilities::stripChars (Glib::ustring& input, const gunichar singleChar)
 {
-        int rtn;
-        string::size_type pos;
+        int rtn(0);
+        string::size_type pos(0);
         while ((pos = input.find_last_of (singleChar)) != Glib::ustring::npos) {
                 input.erase (pos, 1);
                 ++rtn;
@@ -2035,60 +2035,43 @@ wml::FoundryUtilities::xmlEscape (const std::string& s, const bool replaceNonAsc
 void
 wml::FoundryUtilities::stripDosPath (std::string& dosPath)
 {
-        string tmp;
-        string::size_type pos;
+        string::size_type pos (dosPath.find_last_of ('\\'));
 
-        if ((pos = dosPath.find_last_of ('\\', dosPath.size())) == string::npos) {
-                // cerr << "No '\\' character in path apparently" << endl;
-                return;
+        if (pos != string::npos) {
+                dosPath = dosPath.substr (++pos);
         }
-
-        tmp = dosPath.substr (++pos);
-        dosPath = tmp;
 }
 
 void
 wml::FoundryUtilities::stripUnixPath (std::string& unixPath)
 {
-        string tmp;
-        string::size_type pos;
+        string::size_type pos (unixPath.find_last_of ('/'));
 
-        if ((pos = unixPath.find_last_of ('/', unixPath.size())) == string::npos) {
-                // cerr << "No '/' character in path apparently" << endl;
-                return;
+        if (pos != string::npos) {
+                unixPath = unixPath.substr (++pos);
         }
-
-        tmp = unixPath.substr (++pos);
-        unixPath = tmp;
 }
 
 void
 wml::FoundryUtilities::stripUnixFile (std::string& unixPath)
 {
-        string tmp;
-        string::size_type pos;
+        string::size_type pos (unixPath.find_last_of ('/'));
 
-        if ((pos = unixPath.find_last_of ('/', unixPath.size())) == string::npos) {
-                // No '/' character in path apparently
-                return;
+        if (pos != string::npos) {
+                unixPath = unixPath.substr (0, pos);
         }
-
-        tmp = unixPath.substr (0, pos);
-        unixPath = tmp;
 }
 
 void
 wml::FoundryUtilities::stripFileSuffix (std::string& unixPath)
 {
-        string::size_type pos;
-        pos = unixPath.rfind('.');
-        if (pos == string::npos) {
-                return;
-        }
-        // We have a '.' character
-        string tmp = unixPath.substr (0, pos);
-        if (!tmp.empty()) {
-                unixPath = tmp;
+        string::size_type pos (unixPath.rfind('.'));
+        if (pos != string::npos) {
+                // We have a '.' character
+                string tmp (unixPath.substr (0, pos));
+                if (!tmp.empty()) {
+                        unixPath = tmp;
+                }
         }
 }
 
