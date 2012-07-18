@@ -270,9 +270,9 @@ namespace wml {
                  */
                 //@{
                 static int stripChars (std::string& input, const std::string& charList);
-                static int stripChars (std::string& input, const char& charList);
+                static int stripChars (std::string& input, const char charList);
                 static int stripChars (Glib::ustring& input, const Glib::ustring& charList);
-                static int stripChars (Glib::ustring& input, const gunichar& charList);
+                static int stripChars (Glib::ustring& input, const gunichar charList);
                 //@}
 
                 /*!
@@ -318,7 +318,7 @@ namespace wml {
                  */
                 static int searchReplaceInFile (const std::string& searchTerm,
                                                 const std::string& replaceTerm,
-                                                std::string fileName,
+                                                const std::string& fileName,
                                                 const bool replaceAll = true);
 
                 /*!
@@ -567,7 +567,7 @@ namespace wml {
                 static void copyFile (const char * from, const char * to);
                 static void copyFile (const std::string& from, std::ostream& to);
                 static void copyFile (const char * from, std::ostream& to);
-                static void copyFile (FILE* from, const std::string to);
+                static void copyFile (FILE* from, const std::string& to);
                 static void copyFile (std::istream& from, const std::string& to);
                 static void copyFile (const char * from, FILE* to);
                 //@}
@@ -660,8 +660,8 @@ namespace wml {
                  * will be returned.
                  */
                 static void readDirectoryTree (std::vector<std::string>& vec,
-                                               const char* baseDirPath,
-                                               const char* subDirPath,
+                                               const std::string& baseDirPath,
+                                               const std::string& subDirPath,
                                                const unsigned int olderThanSeconds = 0);
 
                 /*!
@@ -673,7 +673,7 @@ namespace wml {
                  * will be returned.
                  */
                 static void readDirectoryTree (std::vector<std::string>& vec,
-                                               const std::string dirPath,
+                                               const std::string& dirPath,
                                                const unsigned int olderThanSeconds = 0);
 
                 /*!
@@ -692,7 +692,7 @@ namespace wml {
                  * The set dset would be filled only with dir2, dir1.
                  */
                 static void readDirectoryDirs (std::set<std::string>& dset,
-                                               const std::string dirPath);
+                                               const std::string& dirPath);
 
                 /*!
                  * Return empty subdirectories in
@@ -850,7 +850,7 @@ namespace wml {
                  * to be between 0 and 36. Characters are in the range
                  * 0-9 and a-f (i.e. hex).
                  */
-                static std::string uuidPortion (unsigned int numChars);
+                static std::string uuidPortion (const unsigned int numChars);
 
                 /*!
                  * Return a random string of characters.
@@ -888,19 +888,19 @@ namespace wml {
                  * Return position in v of first string which is equal
                  * to s, or -1 if it's not present.
                  */
-                static int strVectorContains (const std::vector<std::string>& v, const std::string s);
+                static int strVectorContains (const std::vector<std::string>& v, const std::string& s);
 
                 /*!
                  * Return position in v of first string which is a
                  * substring of s, or -1 if none is present.
                  */
-                static int strVectorMatches (const std::vector<std::string>& v, const std::string s);
+                static int strVectorMatches (const std::vector<std::string>& v, const std::string& s);
 
                 /*!
                  * Return position in v of first entry which _doesn't_
                  * match s. Return -1 if all members of v match s.
                  */
-                static int firstNotMatching (const std::vector<std::string>& v, const std::string s);
+                static int firstNotMatching (const std::vector<std::string>& v, const std::string& s);
 
                 /*!
                  * This could be a template. Return true if l contains
@@ -1104,7 +1104,7 @@ namespace wml {
                  */
                 static void getScript (const SCRIPT_TYPE script,
                                        std::stringstream& rScript,
-                                       std::string scriptFile,
+                                       const std::string& scriptFile,
                                        const bool inlineOutput = true);
 
                 /*!
@@ -1115,7 +1115,7 @@ namespace wml {
                  * at the start and \</script\> at the end.
                  */
                 static void getJavascript (std::stringstream& rJavascript,
-                                           std::string jsFile,
+                                           const std::string& jsFile,
                                            const bool inlineOutput = true);
 
                 /*!
@@ -1126,7 +1126,7 @@ namespace wml {
                  * at the start and \</style\> at the end.
                  */
                 static void getCSS (std::stringstream& rCSS,
-                                    const std::string cssFile,
+                                    const std::string& cssFile,
                                     const bool inlineOutput = true);
 
                 /*!
@@ -1160,11 +1160,11 @@ namespace wml {
                                       const std::string& allowed,
                                       const bool eraseForbidden = false);
                 /*!
-                 * Modification of santize in which the offending
+                 * Modification of sanitize in which the offending
                  * characters are replaced with replaceChar.
                  */
                 static void sanitizeReplace (std::string& str,
-                                             const std::string allowed,
+                                             const std::string& allowed,
                                              const char replaceChar = '_');
 
                 /*!
