@@ -144,13 +144,13 @@ wml::Process::reset (void)
 }
 
 void
-wml::Process::writeIn (string& input)
+wml::Process::writeIn (const string& input) const
 {
         write (this->parentToChild[WRITING_END], input.c_str(), input.size());
 }
 
 void
-wml::Process::setPauseBeforeStart (unsigned int useconds)
+wml::Process::setPauseBeforeStart (const unsigned int useconds)
 {
         this->pauseBeforeStart = useconds;
 }
@@ -404,7 +404,7 @@ wml::Process::probeProcess (void)
 
 // Read stdout pipe, without blocking.
 string
-wml::Process::readAllStandardOutput (void)
+wml::Process::readAllStandardOutput (void) const
 {
         DBG ("Called");
         string s;
@@ -429,7 +429,7 @@ wml::Process::readAllStandardOutput (void)
 
 // Read stderr pipe without blocking
 string
-wml::Process::readAllStandardError (void)
+wml::Process::readAllStandardError (void) const
 {
         string s;
         int bytes = 0;
@@ -452,13 +452,13 @@ wml::Process::readAllStandardError (void)
 }
 
 pid_t
-wml::Process::getPid (void)
+wml::Process::getPid (void) const
 {
         return this->pid;
 }
 
 bool
-wml::Process::running (void)
+wml::Process::running (void) const
 {
         if (this->pid > 0) {
                 return true;
@@ -467,13 +467,13 @@ wml::Process::running (void)
 }
 
 int
-wml::Process::getError (void)
+wml::Process::getError (void) const
 {
         return this->error;
 }
 
 void
-wml::Process::setError (int e)
+wml::Process::setError (const int e)
 {
         this->error = e;
 }
@@ -501,49 +501,49 @@ wml::ProcessData::~ProcessData (void)
 }
 
 void
-wml::ProcessData::setProcessFinishedMsg (string message)
+wml::ProcessData::setProcessFinishedMsg (const string& message)
 {
         this->processFinishedMessage = message;
 }
 
 void
-wml::ProcessData::setErrorNum (int err)
+wml::ProcessData::setErrorNum (const int err)
 {
         this->errorNum = err;
 }
 
 void
-wml::ProcessData::setStdOutReady (bool ready)
+wml::ProcessData::setStdOutReady (const bool ready)
 {
         this->stdOutReady = ready;
 }
 
 void
-wml::ProcessData::setStdErrReady (bool ready)
+wml::ProcessData::setStdErrReady (const bool ready)
 {
         this->stdErrReady = ready;
 }
 
 string
-wml::ProcessData::getProcessFinishedMsg (void)
+wml::ProcessData::getProcessFinishedMsg (void) const
 {
         return this->processFinishedMessage;
 }
 
 int
-wml::ProcessData::getErrorNum (void)
+wml::ProcessData::getErrorNum (void) const
 {
         return this->errorNum;
 }
 
 bool
-wml::ProcessData::getStdOutReady (void)
+wml::ProcessData::getStdOutReady (void) const
 {
         return this->stdOutReady;
 }
 
 bool
-wml::ProcessData::getStdErrReady (void)
+wml::ProcessData::getStdErrReady (void) const
 {
         return this->stdErrReady;
 }

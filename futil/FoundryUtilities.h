@@ -154,7 +154,7 @@ namespace wml {
                 /*!
                  * Apply lower case operation to the char c.
                  */
-                char operator() (char c) const {
+                char operator() (const char c) const {
                         return tolower(c);
                 }
         };
@@ -169,7 +169,7 @@ namespace wml {
                 /*!
                  * Apply upper case operation to the char c.
                  */
-                char operator() (char c) const {
+                char operator() (const char c) const {
                         return toupper(c);
                 }
         };
@@ -270,9 +270,9 @@ namespace wml {
                  */
                 //@{
                 static int stripChars (std::string& input, const std::string& charList);
-                static int stripChars (std::string& input, const char& charList);
+                static int stripChars (std::string& input, const char charList);
                 static int stripChars (Glib::ustring& input, const Glib::ustring& charList);
-                static int stripChars (Glib::ustring& input, const gunichar& charList);
+                static int stripChars (Glib::ustring& input, const gunichar charList);
                 //@}
 
                 /*!
@@ -296,17 +296,10 @@ namespace wml {
                  *
                  * \return the number of terms replaced.
                  */
-                //@{
-                static int searchReplace (const char* searchTerm,
-                                          const char* replaceTerm,
-                                          std::string& data,
-                                          const bool replaceAll = true);
                 static int searchReplace (const std::string& searchTerm,
                                           const std::string& replaceTerm,
                                           std::string& data,
                                           const bool replaceAll = true);
-                //@}
-
 
                 /*!
                  * Do a search and replace in the file fileName,
@@ -316,9 +309,9 @@ namespace wml {
                  * the first occurrence of searchTerm with
                  * replaceTerm.
                  */
-                static int searchReplaceInFile (const std::string searchTerm,
-                                                const std::string replaceTerm,
-                                                std::string fileName,
+                static int searchReplaceInFile (const std::string& searchTerm,
+                                                const std::string& replaceTerm,
+                                                const std::string& fileName,
                                                 const bool replaceAll = true);
 
                 /*!
@@ -327,8 +320,8 @@ namespace wml {
                  * deleteEndOfLine is true, also remove the EOL NL or
                  * CRNL sequence, otherwise, leave the EOL in place.
                  */
-                static int deleteLinesContaining (const std::string searchTerm,
-                                                  const std::string fileName,
+                static int deleteLinesContaining (const std::string& searchTerm,
+                                                  const std::string& fileName,
                                                   const bool deleteEndOfLine = true);
 
                 /*!
@@ -396,13 +389,13 @@ namespace wml {
                  * human readable amount, with the KB/MB/GB suffix
                  * being automatically selected.
                  */
-                static std::string freeSpace (const std::string dirPath);
+                static std::string freeSpace (const std::string& dirPath);
 
                 /*!
                  * Return the amount of free space in KBytes on the
                  * filesystem on which dirPath resides.
                  */
-                static UINT64_TYPE freeSpaceKBytes (const std::string dirPath);
+                static UINT64_TYPE freeSpaceKBytes (const std::string& dirPath);
 
                 /*!
                  * Return the amount of space in KBytes used by the
@@ -422,7 +415,7 @@ namespace wml {
                  * Return the fractional amount of space on the
                  * filesystem on which dirPath resides.
                  */
-                static float freeSpaceFraction (const std::string dirPath);
+                static float freeSpaceFraction (const std::string& dirPath);
 
                 /*!
                  * Return the total amount of space in KBytes on the
@@ -434,10 +427,7 @@ namespace wml {
                  * Stat a file, return true if the file exists and is
                  * any kind of file except a directory.
                  */
-                //@{
                 static bool fileExists (const std::string& path);
-                static bool fileExists (const char * path);
-                //@}
 
                 /*!
                  * Stat a file, return true if the file exists and is
@@ -477,10 +467,7 @@ namespace wml {
                  * Stat a directory, return true if the directory
                  * exists.
                  */
-                //@{
                 static bool dirExists (const std::string& path);
-                static bool dirExists (const char * path);
-                //@}
 
                 /*!
                  * Create the directory and any parent directories
@@ -511,19 +498,19 @@ namespace wml {
                  * was not created. This is NOT applied if it is set
                  * to -1.
                  */
-                static void createDir (const std::string path,
+                static void createDir (const std::string& path,
                                        const mode_t mode = 0775,
                                        const int uid = -1, const int gid = -1);
 
                 /*!
                  * Attempt to rmdir path.
                  */
-                static void removeDir (const std::string path);
+                static void removeDir (const std::string& path);
 
                 /*!
                  * Set the permissions for the provided file
                  */
-                static void setPermissions (const std::string filepath,
+                static void setPermissions (const std::string& filepath,
                                             const mode_t mode);
 
                 /*!
@@ -543,14 +530,14 @@ namespace wml {
                 /*!
                  * Set the ownership for the provided file
                  */
-                static void setOwnership (const std::string filepath,
+                static void setOwnership (const std::string& filepath,
                                           const int uid = -1,
                                           const int gid = -1);
 
                 /*!
                  * Touch the file.
                  */
-                static void touchFile (const std::string path);
+                static void touchFile (const std::string& path);
 
                 /*!
                  * Copy a file. If from/to is a string or a char*,
@@ -564,12 +551,10 @@ namespace wml {
                  */
                 //@{
                 static void copyFile (const std::string& from, const std::string& to);
-                static void copyFile (const char * from, const char * to);
                 static void copyFile (const std::string& from, std::ostream& to);
-                static void copyFile (const char * from, std::ostream& to);
-                static void copyFile (FILE* from, const std::string to);
+                static void copyFile (FILE* from, const std::string& to);
                 static void copyFile (std::istream& from, const std::string& to);
-                static void copyFile (const char * from, FILE* to);
+                static void copyFile (const std::string& from, FILE* to);
                 //@}
 
                 /*!
@@ -612,22 +597,22 @@ namespace wml {
                 /*!
                  * Move a file. Throw exception on failure.
                  */
-                static void moveFile (const std::string from, const std::string to);
+                static void moveFile (const std::string& from, const std::string& to);
 
                 /*!
                  * Call unlink() on the given file path fpath. If
                  * unlinking fails, throw a descriptive error based on
                  * the errno which was set on unlink's return.
                  */
-                static void unlinkFile (const std::string fpath);
+                static void unlinkFile (const std::string& fpath);
 
                 /*!
                  * Unlink files in dirPath which are older than
                  * olerThanSeconds and which contain filePart.
                  */
-                static void clearoutDir (const std::string dirPath,
+                static void clearoutDir (const std::string& dirPath,
                                          const unsigned int olderThanSeconds = 0,
-                                         const std::string filePart = "");
+                                         const std::string& filePart = "");
 
                 /*!
                  * This reads the contents of a directory tree, making
@@ -660,8 +645,8 @@ namespace wml {
                  * will be returned.
                  */
                 static void readDirectoryTree (std::vector<std::string>& vec,
-                                               const char* baseDirPath,
-                                               const char* subDirPath,
+                                               const std::string& baseDirPath,
+                                               const std::string& subDirPath,
                                                const unsigned int olderThanSeconds = 0);
 
                 /*!
@@ -673,7 +658,7 @@ namespace wml {
                  * will be returned.
                  */
                 static void readDirectoryTree (std::vector<std::string>& vec,
-                                               const std::string dirPath,
+                                               const std::string& dirPath,
                                                const unsigned int olderThanSeconds = 0);
 
                 /*!
@@ -692,7 +677,7 @@ namespace wml {
                  * The set dset would be filled only with dir2, dir1.
                  */
                 static void readDirectoryDirs (std::set<std::string>& dset,
-                                               const std::string dirPath);
+                                               const std::string& dirPath);
 
                 /*!
                  * Return empty subdirectories in
@@ -735,7 +720,7 @@ namespace wml {
                  * Return a datestamp - st_mtime; the file
                  * modification time for the given file.
                  */
-                static std::string fileModDatestamp (const char* filename);
+                static std::string fileModDatestamp (const std::string& filename);
 
                 /*!
                  * Check whether the specified files differ.
@@ -795,7 +780,7 @@ namespace wml {
                  * content: &, <, >, ', ", and, optionally, characters
                  * outside the ASCII character set.
                  */
-                static std::string xmlEscape (const std::string& s, bool replaceNonAscii = true);
+                static std::string xmlEscape (const std::string& s, const bool replaceNonAscii = true);
 
                 /*!
                  * Given a path like C:\\path\\to\\file in str, remove
@@ -826,31 +811,26 @@ namespace wml {
                 /*!
                  * Generate a uuid random string as a temporary random
                  * filename. Pass in the path, and a prefix to
-                 * identify the way the file is to be used. prefixPath
-                 * might be, for example, "/tmp/xml-" and the
-                 * resulting file could be:
+                 * identify the way the file is to be used. For
+                 * example, with prefixPath "/tmp/xml-", the resulting
+                 * file could be:
                  * /tmp/xml-814b3393-e55a-449e-b16b-b5241497b532
+                 *
+                 * If numChars is non-zero, it indicates the number of
+                 * characters of the UUID to include. For example,
+                 * with prefixPath "/tmp/xml-" and numChars equal to
+                 * 8, the resulting file could be:
+                 * /tmp/xml-814b3393
                  */
-                static std::string generateRandomFilename (const char* prefixPath);
-
-                /*!
-                 * Generate a uuid random string as a temporary random
-                 * filename. Pass in the path, including a prefix to
-                 * identify the way the file is to be used, and the
-                 * number of characters of the uuid string to
-                 * include. For example with prefixPath "/tmp/xml-"
-                 * and numChars equal to 8, the resulting file could
-                 * be: /tmp/xml-814b3393
-                 */
-                static std::string generateRandomFilename (const char* prefixPath,
-                                                           const unsigned int numChars);
+                static std::string generateRandomFilename (const std::string& prefixPath,
+                                                           const unsigned int numChars = 0);
 
                 /*!
                  * Return a portion of a random UUID string. numChars
                  * to be between 0 and 36. Characters are in the range
                  * 0-9 and a-f (i.e. hex).
                  */
-                static std::string uuidPortion (unsigned int numChars);
+                static std::string uuidPortion (const unsigned int numChars);
 
                 /*!
                  * Return a random string of characters.
@@ -888,19 +868,19 @@ namespace wml {
                  * Return position in v of first string which is equal
                  * to s, or -1 if it's not present.
                  */
-                static int strVectorContains (const std::vector<std::string>& v, const std::string s);
+                static int strVectorContains (const std::vector<std::string>& v, const std::string& s);
 
                 /*!
                  * Return position in v of first string which is a
                  * substring of s, or -1 if none is present.
                  */
-                static int strVectorMatches (const std::vector<std::string>& v, const std::string s);
+                static int strVectorMatches (const std::vector<std::string>& v, const std::string& s);
 
                 /*!
                  * Return position in v of first entry which _doesn't_
                  * match s. Return -1 if all members of v match s.
                  */
-                static int firstNotMatching (const std::vector<std::string>& v, const std::string s);
+                static int firstNotMatching (const std::vector<std::string>& v, const std::string& s);
 
                 /*!
                  * This could be a template. Return true if l contains
@@ -933,8 +913,8 @@ namespace wml {
                  * Populate a vector of directories in /proc
                  */
                 static void readProcDirs (std::vector<std::string>& vec,
-                                          const char* baseDirPath,
-                                          const char* subDirPath);
+                                          const std::string& baseDirPath,
+                                          const std::string& subDirPath);
 
                 /*!
                  * \brief Get the first PID whose program name matches the
@@ -1066,7 +1046,7 @@ namespace wml {
                  * The 3rd char after the space is read in and used as
                  * time separator
                  */
-                static time_t dateTimeToNum (const std::string dateTimeStr);
+                static time_t dateTimeToNum (const std::string& dateTimeStr);
 
                 /*!
                  * Convert a unix epoch number to a date/time of form
@@ -1104,7 +1084,7 @@ namespace wml {
                  */
                 static void getScript (const SCRIPT_TYPE script,
                                        std::stringstream& rScript,
-                                       std::string scriptFile,
+                                       const std::string& scriptFile,
                                        const bool inlineOutput = true);
 
                 /*!
@@ -1115,7 +1095,7 @@ namespace wml {
                  * at the start and \</script\> at the end.
                  */
                 static void getJavascript (std::stringstream& rJavascript,
-                                           std::string jsFile,
+                                           const std::string& jsFile,
                                            const bool inlineOutput = true);
 
                 /*!
@@ -1126,7 +1106,7 @@ namespace wml {
                  * at the start and \</style\> at the end.
                  */
                 static void getCSS (std::stringstream& rCSS,
-                                    const std::string cssFile,
+                                    const std::string& cssFile,
                                     const bool inlineOutput = true);
 
                 /*!
@@ -1154,44 +1134,41 @@ namespace wml {
                  * throwing a runtime error.
                  */
                 static void sanitize (std::string& str,
-                                      const char* allowed,
-                                      const bool eraseForbidden = false);
-                static void sanitize (std::string& str,
                                       const std::string& allowed,
                                       const bool eraseForbidden = false);
+
                 /*!
-                 * Modification of santize in which the offending
+                 * Modification of sanitize in which the offending
                  * characters are replaced with replaceChar.
                  */
                 static void sanitizeReplace (std::string& str,
-                                             const std::string allowed,
+                                             const std::string& allowed,
                                              const char replaceChar = '_');
 
                 /*!
                  * Read filePath and output to stdout. Useful for
                  * outputting static html.
                  */
-                static void coutFile (const char* filePath);
-                static void coutFile (const std::string filePath);
+                static void coutFile (const std::string& filePath);
 
                 /*!
                  * Get the size of the file in bytes.
                  */
-                static int fileSize (const std::string filePath);
+                static int fileSize (const std::string& filePath);
 
                 /*!
                  * Increment the count stored in the file given by
                  * filePath. Return the new value of the count, or -1
                  * on error.
                  */
-                static int incFileCount (const char * filePath);
+                static int incFileCount (const std::string& filePath);
 
                 /*!
                  * Increment the count stored in the file given by
                  * filePath. Return the new value of the count, or -1
                  * on error.
                  */
-                static int decFileCount (const char * filePath);
+                static int decFileCount (const std::string& filePath);
 
                 /*!
                  * Zero the file count in filePath, ENSURING that the
@@ -1200,7 +1177,7 @@ namespace wml {
                  * re-created, then "0" is inserted into it. Return
                  * the new value of the count (0), or -1 on error.
                  */
-                static int zeroFileCount (const char * filePath);
+                static int zeroFileCount (const std::string& filePath);
 
                 /*!
                  * split csv into a vector
@@ -1234,7 +1211,7 @@ namespace wml {
                  * of the returned vector.
                  */
                 static std::vector<Glib::ustring> stringToWords (const Glib::ustring& s,
-                                                                 bool ignoreTrailingSpace = true);
+                                                                 const bool ignoreTrailingSpace = true);
 
                 /*!
                  * Split a string of values into a vector using the
@@ -1354,8 +1331,8 @@ namespace wml {
                  * character if possible.
                  */
                 static std::vector<std::string> wrapLine (const std::string& line,
-                                                          unsigned int maxLength,
-                                                          char wrapAfter = '\0');
+                                                          const unsigned int maxLength,
+                                                          const char wrapAfter = '\0');
 
                 /*!
                  * Turn the passed in vector of string values into a
@@ -1409,8 +1386,8 @@ namespace wml {
                  * the forked process will be left to run and the
                  * function returns immediately.
                  */
-                static void pdfConversion (const std::string inputPath, const std::string outputDevice,
-                                           const std::string outputPath, const unsigned int width,
+                static void pdfConversion (const std::string& inputPath, const std::string& outputDevice,
+                                           const std::string& outputPath, const unsigned int width,
                                            const unsigned int height, const bool wait = false,
                                            const unsigned int resolution = 0);
 
@@ -1423,7 +1400,7 @@ namespace wml {
                  * process will be left to run and the function
                  * returns immediately.
                  */
-                static void pdfToJpeg (const std::string inputPath, const std::string outputPath,
+                static void pdfToJpeg (const std::string& inputPath, const std::string& outputPath,
                                        const unsigned int width, const unsigned int height,
                                        const bool wait = false, const unsigned int resolution = 0);
 
@@ -1439,7 +1416,7 @@ namespace wml {
                  * process will be left to run and the function
                  * returns immediately.
                  */
-                static void pdfToPng (const std::string inputPath, const std::string outputPath,
+                static void pdfToPng (const std::string& inputPath, const std::string& outputPath,
                                       const unsigned int width, const unsigned int height,
                                       const bool wait = false, const unsigned int resolution = 0);
 
@@ -1460,8 +1437,8 @@ namespace wml {
                  * @param toString A container into which the
                  * transcoded string will be placed.
                  */
-                static void doIconv (const char * fromEncoding,
-                                     const char * toEncoding,
+                static void doIconv (const std::string& fromEncoding,
+                                     const std::string& toEncoding,
                                      const std::string& fromString,
                                      std::string& toString);
 
@@ -1470,21 +1447,7 @@ namespace wml {
                  * correct state for overwriting.
                  */
                 static void openFilestreamForOverwrite (std::fstream& f,
-                                                        const char * filepath);
-
-                /*!
-                 * Opens (or re-opens) the referenced filestream in the
-                 * correct state for overwriting.
-                 */
-                static void openFilestreamForOverwrite (std::fstream& f,
                                                         const std::string& filepath);
-
-                /*!
-                 * Opens (or re-opens) the referenced filestream in the
-                 * correct state for appending.
-                 */
-                static void openFilestreamForAppend (std::fstream& f,
-                                                     const char * filepath);
 
                 /*!
                  * Opens (or re-opens) the referenced filestream in the
@@ -1516,7 +1479,7 @@ namespace wml {
                  * This function copied from
                  * wmlnetapui/wmlnetapui/SystemPage.cpp
                  */
-                static bool valid_ip (const std::string ip_string);
+                static bool valid_ip (const std::string& ip_string);
         };
 
 } // namespace wml
