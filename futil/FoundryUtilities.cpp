@@ -4615,7 +4615,7 @@ wml::FoundryUtilities::csvToMap (const std::string& csvList, const char relation
                 vector<string> tokens = FoundryUtilities::csvToVector (*iV, relationship, false);
                 if (tokens.size() != 2) {
                         stringstream errss;
-                        errss << "Problem getting key/value pair from '" << *iV << "'";
+                        errss << "FoundryUtilities::csvToMap: Problem getting key/value pair from '" << *iV << "'";
                         throw runtime_error (errss.str());
                 }
                 string key (tokens.at(0)), value (tokens.at(1));
