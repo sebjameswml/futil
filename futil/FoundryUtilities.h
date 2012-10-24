@@ -879,6 +879,11 @@ namespace wml {
                                                  const bool allowSimilars = true);
 
                 /*!
+                 * \brief Generate MD5 checksum for the specified string.
+                 */
+                static std::string generateMd5sum (const std::string& s);
+
+                /*!
                  * This could be a template. Return true if v contains
                  * i.
                  */

@@ -58,3 +58,4 @@ dateToEpoch
 testXmlEscape
 testStringToWords
 testFilesDiffer
+testRC4

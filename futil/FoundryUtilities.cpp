@@ -2249,6 +2249,46 @@ wml::FoundryUtilities::randomString (const unsigned int numChars,
         return rtn.substr (0, numChars);
 }
 
+string
+wml::FoundryUtilities::generateMd5sum (const std::string& s)
+{
+        string ifp (FoundryUtilities::generateRandomFilename ("/tmp/md5in-", 8)),
+                ofp (FoundryUtilities::generateRandomFilename ("/tmp/md5-", 8));
+        ofstream fout;
+        fout.open (ifp.c_str());
+        if (fout.is_open()) {
+                fout << s;
+                fout.close();
+        }
+
+        string cmd = "md5sum  " + ifp + " > " + ofp;
+        int n (system (cmd.c_str()));
+        FoundryUtilities::unlinkFile (ifp);
+        if (n != 0) {
+                throw runtime_error ("Couldn't generate md5sum");
+        }
+
+        string rtn ("");
+
+        ifstream fin;
+        fin.open (ofp.c_str());
+        if (fin.is_open()) {
+                getline (fin, rtn);
+                fin.close();
+        }
+        FoundryUtilities::unlinkFile (ofp);
+
+        // Output contains checksum value and file info, separated by
+        // one or more spaces:
+        // 6618d4e27c76a0b3b9c1780efbb1117c  /tmp/md5in-0877e1a5
+        string::size_type pos (rtn.find (" "));
+        if (pos != string::npos) {
+                rtn.erase (pos);
+        }
+
+        return rtn;
+}
+
 bool
 wml::FoundryUtilities::vectorContains (const std::vector<unsigned int>& v, const unsigned int i)
 {
