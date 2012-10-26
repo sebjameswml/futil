@@ -1248,7 +1248,7 @@ wml::FoundryUtilities::createDir (const std::string path,
                                   const mode_t mode,
                                   const int uid, const int gid)
 {
-        DBG ("Called for path '" << path << "'");
+        DBG2 ("Called for path '" << path << "'");
         if (path.empty()) {
                 // Create no directory. Just return.
                 return;
