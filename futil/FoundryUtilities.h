@@ -1525,7 +1525,7 @@ wml::FoundryUtilities::splitStringWithEncs (const stringType& s,
                                             const stringType& enclosureChars,
                                             const typename stringType::value_type/*charType*/& escapeChar) // or '\0'
 {
-        DBG2 ("Called for string >" << s << "<");
+        //DBG2 ("Called for string >" << s << "<");
         // Run through the string, searching for separator and
         // enclosure chars and finding tokens based on those.
 
@@ -1555,7 +1555,7 @@ wml::FoundryUtilities::splitStringWithEncs (const stringType& s,
                                 ++a; // Skip the enclosure char
                         } else if ((separatorChars.find_first_of (static_cast<typename stringType::value_type>(s[a]), 0)) != stringType::npos) {
                                 // First char is a ',' This special case means that we insert an entry for the current ',' and step past it.
-                                DBG2 ("First char special case, insert entry.");
+                                //DBG2 ("First char special case, insert entry.");
                                 theVec.push_back ("");
                                 ++a;
 
@@ -1564,7 +1564,7 @@ wml::FoundryUtilities::splitStringWithEncs (const stringType& s,
                 } else { // Not first field
 
                         if ((a = s.find_first_of (sepsAndEncsAndEsc, a)) == stringType::npos) {
-                                DBG ("No enclosure, separator or escape chars in string");
+                                //DBG ("No enclosure, separator or escape chars in string");
                                 theVec.push_back (s);
                                 return theVec;
                         }
@@ -1580,12 +1580,12 @@ wml::FoundryUtilities::splitStringWithEncs (const stringType& s,
                                 ++a; // Skip the enclosure char
                         } else if ((separatorChars.find_first_of (static_cast<typename stringType::value_type>(s[a]), 0)) != stringType::npos) {
                                 // It's a field separator
-                                DBG2 ("Field separator found at position " << a << " skipping...");
+                                //DBG2 ("Field separator found at position " << a << " skipping...");
                                 ++a; // Skip the separator
                                 if (a >= sz) {
                                         // Special case - a trailing separator character - add an empty
                                         // value to the return vector of tokens.
-                                        DBG2 ("Adding trailing empty field due to trailing separator");
+                                        //DBG2 ("Adding trailing empty field due to trailing separator");
                                         theVec.push_back ("");
                                 } else {
                                         // a < sz, so now check if we've hit an escape char
@@ -1607,7 +1607,7 @@ wml::FoundryUtilities::splitStringWithEncs (const stringType& s,
                 // Now get the token
                 typename stringType::size_type range = stringType::npos;
                 if (nextIsEnc) {
-                        DBG2 ("Searching for next instances of enc chars: >" << enclosureChars << "< ");
+                        //DBG2 ("Searching for next instances of enc chars: >" << enclosureChars << "< ");
                         c = a;
                         while ((b = s.find_first_of (currentEncChar, c)) != stringType::npos) {
                                 // FIXME: Check we didn't find an escaped enclosureChar.
@@ -1623,41 +1623,41 @@ wml::FoundryUtilities::splitStringWithEncs (const stringType& s,
                                 break;
                         }
                 } else {
-                        DBG2 ("Searching for next instances of sep chars: >" << separatorChars << "< from position " << a);
+                        //DBG2 ("Searching for next instances of sep chars: >" << separatorChars << "< from position " << a);
                         if ((b = s.find_first_of (separatorChars, a)) != stringType::npos) {
                                 // Check it wasn't an escaped separator:
                                 if (escapeChar) {
                                         c = b; --c;
                                         if (c >= 0 && c != stringType::npos && c < sz && s[c] == escapeChar) {
-                                                DBG2 ("Found escaped separator character");
+                                                //DBG2 ("Found escaped separator character");
                                                 c = b; ++c;
                                                 continue;
                                         }
                                 }
                                 range = b - a;
-                                DBG2 ("On finding a separator char at position " << b
-                                      << " (starting from position " << a << "), have set range to " << range);
+                                //DBG2 ("On finding a separator char at position " << b
+                                //<< " (starting from position " << a << "), have set range to " << range);
                         }
                 }
 
                 entry = s.substr (a, range);
                 FoundryUtilities::stripChars (entry, escapeChar);
-                DBG2 ("Adding entry '" << entry << "' to vector");
+                //DBG2 ("Adding entry '" << entry << "' to vector");
                 theVec.push_back (entry);
 
                 if (range != stringType::npos) { // end of field was not end of string
                         if (nextIsEnc) {
-                                DBG2 ("Adding " << range + 1 << " to a (" << a << ") as nextIsEnc...");
+                                //DBG2 ("Adding " << range + 1 << " to a (" << a << ") as nextIsEnc...");
                                 a += range + 1; // +1 to take us past the closing enclosure.
                         } else {
-                                DBG2 ("Adding " << range << " to a (" << a << ")...");
+                                //DBG2 ("Adding " << range << " to a (" << a << ")...");
                                 a += range; // in new scheme, we want to find the separator, so this
                                             // places us ON the separator.
                         }
                 } else {
                         a = range;
                 }
-                DBG2 ("...a is now " << a);
+                //DBG2 ("...a is now " << a);
         }
 
         return theVec;
