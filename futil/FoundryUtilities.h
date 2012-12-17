@@ -1298,26 +1298,12 @@ namespace wml {
                  * chars.
                  */
                 //@{
-                template <typename stringType, typename charType>
-                static std::vector<stringType> splitStringWithEncs (const stringType& s,
-                                                                    const stringType& separatorChars/* = stringType(";, ")*/,
-                                                                    const stringType& enclosureChars/* = stringType("\"'")*/,
-                                                                    const charType& escapeChar/* = charType(0)*/);
-#if 0
-                template <typename stringType, typename charType>
+                template <typename stringType>
                 static std::vector<stringType> splitStringWithEncs (const stringType& s,
                                                                     const stringType& separatorChars = stringType(";, "),
-                                                                    const stringType& enclosureChars = stringType("\"'")); // escapeChar defaults to 0
-
-                template <typename stringType, typename charType>
-                static std::vector<stringType> splitStringWithEncs (const stringType& s,
-                                                                    const stringType& separatorChars = stringType(";, ")); // and enclosureChars defaults to "\"'"
-
-#endif
-                template <typename stringType, typename charType>
-                static std::vector<stringType> splitStringWithEncs (const stringType& s); // and separatorChars defaults to ";, "
+                                                                    const stringType& enclosureChars = stringType("\"'"),
+                                                                    const typename stringType::value_type& escapeChar = typename stringType::value_type(0));
                 //@}
-
 
                 /*!
                  * Highlight matching portions of search terms in <tag></tag> tags
@@ -1532,12 +1518,12 @@ namespace wml {
  * Templated function splitStringWithEncs implementation.
  */
 //@{
-template <typename stringType, typename charType>
+template <typename stringType/*, typename charType*/>
 std::vector<stringType>
 wml::FoundryUtilities::splitStringWithEncs (const stringType& s,
                                             const stringType& separatorChars,
                                             const stringType& enclosureChars,
-                                            const charType& escapeChar) // or '\0'
+                                            const typename stringType::value_type/*charType*/& escapeChar) // or '\0'
 {
         DBG2 ("Called for string >" << s << "<");
         // Run through the string, searching for separator and
@@ -1555,19 +1541,19 @@ wml::FoundryUtilities::splitStringWithEncs (const stringType& s,
                 // If true, then the thing we're searching for is an enclosure
                 // char, otherwise, it's a separator char.
                 bool nextIsEnc(false);
-                charType currentEncChar = 0;
+                typename stringType::value_type currentEncChar = 0;
 
                 if (a == 0) { // First field.
                         if (escapeChar && s[a] == escapeChar) {
                                 // First char is an escape char - skip this and next
                                 ++a; ++a;
                                 continue;
-                        } else if ((enclosureChars.find_first_of (static_cast<charType>(s[a]), 0)) != stringType::npos) {
+                        } else if ((enclosureChars.find_first_of (static_cast<typename stringType::value_type>(s[a]), 0)) != stringType::npos) {
                                 // First char is an enclosure char.
                                 nextIsEnc = true;
                                 currentEncChar = s[a];
                                 ++a; // Skip the enclosure char
-                        } else if ((separatorChars.find_first_of (static_cast<charType>(s[a]), 0)) != stringType::npos) {
+                        } else if ((separatorChars.find_first_of (static_cast<typename stringType::value_type>(s[a]), 0)) != stringType::npos) {
                                 // First char is a ',' This special case means that we insert an entry for the current ',' and step past it.
                                 DBG2 ("First char special case, insert entry.");
                                 theVec.push_back ("");
@@ -1587,12 +1573,12 @@ wml::FoundryUtilities::splitStringWithEncs (const stringType& s,
                                 // it's an escape char - skip this and next
                                 ++a; ++a;
                                 continue;
-                        } else if ((enclosureChars.find_first_of (static_cast<charType>(s[a]), 0)) != stringType::npos) {
+                        } else if ((enclosureChars.find_first_of (static_cast<typename stringType::value_type>(s[a]), 0)) != stringType::npos) {
                                 // it's an enclosure char.
                                 nextIsEnc = true;
                                 currentEncChar = s[a];
                                 ++a; // Skip the enclosure char
-                        } else if ((separatorChars.find_first_of (static_cast<charType>(s[a]), 0)) != stringType::npos) {
+                        } else if ((separatorChars.find_first_of (static_cast<typename stringType::value_type>(s[a]), 0)) != stringType::npos) {
                                 // It's a field separator
                                 DBG2 ("Field separator found at position " << a << " skipping...");
                                 ++a; // Skip the separator
@@ -1603,7 +1589,7 @@ wml::FoundryUtilities::splitStringWithEncs (const stringType& s,
                                         theVec.push_back ("");
                                 } else {
                                         // a < sz, so now check if we've hit an escape char
-                                        if ((enclosureChars.find_first_of (static_cast<charType>(s[a]), 0)) != stringType::npos) {
+                                        if ((enclosureChars.find_first_of (static_cast<typename stringType::value_type>(s[a]), 0)) != stringType::npos) {
                                                 // Enclosure char following sep char
                                                 nextIsEnc = true;
                                                 currentEncChar = s[a];
@@ -1675,38 +1661,6 @@ wml::FoundryUtilities::splitStringWithEncs (const stringType& s,
         }
 
         return theVec;
-}
-
-#if 0
-template <typename stringType, typename charType>
-std::vector<stringType>
-wml::FoundryUtilities::splitStringWithEncs (const stringType& s,
-                                            const stringType& separatorChars,
-                                            const stringType& enclosureChars)
-{
-        charType escapeChar (0);
-        return wml::FoundryUtilities::splitStringWithEncs (s, separatorChars, enclosureChars, escapeChar);
-}
-
-template <typename stringType, typename charType>
-std::vector<stringType>
-wml::FoundryUtilities::splitStringWithEncs (const stringType& s,
-                                            const stringType& separatorChars)
-{
-        charType escapeChar (0);
-        stringType enclosureChars ("\"'");
-        return wml::FoundryUtilities::splitStringWithEncs (s, separatorChars, enclosureChars, escapeChar);
-}
-#endif
-
-template <typename stringType, typename charType>
-std::vector<stringType>
-wml::FoundryUtilities::splitStringWithEncs (const stringType& s)
-{
-        charType escapeChar (0);
-        stringType separatorChars (";, ");
-        stringType enclosureChars ("\"'");
-        return wml::FoundryUtilities::splitStringWithEncs (s, separatorChars, enclosureChars, escapeChar);
 }
 //@}
 

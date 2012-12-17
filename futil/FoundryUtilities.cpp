@@ -4006,7 +4006,7 @@ wml::FoundryUtilities::htmlHighlightTerm (const string& term,
         char escape = '\0';
         //const string& sTermsRef = sTerms;
         vector<string> searchTermsUC (wml::FoundryUtilities::splitStringWithEncs (sTerms, seps, encs, escape));
-        vector<string> searchTermsUC_2 (wml::FoundryUtilities::splitStringWithEncs (sTerms /*, seps, encs, escape*/));
+        vector<string> searchTermsUC_2 = wml::FoundryUtilities::splitStringWithEncs (sTerms);
 
         string sTag (tag);
         return FoundryUtilities::htmlHighlightTerm (sTerm, searchTermsUC, sTag);
