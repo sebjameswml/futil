@@ -1297,25 +1297,13 @@ namespace wml {
                  * this is the character used to escape the enclosure
                  * chars.
                  */
-                static std::vector<std::string> splitStringWithEncs (const std::string& s,
-                                                                     const std::string separatorChars = ";, ",
-                                                                     const std::string enclosureChars = "\"'",
-                                                                     const char escapeChar = '\0');
-
-                static std::list<std::string> splitStringWithEncsToList (const std::string& s,
-                                                                         const std::string separatorChars = ";, ",
-                                                                         const std::string enclosureChars = "\"'",
-                                                                         const char escapeChar = '\0');
-
-                static std::vector<Glib::ustring> splitStringWithEncs (const Glib::ustring& s,
-                                                                       const Glib::ustring separatorChars = ";, ",
-                                                                       const Glib::ustring enclosureChars = "\"'",
-                                                                       const gunichar escapeChar = 0);
-
-                static std::list<Glib::ustring> splitStringWithEncsToList (const Glib::ustring& s,
-                                                                           const Glib::ustring separatorChars = ";, ",
-                                                                           const Glib::ustring enclosureChars = "\"'",
-                                                                           const gunichar escapeChar = 0);
+                //@{
+                template <typename stringType>
+                static std::vector<stringType> splitStringWithEncs (const stringType& s,
+                                                                    const stringType& separatorChars = stringType(";, "),
+                                                                    const stringType& enclosureChars = stringType("\"'"),
+                                                                    const typename stringType::value_type& escapeChar = typename stringType::value_type(0));
+                //@}
 
                 /*!
                  * Highlight matching portions of search terms in <tag></tag> tags
@@ -1525,6 +1513,156 @@ namespace wml {
         };
 
 } // namespace wml
+
+/*!
+ * Templated function splitStringWithEncs implementation.
+ */
+//@{
+template <typename stringType/*, typename charType*/>
+std::vector<stringType>
+wml::FoundryUtilities::splitStringWithEncs (const stringType& s,
+                                            const stringType& separatorChars,
+                                            const stringType& enclosureChars,
+                                            const typename stringType::value_type/*charType*/& escapeChar) // or '\0'
+{
+        //DBG2 ("Called for string >" << s << "<");
+        // Run through the string, searching for separator and
+        // enclosure chars and finding tokens based on those.
+
+        std::vector<stringType> theVec;
+        stringType entry("");
+        typename stringType::size_type a=0, b=0, c=0;
+        stringType sepsAndEncsAndEsc = separatorChars + enclosureChars;
+        sepsAndEncsAndEsc += escapeChar;
+
+        typename stringType::size_type sz = s.size();
+        while (a < sz) {
+
+                // If true, then the thing we're searching for is an enclosure
+                // char, otherwise, it's a separator char.
+                bool nextIsEnc(false);
+                typename stringType::value_type currentEncChar = 0;
+
+                if (a == 0) { // First field.
+                        if (escapeChar && s[a] == escapeChar) {
+                                // First char is an escape char - skip this and next
+                                ++a; ++a;
+                                continue;
+                        } else if ((enclosureChars.find_first_of (static_cast<typename stringType::value_type>(s[a]), 0)) != stringType::npos) {
+                                // First char is an enclosure char.
+                                nextIsEnc = true;
+                                currentEncChar = s[a];
+                                ++a; // Skip the enclosure char
+                        } else if ((separatorChars.find_first_of (static_cast<typename stringType::value_type>(s[a]), 0)) != stringType::npos) {
+                                // First char is a ',' This special case means that we insert an entry for the current ',' and step past it.
+                                //DBG2 ("First char special case, insert entry.");
+                                theVec.push_back ("");
+                                ++a;
+
+                        } // else first char is a normal char or a separator.
+
+                } else { // Not first field
+
+                        if ((a = s.find_first_of (sepsAndEncsAndEsc, a)) == stringType::npos) {
+                                //DBG ("No enclosure, separator or escape chars in string");
+                                theVec.push_back (s);
+                                return theVec;
+                        }
+
+                        else if (escapeChar && s[a] == escapeChar) {
+                                // it's an escape char - skip this and next
+                                ++a; ++a;
+                                continue;
+                        } else if ((enclosureChars.find_first_of (static_cast<typename stringType::value_type>(s[a]), 0)) != stringType::npos) {
+                                // it's an enclosure char.
+                                nextIsEnc = true;
+                                currentEncChar = s[a];
+                                ++a; // Skip the enclosure char
+                        } else if ((separatorChars.find_first_of (static_cast<typename stringType::value_type>(s[a]), 0)) != stringType::npos) {
+                                // It's a field separator
+                                //DBG2 ("Field separator found at position " << a << " skipping...");
+                                ++a; // Skip the separator
+                                if (a >= sz) {
+                                        // Special case - a trailing separator character - add an empty
+                                        // value to the return vector of tokens.
+                                        //DBG2 ("Adding trailing empty field due to trailing separator");
+                                        theVec.push_back ("");
+                                } else {
+                                        // a < sz, so now check if we've hit an escape char
+                                        if ((enclosureChars.find_first_of (static_cast<typename stringType::value_type>(s[a]), 0)) != stringType::npos) {
+                                                // Enclosure char following sep char
+                                                nextIsEnc = true;
+                                                currentEncChar = s[a];
+                                                ++a; // Skip the enclosure char
+                                        }
+                                }
+                        } else {
+                                //throw std::runtime_error ("FoundryUtilities::splitStringWithEncs: Unexpected case");
+                        }
+                }
+
+                // Check we didn't over-run
+                if (a >= sz) { break; }
+
+                // Now get the token
+                typename stringType::size_type range = stringType::npos;
+                if (nextIsEnc) {
+                        //DBG2 ("Searching for next instances of enc chars: >" << enclosureChars << "< ");
+                        c = a;
+                        while ((b = s.find_first_of (currentEncChar, c)) != stringType::npos) {
+                                // FIXME: Check we didn't find an escaped enclosureChar.
+                                if (escapeChar) {
+                                        c = b; --c;
+                                        if (s[c] == escapeChar) {
+                                                // Skip b which is an escaped enclosure char
+                                                c = b; ++c;
+                                                continue;
+                                        }
+                                }
+                                range = b - a;
+                                break;
+                        }
+                } else {
+                        //DBG2 ("Searching for next instances of sep chars: >" << separatorChars << "< from position " << a);
+                        if ((b = s.find_first_of (separatorChars, a)) != stringType::npos) {
+                                // Check it wasn't an escaped separator:
+                                if (escapeChar) {
+                                        c = b; --c;
+                                        if (c >= 0 && c != stringType::npos && c < sz && s[c] == escapeChar) {
+                                                //DBG2 ("Found escaped separator character");
+                                                c = b; ++c;
+                                                continue;
+                                        }
+                                }
+                                range = b - a;
+                                //DBG2 ("On finding a separator char at position " << b
+                                //<< " (starting from position " << a << "), have set range to " << range);
+                        }
+                }
+
+                entry = s.substr (a, range);
+                FoundryUtilities::stripChars (entry, escapeChar);
+                //DBG2 ("Adding entry '" << entry << "' to vector");
+                theVec.push_back (entry);
+
+                if (range != stringType::npos) { // end of field was not end of string
+                        if (nextIsEnc) {
+                                //DBG2 ("Adding " << range + 1 << " to a (" << a << ") as nextIsEnc...");
+                                a += range + 1; // +1 to take us past the closing enclosure.
+                        } else {
+                                //DBG2 ("Adding " << range << " to a (" << a << ")...");
+                                a += range; // in new scheme, we want to find the separator, so this
+                                            // places us ON the separator.
+                        }
+                } else {
+                        a = range;
+                }
+                //DBG2 ("...a is now " << a);
+        }
+
+        return theVec;
+}
+//@}
 
 #endif // __cplusplus
 

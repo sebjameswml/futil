@@ -64,6 +64,14 @@ int main (int argc, char **argv)
                         cout << *i << "\n";
                 }
 
+                Glib::ustring gs ("'this\"' is, a, \"string");
+                vector<Glib::ustring> toks4 = FoundryUtilities::splitStringWithEncs (gs);
+                vector<Glib::ustring>::const_iterator gi;
+                cout << "Output of splitStringWithEncs for the Glib ustring '" << gs.raw() << "':\n";
+                for (gi = toks4.begin(); gi != toks4.end(); gi++) {
+                        cout << gi->raw() << "\n";
+                }
+
                 string forCount ("ababa");
                 cout << "In string '" << forCount << "':\n";
                 cout << "Number of a chars:" << FoundryUtilities::countChars (forCount, 'a') << endl;;
