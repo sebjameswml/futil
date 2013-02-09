@@ -118,6 +118,11 @@ extern "C" {
  */
 #define CUPS_DESTQUEUEPORT_SAFE_CHARS CHARS_NUMERIC_ALPHA
 
+/*!
+ * Unreserved characters for URI percent encoding.
+ */
+#define URI_UNRESERVED_CHARS      CHARS_NUMERIC_ALPHA"-._~"
+
 /*
  * FoundryUtilities code is available to C++ programs only.
  */
@@ -1510,6 +1515,28 @@ namespace wml {
                  * wmlnetapui/wmlnetapui/SystemPage.cpp
                  */
                 static bool valid_ip (const std::string ip_string);
+
+                /*!
+                 * Encodes reserved characters for representation in a
+                 * URI.
+                 *
+                 * Implemented in a fairly straightforward way using
+                 * information on reserved/unreserved characters found
+                 * here:
+                 * http://labs.apache.org/webarch/uri/rev-2002/rfc2396bis.html#characters
+                 *
+                 * Later, updated based on testing encoding/decoding
+                 * arbitrary PDF files, withinformation form the
+                 * Wikipedia page "Percent Encoding" and brought into
+                 * futil from wml::fwebui.
+                 */
+                static void encodeURIComponent (std::string& s);
+
+                /*!
+                 * This does the opposite of the encodeURIComponent()
+                 * function in javascript.
+                 */
+                static void decodeURIComponent (std::string& s);
         };
 
 } // namespace wml

@@ -4727,4 +4727,58 @@ wml::FoundryUtilities::getlineWithCopy (std::istream* istrm,
         return gotline;
 }
 
+void
+wml::FoundryUtilities::decodeURIComponent (string& s)
+{
+        if (s.empty()) { return; }
+
+        stringstream ss;
+        // Decode %NN to ascii(0xNN)
+        for (string::iterator i = s.begin(); i != s.end(); i++) {
+                if (*i == '%') {
+                        string hex ="";
+                        hex += *(++i);
+                        if (i == s.end()) {
+                                // Fell off end of string. String mal-formed.
+                                break;
+                        }
+                        hex += *(++i);
+                        if (i == s.end()) {
+                                // Fell off end of string after second char.
+                                break;
+                        }
+                        unsigned long ascii = strtoul(hex.c_str(), NULL, 16);
+                        if (ascii >= 0 && ascii < 256) {
+                                ss << (char)ascii;
+                        }
+                } else {
+                        ss << *i;
+                }
+        }
+        s = ss.str();
+}
+
+void
+wml::FoundryUtilities::encodeURIComponent (string& s)
+{
+        if (s.empty()) { return; }
+
+        stringstream ss;
+        // Set stream to use uppercase for hex strings
+        ss << uppercase;
+        ss.fill('0');
+        string charset = URI_UNRESERVED_CHARS;
+        for (string::iterator i = s.begin(); i != s.end(); i++) {
+                if (charset.find(*i) != string::npos) {
+                        ss << *i;
+                } else {
+                        ss << hex << "%";
+                        ss.width(2);
+                        ss << (0xff & static_cast<int>(*i)) << dec;
+                        ss.width(1);
+                }
+
+        }
+        s = ss.str();
+}
 //@}
