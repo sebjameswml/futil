@@ -60,3 +60,4 @@ testStringToWords
 testFilesDiffer
 testRC4
 testSplitString2
+logmsg
