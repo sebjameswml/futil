@@ -1517,6 +1517,13 @@ namespace wml {
                 static bool valid_ip (const std::string ip_string);
 
                 /*!
+                 * Determine if mac_string is a valid MAC address, of
+                 * the form 01:23:45:67:89:ab. Return true if so,
+                 * false if not.
+                 */
+                static bool valid_mac (const std::string& mac_string);
+
+                /*!
                  * Encodes reserved characters for representation in a
                  * URI.
                  *

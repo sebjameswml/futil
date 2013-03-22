@@ -60,4 +60,5 @@ testStringToWords
 testFilesDiffer
 testRC4
 testSplitString2
+testValidMac
 logmsg

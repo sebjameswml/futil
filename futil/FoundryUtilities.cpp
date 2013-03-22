@@ -4699,6 +4699,46 @@ wml::FoundryUtilities::valid_ip (const string ip_string)
 }
 
 bool
+wml::FoundryUtilities::valid_mac (const string& mac_string)
+{
+        regex_t * ip_regex = (regex_t*)0;
+        int reg_error;
+        int valid = 0; /* The result of the validation. */
+
+        ip_regex = (regex_t*) malloc (sizeof(regex_t));
+
+        /* Validation one - does it conform to XX:XX:XX:XX:XX:XX format? */
+        reg_error =
+                regcomp (ip_regex,
+                         "^([0-9a-fA-F][0-9a-fA-F]):"
+                         "([0-9a-fA-F][0-9a-fA-F]):"
+                         "([0-9a-fA-F][0-9a-fA-F]):"
+                         "([0-9a-fA-F][0-9a-fA-F]):"
+                         "([0-9a-fA-F][0-9a-fA-F]):"
+                         "([0-9a-fA-F][0-9a-fA-F])$",
+                         REG_EXTENDED);
+
+        if (reg_error) {
+                DBG ("Failed compiling basic format regex check");
+                if (ip_regex != (regex_t*)0) {
+                        regfree (ip_regex);
+                        free (ip_regex);
+                }
+                return false;
+        }
+
+        valid = regexec (ip_regex, mac_string.c_str(), 0, NULL, 0) ? 0 : 1;
+
+        regfree (ip_regex);
+        free (ip_regex);
+
+        if (valid > 0) {
+                return true;
+        }
+        return false;
+}
+
+bool
 wml::FoundryUtilities::getlineWithCopy (std::istream* istrm,
                                         std::string& line,
                                         std::ofstream& copystrm,
