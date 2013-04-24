@@ -5,9 +5,9 @@ SUBDIRS = futil doc
 
 bin_PROGRAMS = testDoIconv testXmlCondition testfutil testsymlinks testdirperms testSetPerm testdates dateToEpoch testSplitString testSplitString2 testtotalspace testRandomString testlock splitstring stringtovector emptydirs logmsg
 
-check_PROGRAMS = testXmlEscape testStringToWords testFilesDiffer testRC4 testValidMac
+check_PROGRAMS = testXmlEscape testStringToWords testFilesDiffer testRC4 testValidMac testWrapLine
 
-TESTS = testXmlEscape testStringToWords testFilesDiffer testRC4 testValidMac
+TESTS = testXmlEscape testStringToWords testFilesDiffer testRC4 testValidMac testWrapLine
 
 logmsg_SOURCES = logmsg.cpp
 # no LDADD
@@ -74,6 +74,9 @@ testRC4_LDADD = futil/libfutil.la -luuid -lmagic $(GLIBMM_LIBS)
 
 testValidMac_SOURCES = testValidMac.cpp
 testValidMac_LDADD = futil/libfutil.la -luuid -lmagic $(GLIBMM_LIBS)
+
+testWrapLine_SOURCES = testWrapLine.cpp
+testWrapLine_LDADD = futil/libfutil.la -luuid -lmagic $(GLIBMM_LIBS)
 
 INCLUDES = -I./futil $(GLIBMM_CFLAGS)
 
