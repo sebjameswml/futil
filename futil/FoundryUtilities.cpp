@@ -4139,7 +4139,7 @@ wml::FoundryUtilities::wrapLine (const std::string& line, unsigned int maxLength
 
                 if (len - pos > maxLength) {
                         pos1 = line.find_last_of (separators, pos + maxLength);
-                        if (pos1 < pos) {
+                        if (pos1 < pos || pos1 == string::npos) {
                                 // Likely found a string with no
                                 // spaces and maxLength chars so increment
                                 // allowable line length
