@@ -592,7 +592,12 @@ namespace wml {
                 /*!
                  * Append the file from to the filestream appendTo
                  */
+                //@{
                 static void appendFile (const std::string& from, std::ostream& appendTo);
+                static void appendFile (std::istream& from, std::ostream& appendTo);
+                static void appendFile (std::istream& from, const std::string& appendTo);
+                static void appendFile (const std::string& from, const std::string& appendTo);
+                //@}
 
                 /*!
                  * Make a copy of \param bytes bytes of the file at

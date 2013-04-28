@@ -1784,7 +1784,7 @@ wml::FoundryUtilities::appendFile (const std::string& from, std::ostream& append
         ifstream in;
         in.open (from.c_str(), ios::in);
         if (!in.is_open()) {
-                throw runtime_error ("FoundryUtilities::copyFile(): Couldn't open FROM file");
+                throw runtime_error ("FoundryUtilities::appendFile(): Couldn't open FROM file");
         }
 
         char buf[64];
@@ -1794,6 +1794,69 @@ wml::FoundryUtilities::appendFile (const std::string& from, std::ostream& append
         }
 
         in.close();
+}
+
+// AH - because USER opens the ostream, then the USER/client controls if copy or append.
+// This would be the same as copyFile(istream&, ostream&
+void
+wml::FoundryUtilities::appendFile (istream& from, ostream& appendTo)
+{
+        if (!appendTo.good()) {
+                throw runtime_error ("Can't append to appendTo, it's not good()");
+        }
+
+        char buf[64];
+        buf[63] = '\0';
+        while (!from.eof() && appendTo.good()) {
+                from.read (buf, 63);
+                appendTo.write (buf, from.gcount());
+        }
+}
+
+void
+wml::FoundryUtilities::appendFile (istream& from, const string& appendTo)
+{
+        ofstream f;
+        f.open (appendTo.c_str(), ios::out|ios::app);
+        if (!f.is_open()) {
+                stringstream ee;
+                ee << "Failed to open output file '" << appendTo << "'";
+                throw runtime_error (ee.str());
+        }
+
+        char buf[64];
+        buf[63] = '\0';
+        while (!from.eof() && f.good()) {
+                from.read (buf, 63);
+                f.write (buf, from.gcount());
+        }
+}
+
+void
+wml::FoundryUtilities::appendFile (const string& from, const string& appendTo)
+{
+        ifstream fin;
+        fin.open (from.c_str(), ios::in);
+        if (!fin.is_open()) {
+                stringstream ee;
+                ee << "Failed to open input file '" << from << "'";
+                throw runtime_error (ee.str());
+        }
+
+        ofstream f;
+        f.open (appendTo.c_str(), ios::out|ios::app);
+        if (!f.is_open()) {
+                stringstream ee;
+                ee << "Failed to open output file '" << appendTo << "'";
+                throw runtime_error (ee.str());
+        }
+
+        char buf[64];
+        buf[63] = '\0';
+        while (!fin.eof() && f.good()) {
+                fin.read (buf, 63);
+                f.write (buf, fin.gcount());
+        }
 }
 
 void
