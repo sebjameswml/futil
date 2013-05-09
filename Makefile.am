@@ -3,7 +3,7 @@ AUTOMAKE_OPTIONS = check-news dist-bzip2
 
 SUBDIRS = futil doc
 
-bin_PROGRAMS = testDoIconv testXmlCondition testfutil testsymlinks testdirperms testSetPerm testdates dateToEpoch testSplitString testSplitString2 testtotalspace testRandomString testlock splitstring stringtovector emptydirs logmsg
+bin_PROGRAMS = testDoIconv testXmlCondition testfutil testsymlinks testdirperms testSetPerm testdates dateToEpoch testSplitString testSplitString2 testtotalspace testRandomString testlock splitstring stringtovector emptydirs logmsg testUnicodeToUTF8
 
 check_PROGRAMS = testXmlEscape testStringToWords testFilesDiffer testRC4 testValidMac testWrapLine
 
@@ -62,6 +62,9 @@ testlock_LDADD = futil/libfutil.la -luuid -lmagic $(GLIBMM_LIBS)
 
 testXmlEscape_SOURCES = testXmlEscape.cpp
 testXmlEscape_LDADD = futil/libfutil.la -luuid -lmagic $(GLIBMM_LIBS)
+
+testUnicodeToUTF8_SOURCES = testUnicodeToUTF8.cpp
+testUnicodeToUTF8_LDADD = futil/libfutil.la -luuid -lmagic $(GLIBMM_LIBS)
 
 testStringToWords_SOURCES = testStringToWords.cpp
 testStringToWords_LDADD = futil/libfutil.la -luuid -lmagic $(GLIBMM_LIBS)

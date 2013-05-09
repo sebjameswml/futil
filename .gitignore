@@ -62,3 +62,4 @@ testRC4
 testSplitString2
 testValidMac
 logmsg
+testUnicodeToUTF8

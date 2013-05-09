@@ -1150,6 +1150,10 @@ namespace wml {
                  */
                 static void unicodeize (std::string& str);
 
+                static std::string unicodePointToUTF8 (unsigned long& unicodePoint);
+
+                static void numericCharRefsToUTF8 (std::string& s);
+
                 /*!
                  * If str contains only numerals 0 to 9, return true,
                  * else return false.

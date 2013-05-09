@@ -3749,6 +3749,101 @@ wml::FoundryUtilities::unicodeize (std::string& str)
         str = utf8.str();
 }
 
+string
+wml::FoundryUtilities::unicodePointToUTF8 (unsigned long& unicodePoint)
+{
+        stringstream utf8chars;
+
+        if (unicodePoint < 0x80) {
+                // 7 bits to the code point, 1 byte. Simple - just
+                // convert to one byte.
+                char c = static_cast<char>(unicodePoint);
+                utf8chars << c;
+
+        } else if (unicodePoint < 0x0800) {
+                // 2 bytes. Leader is 0xc0 (110 00000) on byte1, 0c80 (10 000000) on byte 2.
+                char byte1 = 0xc0 | ((0x7c0 & unicodePoint) >> 6);
+                char byte2 = 0x80 | (0x3f & unicodePoint);
+                utf8chars << byte1 << byte2;
+
+        } else if (unicodePoint < 0x10000) {
+                // 3 bytes. Leader is 0xe0 (1110 0000) on byte1, 0c80 (10 000000) on bytes 2, 3.
+                char byte1 = 0xe0 | ((0xf000 & unicodePoint) >> 12);
+                char byte2 = 0x80 | ((0xfc0 & unicodePoint) >> 6);
+                char byte3 = 0x80 | (0x3f & unicodePoint);
+                utf8chars << byte1 << byte2 << byte3;
+
+        } else if (unicodePoint < 0x200000) {
+                // 4 bytes. Leader is 0xf0 (11110 000) on byte1, 0c80 (10 000000) on bytes 2, 3, 4.
+                char byte1 = 0xf0 | ((0x1c0000 & unicodePoint) >> 18);
+                char byte2 = 0x80 | ((0x3f000 & unicodePoint) >> 12);
+                char byte3 = 0x80 | ((0xfc0 & unicodePoint) >> 6);
+                char byte4 = 0x80 | (0x3f & unicodePoint);
+                utf8chars << byte1 << byte2 << byte3 << byte4;
+
+        } else if (unicodePoint < 0x4000000) {
+                // 5 bytes. Leader is 0xf8 (111110 00) on byte 1.
+                char byte1 = 0xf8 | ((0x3000000 & unicodePoint) >> 24);
+                char byte2 = 0x80 | ((0xfc0000 & unicodePoint) >> 18);
+                char byte3 = 0x80 | ((0x3f000 & unicodePoint) >> 12);
+                char byte4 = 0x80 | ((0xfc0 & unicodePoint) >> 6);
+                char byte5 = 0x80 | (0x3f & unicodePoint);
+                utf8chars << byte1 << byte2 << byte3 << byte4 << byte5;
+
+        } else {
+                // 6 bytes. Leader is 0xfc (111111 00) on byte 1.
+                char byte1 = 0xfc | ((0x40000000 & unicodePoint) >> 30);
+                char byte2 = 0x80 | ((0x3f000000 & unicodePoint) >> 24);
+                char byte3 = 0x80 | ((0xfc0000 & unicodePoint) >> 18);
+                char byte4 = 0x80 | ((0x3f000 & unicodePoint) >> 12);
+                char byte5 = 0x80 | ((0xfc0 & unicodePoint) >> 6);
+                char byte6 = 0x80 | (0x3f & unicodePoint);
+                utf8chars << byte1 << byte2 << byte3 << byte4 << byte5 << byte6;
+        }
+
+        return utf8chars.str();
+}
+
+void
+wml::FoundryUtilities::numericCharRefsToUTF8 (string& s)
+{
+        string::size_type pos1 = 0, pos2 = 0, x=0;
+        string numStr("");
+        int base = 10;
+        while ((pos1 = s.find ("&#", pos2)) != string::npos) {
+
+                pos2 = (s.find (";", pos1));
+
+                if (pos2 != string::npos) {
+
+                        // check if hex or dec representation, based on x being present.
+                        x = s.find ("x", pos1);
+                        if (x == string::npos || x > pos2) {
+                                // decimal numeric ref
+                                base = 10;
+                        } else {
+                                // hex numeric ref
+                                base = 16;
+                        }
+
+                        numStr = s.substr (pos1+3, pos2-(pos1+3));
+                        char * p;
+                        unsigned long n = strtoul (numStr.c_str(), &p, base);
+                        if ( * p != 0 ) {
+                                DBG ("Not a number");
+                        } else {
+                                DBG ("Replacing NCR: '&#" << (base==16?"x":"") << numStr << ";'");
+                                string newchars = FoundryUtilities::unicodePointToUTF8 (n);
+                                s.replace (pos1, numStr.size()+4, newchars);
+                                pos2 = pos1+1;
+                        }
+                } else {
+                        // Incomplete numeric character reference, ignore
+                        DBG ("Found incomplete character reference, ignoring.")
+                }
+        }
+}
+
 bool
 wml::FoundryUtilities::containsOnlyNumerals (const std::string& str)
 {
