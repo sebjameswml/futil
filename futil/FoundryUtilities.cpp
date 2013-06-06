@@ -1135,6 +1135,28 @@ wml::FoundryUtilities::regfileExists (const std::string& path)
 }
 
 bool
+wml::FoundryUtilities::userExefileExists (const std::string& path)
+{
+        struct stat * buf = NULL;
+
+        buf = static_cast<struct stat*> (malloc (sizeof (struct stat)));
+        memset (buf, 0, sizeof (struct stat));
+
+        if (stat (path.c_str(), buf)) {
+                free (buf);
+                return false;
+        }
+
+        if (S_ISREG (buf->st_mode) && (S_IXUSR & buf->st_mode) ) {
+                free (buf);
+                return true;
+        }
+
+        free (buf);
+        return false;
+}
+
+bool
 wml::FoundryUtilities::socketExists (const std::string& path)
 {
         struct stat * buf = NULL;

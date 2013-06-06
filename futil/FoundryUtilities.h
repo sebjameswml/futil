@@ -454,6 +454,12 @@ namespace wml {
                 static bool regfileExists (const std::string& path);
 
                 /*!
+                 * Like regfileExists, but also checks if the file has
+                 * the "executable by user" bit set (chmod u+x).
+                 */
+                static bool userExefileExists (const std::string& path);
+
+                /*!
                  * Like regfileExists, but for block devices
                  */
                 static bool blockdevExists (const std::string& path);
