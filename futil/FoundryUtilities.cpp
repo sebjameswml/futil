@@ -3811,6 +3811,23 @@ wml::FoundryUtilities::containsOnlyNumerals (const std::string& str)
         return true;
 }
 
+bool
+wml::FoundryUtilities::containsOnlyWhitespace (const std::string& str)
+{
+        for (unsigned int i=0; i<str.size(); i++) {
+                if (str[i] == ' ' ||
+                    str[i] == '\t' ||
+                    str[i] == '\n' ||
+                    str[i] == '\r') {
+                        // IS whitespace; carry on
+                } else {
+                        // NOT whitespace return false.
+                        return false;
+                }
+        }
+        return true;
+}
+
 void
 wml::FoundryUtilities::sanitize (std::string& str,
                                  const std::string& allowed,

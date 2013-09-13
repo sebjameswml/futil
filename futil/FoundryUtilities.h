@@ -1147,6 +1147,12 @@ namespace wml {
                 static bool containsOnlyNumerals (const std::string& str);
 
                 /*!
+                 * If str contains only whitespace characters (tab,
+                 * NL, CR, space), return true, otherwise return false.
+                 */
+                static bool containsOnlyWhitespace (const std::string& str);
+
+                /*!
                  * A general purpose sanitization function. This is a
                  * "allow only a list of characters" sort of
                  * sanitiser, so you call it with a different list of
