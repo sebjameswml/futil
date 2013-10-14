@@ -3,8 +3,8 @@
  *  static public utility functions and classes used across WML code.
  *
  *  This particular program is for comparing the performance of
- *  FoundryUtilities::splitString with
- *  FoundryUtilities::stringToVector.
+ *  futil::splitString with
+ *  futil::stringToVector.
  *
  *  WML futil is Copyright William Matthew Ltd. 2010.
  *
@@ -35,7 +35,7 @@
 
 #include "futil/config.h"
 #include "WmlDbg.h"
-#include "FoundryUtilities.h"
+#include "futil.h"
 
 // Includes a global called stringtosplit. Also used by stringtovector.cpp.
 #include "stringtosplit.h"
@@ -54,7 +54,7 @@ int main(int argc, char** argv)
         while (j < NUM_TIMES_TO_SPLIT) {
                 theResult.clear();
                 string delim (" ");
-                FoundryUtilities::splitString (theResult, stringtosplit, delim);
+                futil::splitString (theResult, stringtosplit, delim);
                 ++j;
         }
 

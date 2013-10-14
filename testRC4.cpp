@@ -32,7 +32,7 @@
 
 #include "config.h"
 #include "WmlDbg.h"
-#include "FoundryUtilities.h"
+#include "futil.h"
 #include "RC4.h"
 
 using namespace std;
@@ -69,7 +69,7 @@ int main (int argc, char** argv)
         while (iTest != tests.end()) {
                 string out (RC4::rc4crypt (iTest->first.first, iTest->first.second));
                 expected = iTest->second;
-                FoundryUtilities::convertCHexCharSequences (expected);
+                futil::convertCHexCharSequences (expected);
                 if (out == expected) {
                         ++passed;
                 } else {

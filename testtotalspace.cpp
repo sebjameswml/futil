@@ -4,7 +4,7 @@
 
 #include "config.h"
 #include <futil/WmlDbg.h>
-#include <futil/FoundryUtilities.h>
+#include <futil/futil.h>
 
 extern "C" {
 #include <stdlib.h>
@@ -23,8 +23,8 @@ int main (int argc, char** argv)
                 unsigned int total;
                 unsigned int available;
                 unsigned int used;
-                total = FoundryUtilities::totalSpaceKBytes ("/boot");
-                available = FoundryUtilities::freeSpaceKBytes ("/boot");
+                total = futil::totalSpaceKBytes ("/boot");
+                available = futil::freeSpaceKBytes ("/boot");
                 used = total - available;
 
                 cout << "Total space:        " << total << "\n";
@@ -35,7 +35,7 @@ int main (int argc, char** argv)
                 flist.push_back ("1.file");
                 flist.push_back ("2.file");
                 flist.push_back ("3.file");
-                unsigned int filelistused  = FoundryUtilities::KBytesUsedBy (flist);
+                unsigned int filelistused  = futil::KBytesUsedBy (flist);
                 cout << "File list uses      " << filelistused << "\n";
 
         } catch (const runtime_error& e) {

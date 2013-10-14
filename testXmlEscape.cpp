@@ -30,7 +30,7 @@
 
 std::ofstream DBGSTREAM;
 
-#include "FoundryUtilities.h"
+#include "futil.h"
 
 using namespace std;
 using namespace wml;
@@ -65,7 +65,7 @@ int main (int argc, char **argv)
 
         list<pair<string, string> >::const_iterator iTest = tests.begin();
         while (iTest != tests.end()) {
-                string out (FoundryUtilities::xmlEscape (iTest->first));
+                string out (futil::xmlEscape (iTest->first));
                 if (out == iTest->second) {
                         ++passed;
                 } else {

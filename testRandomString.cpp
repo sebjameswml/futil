@@ -27,7 +27,7 @@
 
 #include "config.h"
 #include "WmlDbg.h"
-#include "FoundryUtilities.h"
+#include "futil.h"
 
 using namespace std;
 using namespace wml;
@@ -38,23 +38,23 @@ int main ()
 {
         try {
                 cout << "16 characters from a UUID string:\n";
-                cout << FoundryUtilities::uuidPortion (16) << endl;
+                cout << futil::uuidPortion (16) << endl;
 
                 cout << "\nA string containing upper, lower case and numerals:\n";
-                cout << FoundryUtilities::randomString (64) << endl;
+                cout << futil::randomString (64) << endl;
                 cout << "\nA string containing lower case and numerals:\n";
-                cout << FoundryUtilities::randomString (64, false, true, true) << endl;
+                cout << futil::randomString (64, false, true, true) << endl;
                 cout << "\nA string containing upper case and numerals:\n";
-                cout << FoundryUtilities::randomString (64, true, false, true) << endl;
+                cout << futil::randomString (64, true, false, true) << endl;
                 cout << "\nA string containing only numerals:\n";
-                cout << FoundryUtilities::randomString (64, false, false, true) << endl;
+                cout << futil::randomString (64, false, false, true) << endl;
                 cout << "\nA string containing only upper case:\n";
-                cout << FoundryUtilities::randomString (64, true, false, false) << endl;
+                cout << futil::randomString (64, true, false, false) << endl;
                 cout << "\nA string containing only lower case:\n";
-                cout << FoundryUtilities::randomString (64, false, true, false) << endl;
+                cout << futil::randomString (64, false, true, false) << endl;
 
                 cout << "\nCause an exception...\n";
-                cout << FoundryUtilities::randomString (64, false, false, false) << endl;
+                cout << futil::randomString (64, false, false, false) << endl;
 
         } catch (const exception& e) {
                 cout << "Exception: " << e.what() << endl;

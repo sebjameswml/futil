@@ -10,7 +10,7 @@
 
 std::ofstream DBGSTREAM;
 
-#include "FoundryUtilities.h"
+#include "futil.h"
 
 using namespace std;
 using namespace wml;
@@ -52,7 +52,7 @@ int main (int argc, char **argv)
                 while (s != samples.end()) {
 
                         toks3.clear();
-                        toks3 = FoundryUtilities::splitStringWithEncs (*s, seps, encs);
+                        toks3 = futil::splitStringWithEncs (*s, seps, encs);
                         cout << "Output of splitStringWithEncs for the string:" << endl;
                         // A count line:
                         cout << "!123456789\"123456789£123456789$123456789\%123456789^123456789&123456789*123456789(123456789)123456789" << endl << *s << endl;

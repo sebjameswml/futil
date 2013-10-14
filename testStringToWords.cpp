@@ -31,7 +31,7 @@
 
 std::ofstream DBGSTREAM;
 
-#include "FoundryUtilities.h"
+#include "futil.h"
 
 using namespace std;
 using namespace wml;
@@ -94,7 +94,7 @@ int main (int argc, char **argv)
                 Glib::ustring in (testsI->first);
                 vector<Glib::ustring> out;
                 try {
-                        out = FoundryUtilities::stringToWords (in);
+                        out = futil::stringToWords (in);
                 } catch (runtime_error& e) {
                         DBGSTREAM << "Exception: '" << e.what() << endl;
                         cerr << "Error: " << e.what() << endl;

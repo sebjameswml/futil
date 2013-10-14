@@ -32,7 +32,7 @@
 
 #include "futil/config.h"
 #include "WmlDbg.h"
-#include "FoundryUtilities.h"
+#include "futil.h"
 
 using namespace std;
 using namespace wml;
@@ -50,7 +50,7 @@ int main(int argc, char** argv)
 
         string basePath(argv[1]);
         set<string> empties;
-        FoundryUtilities::readDirectoryEmptyDirs (empties, basePath);
+        futil::readDirectoryEmptyDirs (empties, basePath);
 
         set<string>::const_iterator i = empties.begin();
         while (i != empties.end()) {

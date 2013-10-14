@@ -29,7 +29,7 @@
 
 #include "futil/config.h"
 #include "WmlDbg.h"
-#include "FoundryUtilities.h"
+#include "futil.h"
 
 using namespace std;
 using namespace wml;
@@ -41,7 +41,7 @@ int main(int argc, char** argv)
         DBGOPEN ("testsymlinks.log");
 
         // Suppose /etc/inetd.conf is a hanging symlink?
-        if (FoundryUtilities::fileExists ("/etc/inetd.conf")) {
+        if (futil::fileExists ("/etc/inetd.conf")) {
                 cout << "true" << endl;
         } else {
                 cout << "false" << endl;

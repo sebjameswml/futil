@@ -30,7 +30,7 @@
 
 #include "futil/config.h"
 #include "WmlDbg.h"
-#include "FoundryUtilities.h"
+#include "futil.h"
 
 using namespace std;
 using namespace wml;
@@ -60,7 +60,7 @@ int main(int argc, char** argv)
         time_t n = 0;
 
         try {
-                n = FoundryUtilities::dateTimeToNum (d);
+                n = futil::dateTimeToNum (d);
                 cout << n;
         } catch (const exception& e) {
                 cerr << "Date format error\n";
