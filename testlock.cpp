@@ -22,6 +22,7 @@
  *
  */
 
+#include <unistd.h>
 #include <string>
 #include <iostream>
 #include <fstream>

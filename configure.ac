@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.59)
 AC_INIT([futil], [0.1], [sjames@wmltd.co.uk])
-AC_CONFIG_SRCDIR(futil/FoundryUtilities.cpp)
+AC_CONFIG_SRCDIR(futil/futil.cpp)
 AC_REVISION([$Revision: 1.3 $])
 AC_PREFIX_DEFAULT(/usr)
 
@@ -175,6 +175,8 @@ fi
 
 dnl pkg-config to check for glibmm-2.4. Ubuntu 10.04 has ??, wmlpp2 has 2.20.1.
 PKG_CHECK_MODULES(GLIBMM, glibmm-2.4 >= 2.20.1)
+dnl 2.17.0 is the version of uuid-dev on Debian 6. 1.41.3 is found on wmlpp2 trees.
+PKG_CHECK_MODULES(UUID, uuid >= 1.41.3)
 
 dnl Always output certain files
 AC_CONFIG_FILES([Makefile futil/Makefile doc/Makefile doc/Doxyfile])

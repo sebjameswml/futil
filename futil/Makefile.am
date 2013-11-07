@@ -1,6 +1,6 @@
 CLEANFILES = *~
 
-INCLUDES = -I$(top_srcdir) -I$(top_builddir) $(GLIBMM_CFLAGS)
+INCLUDES = -I$(top_srcdir) -I$(top_builddir) $(GLIBMM_CFLAGS) $(UUID_CFLAGS)
 
 lib_LTLIBRARIES = libfutil.la
 
