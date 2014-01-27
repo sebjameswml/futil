@@ -126,12 +126,12 @@ wml::Process::~Process ()
 }
 
 bool
-wml::Process::reset (void)
+wml::Process::reset (bool keepCallbacks)
 {
         if (this->running()) {
                 return false;
         }
-        if (this->callbacks != (ProcessCallbacks*)0) {
+        if (!keepCallbacks && this->callbacks != (ProcessCallbacks*)0) {
                 DBG ("Resetting callbacks pointer");
                 this->callbacks = (ProcessCallbacks*)0;
         }
@@ -492,6 +492,7 @@ wml::Process::setCallbacks (ProcessCallbacks * cb)
 //@{
 wml::ProcessData::ProcessData (void)
 {
+        this->errorNum = -1;
         this->stdOutReady = false;
         this->stdErrReady = false;
 }

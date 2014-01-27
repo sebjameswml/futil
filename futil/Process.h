@@ -101,8 +101,13 @@ namespace wml {
                  * process is still running, return false and don't do
                  * the reset. Otherwise, reset member attributes and
                  * return true.
+                 *
+                 * \param keepCallbacks If true, then the stored
+                 * pointer to a callback class should NOT be
+                 * reset. The default behaviour is to reset the
+                 * callbacks.
                  */
-                bool reset (void);
+                bool reset (bool keepCallbacks = false);
 
                 /*!
                  * Write \arg input to the stdin of the process.
