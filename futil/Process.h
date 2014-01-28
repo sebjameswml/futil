@@ -96,6 +96,13 @@ namespace wml {
                  */
                 ~Process();
 
+        private:
+                /*!
+                 * Close any open file descriptors.
+                 */
+                void closeAllFileDescriptors (void);
+
+        public:
                 /*!
                  * Reset the process ready to be used again. If this
                  * process is still running, return false and don't do

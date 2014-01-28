@@ -79,50 +79,67 @@ wml::Process::Process () :
 wml::Process::~Process ()
 {
         // Close pipes
+        this->closeAllFileDescriptors();
+        // Free polling struct
+        free (this->p);
+}
+
+void
+wml::Process::closeAllFileDescriptors (void)
+{
         if (this->parentToChild[WRITING_END] > 0) {
+                DBG ("close parentToChild[WRITING_END]...");
                 if (close (this->parentToChild[WRITING_END])) {
                         // Normally succeeds
                         DBG ("Failed to close parentToChild[WRITING_END]");
                 }
+                this->parentToChild[WRITING_END] = 0;
         }
 
         if (this->parentToChild[READING_END] > 0) {
+                DBG ("Unexpectedly closing parentToChild[READING_END]...");
                 if (close (this->parentToChild[READING_END])) {
                         // Normally already closed in Process::start
                         DBG ("Failed to close parentToChild[READING_END]");
                 }
+                this->parentToChild[READING_END] = 0;
         }
 
         if (this->childToParent[READING_END] > 0) {
+                DBG ("close childToParent[READING_END]...");
                 if (close (this->childToParent[READING_END])) {
                         // Normally succeeds
                         DBG ("Failed to close childToParent[READING_END]");
                 }
+                this->childToParent[READING_END] = 0;
         }
 
         if (this->childToParent[WRITING_END] > 0) {
+                DBG ("Unexpectedly closing childToParent[WRITING_END]...");
                 if (close (this->childToParent[WRITING_END])) {
                         // Normally already closed in Process::start
                         DBG ("Failed to close childToParent[WRITING_END]");
                 }
+                this->childToParent[WRITING_END] = 0;
         }
 
         if (this->childErrToParent[READING_END] > 0) {
+                DBG ("close childErrToParent[READING_END]...");
                 if (close (this->childErrToParent[READING_END])) {
                         // Normally succeeds
                         DBG ("Failed to close childErrToParent[READING_END]");
                 }
+                this->childErrToParent[READING_END] = 0;
         }
 
         if (this->childErrToParent[WRITING_END] > 0) {
+                DBG ("Unexpectedly closing childErrToParent[READING_END]...");
                 if (!close (this->childErrToParent[WRITING_END])) {
                         // Normally already closed in Process::start
                         DBG ("Failed to close childErrToParent[READING_END]");
                 }
+                this->childErrToParent[WRITING_END] = 0;
         }
-
-        // Free polling struct
-        free (this->p);
 }
 
 bool
@@ -140,6 +157,10 @@ wml::Process::reset (bool keepCallbacks)
         this->error = PROCESSNOERROR;
         this->progName = "unknown";
         this->environment.clear();
+
+        // Ensure all file descriptors are closed.
+        this->closeAllFileDescriptors();
+
         return true;
 }
 
