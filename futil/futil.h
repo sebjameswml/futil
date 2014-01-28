@@ -1528,6 +1528,14 @@ namespace wml {
                  * function in javascript.
                  */
                 static void decodeURIComponent (std::string& s);
+
+                /*!
+                 * Currently Linux only. Consult the /proc directory
+                 * to find the number of files open for the passed-in
+                 * process id pid. If pid is 0, then use the pid of
+                 * the current process.
+                 */
+                static unsigned int filesOpen (pid_t pid = 0);
         };
 
 } // namespace wml

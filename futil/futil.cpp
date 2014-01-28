@@ -2492,6 +2492,29 @@ wml::futil::getPid (const std::string& programName)
         return pid;
 }
 
+unsigned int
+wml::futil::filesOpen (pid_t pid)
+{
+        if (pid == 0) {
+                // Use current process.
+                pid = getpid();
+        }
+
+        stringstream pathss;
+        pathss << "/proc/" << pid << "/fdinfo";
+        string path = pathss.str();
+
+        vector<string> files;
+        try {
+                futil::readDirectoryTree (files, path);
+        } catch (const exception& e) {
+                DBG ("Failed to read dir tree: " << e.what());
+                // No fdinfo directory, so no files open for that pid.
+                return 0;
+        }
+        return files.size();
+}
+
 int
 wml::futil::termKill (const string& programName, int& pid)
 {

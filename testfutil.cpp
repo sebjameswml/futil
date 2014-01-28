@@ -116,6 +116,9 @@ int main(int argc, char** argv)
         futil::convertCHexCharSequences (withHexEscapes);
         cout << "Converted string: " << withHexEscapes << endl;
 
+        // When testing, change this number to something which will work:
+        cout << futil::filesOpen (0) << " files are open for this process\n";
+
         DBGCLOSE();
 
         return 0;
