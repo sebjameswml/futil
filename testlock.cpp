@@ -26,6 +26,10 @@
 #include <iostream>
 #include <fstream>
 
+extern "C" {
+#include <unistd.h>
+}
+
 #include "futil/config.h"
 #include "WmlDbg.h"
 #include "FoundryUtilities.h"

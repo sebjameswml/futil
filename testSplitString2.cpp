@@ -8,6 +8,10 @@
 #include <string>
 #include <vector>
 
+extern "C" {
+#include <unistd.h>
+}
+
 std::ofstream DBGSTREAM;
 
 #include "FoundryUtilities.h"
