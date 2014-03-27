@@ -122,6 +122,15 @@ namespace wml {
                 void writeIn (const string& input) const;
 
                 /*!
+                 * Close the writing end (i.e. input) of the
+                 * parentToChild pipe.
+                 *
+                 * Required when using Process to run a program that
+                 * reads data until the input channel is closed.
+                 */
+                void closeWritingEnd (void);
+
+                /*!
                  * When Process::start() is called, pause useconds
                  * before forking and exec-ing the program. This is a
                  * setter for this->pauseBeforeStart.

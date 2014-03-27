@@ -172,6 +172,19 @@ wml::Process::writeIn (const string& input) const
 }
 
 void
+wml::Process::closeWritingEnd (void)
+{
+        if (this->parentToChild[WRITING_END] > 0) {
+                DBG ("close parentToChild[WRITING_END]...");
+                if (close (this->parentToChild[WRITING_END])) {
+                        // Normally succeeds
+                        DBG ("Failed to close parentToChild[WRITING_END]");
+                }
+                this->parentToChild[WRITING_END] = 0;
+        }
+}
+
+void
 wml::Process::setPauseBeforeStart (const unsigned int useconds)
 {
         this->pauseBeforeStart = useconds;
