@@ -31,6 +31,7 @@ extern "C" {
 #include <sys/stat.h>
 #include <sys/poll.h>
 #include <signal.h>
+#include <string.h>
 }
 
 #include "config.h"
@@ -226,7 +227,9 @@ wml::Process::start (const string& program, const list<string>& args)
                     (dup2 (this->childToParent[WRITING_END], STDOUT)) == -1 ||
                     (dup2 (this->childErrToParent[WRITING_END], STDERR)) == -1) {
                         theError = errno;
-                        cout << "ERROR! Couldn't get access to stdin/out/err! errno was " << theError << endl;
+                        cerr << "ERROR! Couldn't get access to stdin/out/err! errno:"
+                             << theError << " (" << strerror(theError) << ")" << endl;
+
                         return PROCESS_FAILURE;
                 }
 
@@ -251,8 +254,9 @@ wml::Process::start (const string& program, const list<string>& args)
 
                 // If process returns, error occurred
                 theError = errno;
-                // This'll get picked up by parseResponse
-                cout << "Process error: " << this->pid << " crashed. errno:" << theError << endl;
+                // This'll get picked up by error handling callback methods
+                cerr << "Error: process " << this->pid << " crashed. errno:"
+                     << errno << " (" << strerror(theError) << ")" << endl;
 
                 // This won't get picked up by the parent process.
                 this->error = PROCESSCRASHED;
