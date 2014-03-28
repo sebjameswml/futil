@@ -977,12 +977,30 @@ namespace wml {
                 static std::string getMacAddr (void);
 
                 /*!
+                 * Get the mac address of the platform from the
+                 * network device @param netdev
+                 *
+                 * @return The mac address as a string (something like
+                 * "aa:bb:cc:00:0a:0b")
+                 */
+                static std::string getMacAddr (const std::string& netdev);
+
+                /*!
                  * Get the mac address of the platform from eth0
                  *
                  * @param[out] mac A buffer of 2 * 32 bit unsigned
                  * ints in which to place the mac address
                  */
                 static void getMacAddr (unsigned int* mac);
+
+                /*!
+                 * Get the mac address of the platform from the
+                 * network device @param netdev.
+                 *
+                 * @param[out] mac A buffer of 2 * 32 bit unsigned
+                 * ints in which to place the mac address
+                 */
+                static void getMacAddr (unsigned int* mac, const std::string& netdev);
 
                 /*!
                  * Get the mac address from the string @macStr

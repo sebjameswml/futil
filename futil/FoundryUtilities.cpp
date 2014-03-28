@@ -2609,12 +2609,18 @@ wml::FoundryUtilities::readProcDirs (vector<string>& vec,
 std::string
 wml::FoundryUtilities::getMacAddr (void)
 {
+        return FoundryUtilities::getMacAddr ("eth0");
+}
+
+std::string
+wml::FoundryUtilities::getMacAddr (const string& netdev)
+{
         char mac[32] = "";
         struct ifreq ifr;
         int sd;
 
         /* Set up network socket to get mac address */
-        strcpy(ifr.ifr_name, "eth0");
+        strcpy(ifr.ifr_name, netdev.c_str());
 
         sd = socket(AF_INET, SOCK_DGRAM, 0);
 
@@ -2646,11 +2652,17 @@ wml::FoundryUtilities::getMacAddr (void)
 void
 wml::FoundryUtilities::getMacAddr (unsigned int* mac)
 {
+        FoundryUtilities::getMacAddr (mac, "eth0");
+}
+
+void
+wml::FoundryUtilities::getMacAddr (unsigned int* mac, const string& netdev)
+{
         struct ifreq ifr;
         int sd;
 
         /* Set up network socket to get mac address */
-        strcpy(ifr.ifr_name, "eth0");
+        strcpy(ifr.ifr_name, netdev.c_str());
 
         sd = socket(AF_INET, SOCK_DGRAM, 0);
 
