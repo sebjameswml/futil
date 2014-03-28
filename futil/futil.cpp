@@ -2607,14 +2607,14 @@ wml::futil::readProcDirs (vector<string>& vec,
 }
 
 std::string
-wml::futil::getMacAddr (void)
+wml::futil::getMacAddr (const string& netdev)
 {
         char mac[32] = "";
         struct ifreq ifr;
         int sd;
 
         /* Set up network socket to get mac address */
-        strcpy(ifr.ifr_name, "eth0");
+        strcpy(ifr.ifr_name, netdev.c_str());
 
         sd = socket(AF_INET, SOCK_DGRAM, 0);
 
@@ -2644,13 +2644,13 @@ wml::futil::getMacAddr (void)
 }
 
 void
-wml::futil::getMacAddr (unsigned int* mac)
+wml::futil::getMacAddr (unsigned int* mac, const string& netdev)
 {
         struct ifreq ifr;
         int sd;
 
         /* Set up network socket to get mac address */
-        strcpy(ifr.ifr_name, "eth0");
+        strcpy(ifr.ifr_name, netdev.c_str());
 
         sd = socket(AF_INET, SOCK_DGRAM, 0);
 

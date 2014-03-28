@@ -969,20 +969,22 @@ namespace wml {
                 static int termKill (const std::string& programName, int& pid);
 
                 /*!
-                 * Get the mac address of the platform from eth0
+                 * Get the mac address of the platform from the
+                 * network device @param netdev
                  *
                  * @return The mac address as a string (something like
                  * "aa:bb:cc:00:0a:0b")
                  */
-                static std::string getMacAddr (void);
+                static std::string getMacAddr (const std::string& netdev = "eth0");
 
                 /*!
-                 * Get the mac address of the platform from eth0
+                 * Get the mac address of the platform from the
+                 * network device @param netdev.
                  *
                  * @param[out] mac A buffer of 2 * 32 bit unsigned
                  * ints in which to place the mac address
                  */
-                static void getMacAddr (unsigned int* mac);
+                static void getMacAddr (unsigned int* mac, const std::string& netdev = "eth0");
 
                 /*!
                  * Get the mac address from the string @macStr
