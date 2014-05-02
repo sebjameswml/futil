@@ -627,7 +627,7 @@ wml::FoundryUtilities::countChars (const std::string& line, const char c)
         return count;
 }
 
-unsigned int
+unsigned long long int
 wml::FoundryUtilities::getMemory (void)
 {
         ifstream f ("/proc/meminfo");
@@ -661,14 +661,14 @@ wml::FoundryUtilities::getMemory (void)
         // k is length of string
 
         stringstream ss;
-        unsigned int memTotal = 0;
+        unsigned long long int memTotal = 0;
         ss << line.substr (j, k);
         ss >> memTotal;
 
         return memTotal<<10; // Left shift 10 to return bytes, not kbytes
 }
 
-unsigned int
+unsigned long long int
 wml::FoundryUtilities::getCachedMemory (void)
 {
         ifstream f ("/proc/meminfo");
@@ -707,14 +707,14 @@ wml::FoundryUtilities::getCachedMemory (void)
         // k is length of string
 
         stringstream ss;
-        unsigned int memCached = 0;
+        unsigned long long int memCached = 0;
         ss << line.substr (j, k);
         ss >> memCached;
 
         return memCached<<10; // Left shift 10 to return bytes, not kbytes
 }
 
-unsigned int
+unsigned long long int
 wml::FoundryUtilities::getBufferedMemory (void)
 {
         ifstream f ("/proc/meminfo");
@@ -753,14 +753,14 @@ wml::FoundryUtilities::getBufferedMemory (void)
         // k is length of string
 
         stringstream ss;
-        unsigned int memBuffered = 0;
+        unsigned long long int memBuffered = 0;
         ss << line.substr (j, k);
         ss >> memBuffered;
 
         return memBuffered<<10; // Left shift 10 to return bytes, not kbytes
 }
 
-unsigned int
+unsigned long long int
 wml::FoundryUtilities::getActiveMemory (void)
 {
         ifstream f ("/proc/meminfo");
@@ -798,14 +798,14 @@ wml::FoundryUtilities::getActiveMemory (void)
         // k is length of string
 
         stringstream ss;
-        unsigned int memActive = 0;
+        unsigned long long int memActive = 0;
         ss << line.substr (j, k);
         ss >> memActive;
 
         return memActive<<10; // Left shift 10 to return bytes, not kbytes
 }
 
-unsigned int
+unsigned long long int
 wml::FoundryUtilities::getInactiveMemory (void)
 {
         ifstream f ("/proc/meminfo");
@@ -843,7 +843,7 @@ wml::FoundryUtilities::getInactiveMemory (void)
         // k is length of string
 
         stringstream ss;
-        unsigned int memInactive = 0;
+        unsigned long long int memInactive = 0;
         ss << line.substr (j, k);
         ss >> memInactive;
 

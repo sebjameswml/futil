@@ -348,35 +348,35 @@ namespace wml {
                  *
                  * Returns RAM in bytes.
                  */
-                static unsigned int getMemory (void);
+                static unsigned long long int getMemory (void);
 
                 /*!
                  * \brief Return the amount of RAM used as cache.
                  *
                  * Returns cached RAM in bytes.
                  */
-                static unsigned int getCachedMemory (void);
+                static unsigned long long int getCachedMemory (void);
 
                 /*!
                  * \brief Return the amount of RAM used as buffers.
                  *
                  * Returns buffer RAM in bytes.
                  */
-                static unsigned int getBufferedMemory (void);
+                static unsigned long long int getBufferedMemory (void);
 
                 /*!
                  * \brief Return the amount of active RAM.
                  *
                  * Returns active RAM in bytes.
                  */
-                static unsigned int getActiveMemory (void);
+                static unsigned long long int getActiveMemory (void);
 
                 /*!
                  * \brief Return the amount of inactive RAM.
                  *
                  * Returns inactive RAM in bytes.
                  */
-                static unsigned int getInactiveMemory (void);
+                static unsigned long long int getInactiveMemory (void);
 
                 /*!
                  * Returns the system load average.
