@@ -627,7 +627,7 @@ wml::futil::countChars (const std::string& line, const char c)
         return count;
 }
 
-unsigned int
+unsigned long long int
 wml::futil::getMemory (void)
 {
         ifstream f ("/proc/meminfo");
@@ -661,7 +661,7 @@ wml::futil::getMemory (void)
         // k is length of string
 
         stringstream ss;
-        unsigned int memTotal = 0;
+        unsigned long long int memTotal = 0;
         ss << line.substr (j, k);
         ss >> memTotal;
 
@@ -707,7 +707,7 @@ wml::futil::getCachedMemory (void)
         // k is length of string
 
         stringstream ss;
-        unsigned int memCached = 0;
+        unsigned long long int memCached = 0;
         ss << line.substr (j, k);
         ss >> memCached;
 
@@ -753,7 +753,7 @@ wml::futil::getBufferedMemory (void)
         // k is length of string
 
         stringstream ss;
-        unsigned int memBuffered = 0;
+        unsigned long long int memBuffered = 0;
         ss << line.substr (j, k);
         ss >> memBuffered;
 
@@ -798,7 +798,7 @@ wml::futil::getActiveMemory (void)
         // k is length of string
 
         stringstream ss;
-        unsigned int memActive = 0;
+        unsigned long long int memActive = 0;
         ss << line.substr (j, k);
         ss >> memActive;
 
@@ -843,7 +843,7 @@ wml::futil::getInactiveMemory (void)
         // k is length of string
 
         stringstream ss;
-        unsigned int memInactive = 0;
+        unsigned long long int memInactive = 0;
         ss << line.substr (j, k);
         ss >> memInactive;
 
