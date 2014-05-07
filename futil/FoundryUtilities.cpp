@@ -2400,7 +2400,9 @@ wml::FoundryUtilities::pidLoaded (const int pid)
                 getline (f, line, '\n');
                 getline (f, line, '\n'); // Second line is the State line.
                 f.close();
-                if (line.size()>7 && (line[7] == 'S' || line[7] == 'R')) {
+                // Check that the state of the loaded PID is not
+                // either zombie (Z) or dead (X).
+                if (line.size()>7 && !(line[7] == 'Z' || line[7] == 'X')) {
                         return true;
                 }
         }
