@@ -916,11 +916,16 @@ namespace wml {
                 static bool listContains (const std::list<std::string>& l, const std::string& s);
 
                 /*!
-                 * Return true if the given pid is in the sleeping or
-                 * running state. False otherwise. Determine this by
-                 * reading /proc/[pid]/status and examinging the
-                 * second line which will say something like:
-                 * Status:\\tS (sleeping)\\n or Status:\\tR (running)
+                 * Return true if the given pid is loaded, unless its
+                 * state, as given in /proc/[pid]/status, is either
+                 * zombie (Z) or dead (X).
+                 *
+                 * The second line of /proc/[pid]/status, if the file
+                 * exists, provides information about the state of the
+                 * specified pid. State may be one of the following:
+                 * "R (running)", "S (sleeping)", "D (disk sleep)", "T
+                 * (stopped)", "T (tracing stop)", "Z (zombie)", or "X
+                 * (dead)".
                  */
                 static bool pidLoaded (const int pid);
 
