@@ -668,7 +668,7 @@ wml::futil::getMemory (void)
         return memTotal<<10; // Left shift 10 to return bytes, not kbytes
 }
 
-unsigned int
+unsigned long long int
 wml::futil::getCachedMemory (void)
 {
         ifstream f ("/proc/meminfo");
@@ -714,7 +714,7 @@ wml::futil::getCachedMemory (void)
         return memCached<<10; // Left shift 10 to return bytes, not kbytes
 }
 
-unsigned int
+unsigned long long int
 wml::futil::getBufferedMemory (void)
 {
         ifstream f ("/proc/meminfo");
@@ -760,7 +760,7 @@ wml::futil::getBufferedMemory (void)
         return memBuffered<<10; // Left shift 10 to return bytes, not kbytes
 }
 
-unsigned int
+unsigned long long int
 wml::futil::getActiveMemory (void)
 {
         ifstream f ("/proc/meminfo");
@@ -805,7 +805,7 @@ wml::futil::getActiveMemory (void)
         return memActive<<10; // Left shift 10 to return bytes, not kbytes
 }
 
-unsigned int
+unsigned long long int
 wml::futil::getInactiveMemory (void)
 {
         ifstream f ("/proc/meminfo");
