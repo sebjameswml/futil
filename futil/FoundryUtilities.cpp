@@ -1058,6 +1058,11 @@ wml::FoundryUtilities::fileExists (const std::string& path)
         struct stat * buf = NULL;
 
         buf = static_cast<struct stat*> (malloc (sizeof (struct stat)));
+        if (buf == NULL) {
+                DBG ("Memory allocation error in FoundryUtilities::fileExists");
+                return false;
+        }
+//        DBG ("Setting buff to all zeros (" << sizeof (struct stat));
         memset (buf, 0, sizeof (struct stat));
 
         if (stat (path.c_str(), buf)) {
