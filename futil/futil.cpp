@@ -471,9 +471,9 @@ wml::futil::stripLeadingChars (Glib::ustring& input, const gunichar c)
 
 int
 wml::futil::searchReplace (const string& searchTerm,
-                                      const string& replaceTerm,
-                                      std::string& data,
-                                      const bool replaceAll)
+                           const string& replaceTerm,
+                           std::string& data,
+                           const bool replaceAll)
 {
         int count = 0;
         string::size_type pos = 0;
@@ -543,9 +543,9 @@ wml::futil::conditionAsXmlTag (std::string& str)
 
 int
 wml::futil::searchReplaceInFile (const std::string& searchTerm,
-                                            const std::string& replaceTerm,
-                                            const std::string& fileName,
-                                            const bool replaceAll)
+                                 const std::string& replaceTerm,
+                                 const std::string& fileName,
+                                 const bool replaceAll)
 {
         int count(0);
 
@@ -564,7 +564,7 @@ wml::futil::searchReplaceInFile (const std::string& searchTerm,
         string line;
         while (getline (f, line, '\n')) {
                 count += futil::searchReplace (searchTerm, replaceTerm,
-                                                          line, replaceAll);
+                                               line, replaceAll);
                 of << line << '\n';
         }
         f.close();
@@ -586,8 +586,8 @@ wml::futil::searchReplaceInFile (const std::string& searchTerm,
 
 int
 wml::futil::deleteLinesContaining (const std::string& searchTerm,
-                                              const std::string& fileName,
-                                              const bool deleteEndOfLine)
+                                   const std::string& fileName,
+                                   const bool deleteEndOfLine)
 {
         int count(0);
 
@@ -665,7 +665,7 @@ wml::futil::getMemory (void)
         // MemTotal is the first line of meminfo.
         string line;
         if (getline (f, line, '\n')) {
-            // Ok
+                // Ok
         } else {
                 f.close();
                 return 0;
@@ -1281,8 +1281,8 @@ wml::futil::dirExists (const std::string& path)
 
 void
 wml::futil::createDir (const std::string& path,
-                                  const mode_t mode,
-                                  const int uid, const int gid)
+                       const mode_t mode,
+                       const int uid, const int gid)
 {
         DBG2 ("Called for path '" << path << "'");
         if (path.empty()) {
@@ -1495,7 +1495,7 @@ wml::futil::setPermissions (const string& filepath, const mode_t mode)
 
 bool
 wml::futil::checkAccess (const std::string& filepath,
-                                    const std::string& accessType)
+                         const std::string& accessType)
 {
         if (accessType.find("r") != string::npos) {
                 ifstream in;
@@ -1641,8 +1641,8 @@ wml::futil::copyFile (const string& from, ostream& to)
 
 void
 wml::futil::truncateFile (const std::string& from,
-                                     const std::string& to,
-                                     const unsigned int bytes)
+                          const std::string& to,
+                          const unsigned int bytes)
 {
         ofstream out;
 
@@ -2242,10 +2242,10 @@ wml::futil::uuidPortion (const unsigned int numChars)
 
 std::string
 wml::futil::randomString (const unsigned int numChars,
-                                     const bool includeUppercase,
-                                     const bool includeLowercase,
-                                     const bool includeNumerals,
-                                     const bool allowSimilars)
+                          const bool includeUppercase,
+                          const bool includeLowercase,
+                          const bool includeNumerals,
+                          const bool allowSimilars)
 {
         if (!includeUppercase && !includeLowercase && !includeNumerals) {
                 throw runtime_error ("No characters to return");
@@ -2583,8 +2583,8 @@ wml::futil::termKill (const string& programName, int& pid)
 
 void
 wml::futil::readProcDirs (vector<string>& vec,
-                                     const string& baseDirPath,
-                                     const string& subDirPath)
+                          const string& baseDirPath,
+                          const string& subDirPath)
 {
         DIR* d;
         struct dirent *ep;
@@ -2789,8 +2789,8 @@ wml::futil::macAddrToStr (const unsigned int* mac)
 
 void
 wml::futil::clearoutDir (const string& dirPath,
-                                    const unsigned int olderThanSeconds,
-                                    const string& filePart)
+                         const unsigned int olderThanSeconds,
+                         const string& filePart)
 {
         vector<string> files;
         try {
@@ -2821,17 +2821,17 @@ wml::futil::clearoutDir (const string& dirPath,
 
 void
 wml::futil::readDirectoryTree (vector<string>& vec,
-                                          const string& dirPath,
-                                          const unsigned int olderThanSeconds)
+                               const string& dirPath,
+                               const unsigned int olderThanSeconds)
 {
         futil::readDirectoryTree (vec, dirPath, "", olderThanSeconds);
 }
 
 void
 wml::futil::readDirectoryTree (vector<string>& vec,
-                                          const string& baseDirPath,
-                                          const string& subDirPath,
-                                          const unsigned int olderThanSeconds)
+                               const string& baseDirPath,
+                               const string& subDirPath,
+                               const unsigned int olderThanSeconds)
 {
         DIR* d;
         struct dirent *ep;
@@ -2895,7 +2895,7 @@ wml::futil::readDirectoryTree (vector<string>& vec,
                                 newPath = sd + "/" + ep->d_name;
                         }
                         futil::readDirectoryTree (vec, baseDirPath,
-                                                             newPath.c_str(), olderThanSeconds);
+                                                  newPath.c_str(), olderThanSeconds);
                 } else {
                         // Non-directories are simply added to the vector
                         string newEntry;
@@ -2939,7 +2939,7 @@ wml::futil::readDirectoryTree (vector<string>& vec,
 
 void
 wml::futil::readDirectoryDirs (std::set<std::string>& dset,
-                                          const std::string& dirPath)
+                               const std::string& dirPath)
 {
         DIR* d;
         struct dirent *ep;
@@ -2970,8 +2970,8 @@ wml::futil::readDirectoryDirs (std::set<std::string>& dset,
 
 void
 wml::futil::readDirectoryEmptyDirs (std::set<std::string>& dset,
-                                               const std::string& baseDirPath,
-                                               const std::string& subDir)
+                                    const std::string& baseDirPath,
+                                    const std::string& subDir)
 {
         DBG ("Called for baseDirPath '" << baseDirPath << "' and subDir '" << subDir << "'");
         DIR* d;
@@ -3033,7 +3033,7 @@ wml::futil::readDirectoryEmptyDirs (std::set<std::string>& dset,
 
 void
 wml::futil::removeUnusedDirs (std::set<std::string>& dset,
-                                         const std::string& dirPath)
+                              const std::string& dirPath)
 {
         set<string> onepass;
         do {
@@ -3045,8 +3045,8 @@ wml::futil::removeUnusedDirs (std::set<std::string>& dset,
 
 void
 wml::futil::removeEmptySubDirs (std::set<std::string>& dset,
-                                           const std::string& baseDirPath,
-                                           const std::string& subDir)
+                                const std::string& baseDirPath,
+                                const std::string& subDir)
 {
         DBG ("Called for baseDirPath '" << baseDirPath << "' and subDir '" << subDir << "'");
         DIR* d;
@@ -3453,8 +3453,8 @@ wml::futil::dateTimeToNum (const std::string &dateTimeStr)
 
 std::string
 wml::futil::numToDateTime (const time_t epochSeconds,
-                                      const char dateSeparator,
-                                      const char timeSeparator)
+                           const char dateSeparator,
+                           const char timeSeparator)
 {
         if (epochSeconds == 0) {
                 return "unknown";
@@ -3515,7 +3515,7 @@ wml::futil::numToDateTime (const time_t epochSeconds,
 
 std::string
 wml::futil::numToDate (const time_t epochSeconds,
-                                  const char separator)
+                       const char separator)
 {
         struct tm * t;
         time_t es = epochSeconds;
@@ -3564,7 +3564,7 @@ wml::futil::timeNow (void)
 
 unsigned int
 wml::futil::getMonthFromLog (const std::string& filePath,
-                                        const unsigned int lineNum)
+                             const unsigned int lineNum)
 {
         unsigned int month = 0;
 
@@ -3629,16 +3629,16 @@ wml::futil::getMonthFromLog (const std::string& filePath,
 
 void
 wml::futil::getCSS (std::stringstream& rCSS,
-                               const std::string& cssFile,
-                               const bool inlineOutput)
+                    const std::string& cssFile,
+                    const bool inlineOutput)
 {
         futil::getScript (SCRIPT_CSS, rCSS, cssFile, inlineOutput);
 }
 
 void
 wml::futil::getJavascript (std::stringstream& rJavascript,
-                                      const std::string& jsFile,
-                                      const bool inlineOutput)
+                           const std::string& jsFile,
+                           const bool inlineOutput)
 {
         string jsFileName (jsFile);
         if (inlineOutput == true
@@ -3657,9 +3657,9 @@ wml::futil::getJavascript (std::stringstream& rJavascript,
 
 void
 wml::futil::getScript (const SCRIPT_TYPE script,
-                                  std::stringstream& rScript,
-                                  const std::string& theScriptFile,
-                                  const bool inlineOutput)
+                       std::stringstream& rScript,
+                       const std::string& theScriptFile,
+                       const bool inlineOutput)
 {
         string scriptFile (theScriptFile);
         if (inlineOutput == true) {
@@ -3861,7 +3861,7 @@ wml::futil::numericCharRefsToUTF8 (string& s)
                         }
                 } else {
                         // Incomplete numeric character reference, ignore
-                        DBG ("Found incomplete character reference, ignoring.")
+                        DBG ("Found incomplete character reference, ignoring.");
                 }
         }
 }
@@ -3899,8 +3899,8 @@ wml::futil::containsOnlyWhitespace (const std::string& str)
 
 void
 wml::futil::sanitize (std::string& str,
-                                 const std::string& allowed,
-                                 const bool eraseForbidden)
+                      const std::string& allowed,
+                      const bool eraseForbidden)
 {
         unsigned int i=0;
         while (i<str.size()) {
@@ -3922,8 +3922,8 @@ wml::futil::sanitize (std::string& str,
 
 void
 wml::futil::sanitizeReplace (std::string& str,
-                                        const std::string& allowed,
-                                        const char replaceChar)
+                             const std::string& allowed,
+                             const char replaceChar)
 {
         unsigned int i=0;
         while (i<str.size()) {
@@ -4080,8 +4080,8 @@ wml::futil::stringToWords (const Glib::ustring& s, const bool ignoreTrailingEmpt
 
 vector<Glib::ustring>
 wml::futil::stringToVector (const Glib::ustring& s,
-                                       const Glib::ustring& separator,
-                                       const bool ignoreTrailingEmptyVal)
+                            const Glib::ustring& separator,
+                            const bool ignoreTrailingEmptyVal)
 {
         if (separator.empty()) {
                 throw runtime_error ("Can't split the string; the separator is empty.");
@@ -4113,7 +4113,7 @@ wml::futil::stringToVector (const Glib::ustring& s,
 // Similiar to futil::splitString() but FASTER.
 vector<string>
 wml::futil::stringToVector (const string& s, const string& separator,
-                                       const bool ignoreTrailingEmptyVal)
+                            const bool ignoreTrailingEmptyVal)
 {
         if (separator.empty()) {
                 throw runtime_error ("Can't split the string; the separator is empty.");
@@ -4145,8 +4145,8 @@ wml::futil::stringToVector (const string& s, const string& separator,
 // Similiar to futil::stringToVector()
 void
 wml::futil::splitString (vector<string>& tokens,
-                                    const string& stringToSplit,
-                                    const string& delim)
+                         const string& stringToSplit,
+                         const string& delim)
 {
         string::size_type pos;
         pos = stringToSplit.find (delim);
@@ -4163,8 +4163,8 @@ wml::futil::splitString (vector<string>& tokens,
 
 std::string
 wml::futil::htmlHighlightTerm (const string& term,
-                                          const string& searchTerms,
-                                          const string& tag)
+                               const string& searchTerms,
+                               const string& tag)
 {
         string sTerm (term);
         string sTerms (searchTerms);
@@ -4182,8 +4182,8 @@ wml::futil::htmlHighlightTerm (const string& term,
 
 std::string
 wml::futil::htmlHighlightTerm (const std::string& term,
-                                          const vector<string>& searchTermsUC,
-                                          const std::string& tag)
+                               const vector<string>& searchTermsUC,
+                               const std::string& tag)
 {
         string rtn("");
         string termUC = term;
@@ -4270,7 +4270,7 @@ wml::futil::wrapLine (const std::string& line, const unsigned int maxLength, con
 
 string
 wml::futil::vectorToString (const vector<string>& v,
-                                       const string& separator)
+                            const string& separator)
 {
         if (separator.empty()) {
                 throw runtime_error ("Can't build the string; the separator is empty.");
@@ -4292,7 +4292,7 @@ wml::futil::vectorToString (const vector<string>& v,
 
 std::vector<std::string>
 wml::futil::csvToVector (const std::string& csvList, const char separator,
-                                    const bool ignoreTrailingEmptyVal)
+                         const bool ignoreTrailingEmptyVal)
 {
         vector<string> theVec;
         string csvl (csvList);
@@ -4482,9 +4482,9 @@ wml::futil::suffix (const int n)
 
 void
 wml::futil::pdfConversion (const string& inputPath,
-                                      const string& outputDevice, const string& outputPath,
-                                      const unsigned int width, const unsigned int height,
-                                      const bool wait, const unsigned int resolution)
+                           const string& outputDevice, const string& outputPath,
+                           const unsigned int width, const unsigned int height,
+                           const bool wait, const unsigned int resolution)
 {
         string widthS, heightS, resS;
         stringstream tempSS, returnSS;
@@ -4529,16 +4529,16 @@ wml::futil::pdfConversion (const string& inputPath,
 
 void
 wml::futil::pdfToJpeg (const string& inputPath, const string& outputPath,
-                                  const unsigned int width, const unsigned int height,
-                                  const bool wait, const unsigned int resolution)
+                       const unsigned int width, const unsigned int height,
+                       const bool wait, const unsigned int resolution)
 {
         pdfConversion (inputPath, "jpeg", outputPath, width, height, wait, resolution);
 }
 
 void
 wml::futil::pdfToPng (const string& inputPath, const string& outputPath,
-                                 const unsigned int width,const  unsigned int height,
-                                 const bool wait, const unsigned int resolution)
+                      const unsigned int width,const  unsigned int height,
+                      const bool wait, const unsigned int resolution)
 {
         pdfConversion (inputPath, "pngalpha", outputPath, width, height, wait, resolution);
 }
@@ -4549,9 +4549,9 @@ wml::futil::pdfToPng (const string& inputPath, const string& outputPath,
 #define ICONV_OUTBUF_SIZE 256
 void
 wml::futil::doIconv (const string& fromEncoding,
-                                const string& toEncoding,
-                                const string& fromString,
-                                string& toString)
+                     const string& toEncoding,
+                     const string& fromString,
+                     string& toString)
 {
         // We'll read ICONV_INBUF_SIZE bytes at a time from fromString into inbuf...
         char inbuf[ICONV_INBUF_SIZE];
@@ -4896,10 +4896,10 @@ wml::futil::valid_mac (const string& mac_string)
 
 bool
 wml::futil::getlineWithCopy (std::istream* istrm,
-                                        std::string& line,
-                                        std::ofstream& copystrm,
-                                        bool& inputComplete,
-                                        const char eolChar)
+                             std::string& line,
+                             std::ofstream& copystrm,
+                             bool& inputComplete,
+                             const char eolChar)
 {
 #ifdef DEBUG2
         if (istrm->good()) { DBG2 ("good is set in istrm"); }
