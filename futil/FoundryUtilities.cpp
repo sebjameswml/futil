@@ -1062,7 +1062,6 @@ wml::FoundryUtilities::fileExists (const std::string& path)
                 DBG ("Memory allocation error in FoundryUtilities::fileExists");
                 return false;
         }
-//        DBG ("Setting buff to all zeros (" << sizeof (struct stat));
         memset (buf, 0, sizeof (struct stat));
 
         if (stat (path.c_str(), buf)) {
