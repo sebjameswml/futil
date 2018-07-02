@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.59)
 AC_INIT([futil], [0.1], [sjames@wmltd.co.uk])
-AC_CONFIG_SRCDIR(futil/FoundryUtilities.cpp)
+AC_CONFIG_SRCDIR(futil/futil.cpp)
 AC_REVISION([$Revision: 1.3 $])
 AC_PREFIX_DEFAULT(/usr)
 
@@ -134,7 +134,7 @@ dnl enable/disable compiler warnings (using gcc), if specified
 AC_ARG_ENABLE(warnings,
   [  --disable-warnings      disable gcc warnings [default=no]],
   [case "${enableval}" in
-    yes) futil_warnings=yes ;; 
+    yes) futil_warnings=yes ;;
     no)  futil_warnings=no ;;
     *) AC_MSG_ERROR(bad value ${enableval} for --enable-warnings) ;;
   esac], futil_warnings=yes)

@@ -1,13 +1,12 @@
 Foundry Utilities
 -----------------
 
-This package, WML futil, is a set of utility functions which we find
-useful at William Matthew Ltd (WML).
+This package, WML futil, is a set of utility functions which Seb James
+developed at William Matthew Ltd (WML).
 
-The main class is called wml::FoundryUtilities (it may in future be
-renamed to wml::futil in a refactoring exercise).
+The main class is called wml::futil.
 
-wml::FoundryUtilities contains a set of public static functions to
+wml::futil contains a set of public static functions to
 make our programming life easier.
 
 Two additional classes are provided - wml::Process which is used to
@@ -17,8 +16,8 @@ a C++ wrapper around libmagic.
 futil depends on libuuid and libmagic, both of which are available
 under open source licences.
 
-The name comes from "Foundry Linux" which is the name we give to the
-LFS-based from-source GNU/Linux OS which we distribute to our
+The name comes from "Foundry Linux" which is the name Seb gave to the
+LFS-based from-source GNU/Linux OS which is distributed to WML's
 customers.
 
 WML futil is Copyright William Matthew Ltd. 2011.
@@ -40,4 +39,5 @@ You should have received a copy of the GNU Lesser General Public License
 along with WML futil (see the file COPYING.LGPL).  If not, see
 <http://www.gnu.org/licenses/>.
 
-Seb James, 5th April 2011.
+Seb James, 5th April 2011
+(updated 2nd July 2018 on refactoring from wml::FoundryUtilities to wml::futil)

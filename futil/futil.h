@@ -31,8 +31,8 @@
  *
  */
 
-#ifndef _FOUNDRYUTILITIES_H_
-#define _FOUNDRYUTILITIES_H_
+#ifndef _FUTIL_H_
+#define _FUTIL_H_
 
 #ifdef __GNUG__
 # pragma interface
@@ -47,7 +47,7 @@ extern "C" {
 }
 
 /*!
- * Character sets useful when calling FoundryUtilities::sanitize().
+ * Character sets useful when calling futil::sanitize().
  *
  * These are ordered so that the most common chars appear earliest.
  */
@@ -124,7 +124,7 @@ extern "C" {
 #define URI_UNRESERVED_CHARS      CHARS_NUMERIC_ALPHA"-._~"
 
 /*
- * FoundryUtilities code is available to C++ programs only.
+ * futil code is available to C++ programs only.
  */
 #ifdef __cplusplus
 
@@ -182,20 +182,20 @@ namespace wml {
         /*!
          * \brief A collection of utility functions
          *
-         * The FoundryUtilities class provides numerous static utility
+         * The futil class provides numerous static utility
          * functions.
          */
-        class FoundryUtilities
+        class futil
         {
         public:
                 /*!
                  * Constructor
                  */
-                FoundryUtilities();
+                futil();
                 /*!
                  * Destructor
                  */
-                ~FoundryUtilities();
+                ~futil();
 
                 /*!
                  * This removes all carriage return characters ('\\r'
@@ -1275,7 +1275,7 @@ namespace wml {
                  * will NOT cause an additional empty value in the
                  * returned vector.
                  *
-                 * Similar to FoundryUtilities::splitString but
+                 * Similar to futil::splitString but
                  * FASTER. PREFER THIS OVER splitString.
                  */
                 static std::vector<std::string> stringToVector (const std::string& s, const std::string& separator,
@@ -1289,7 +1289,7 @@ namespace wml {
                  * Split a string into a set of strings using the
                  * delimiter specified.
                  *
-                 * Similar to FoundryUtilities::stringToVector but
+                 * Similar to futil::stringToVector but
                  * SLOW. Perhaps because it runs recursively?
                  *
                  * Try not to use this - PREFER stringToVector OVER
@@ -1569,7 +1569,7 @@ namespace wml {
 //@{
 template <typename stringType/*, typename charType*/>
 std::vector<stringType>
-wml::FoundryUtilities::splitStringWithEncs (const stringType& s,
+wml::futil::splitStringWithEncs (const stringType& s,
                                             const stringType& separatorChars,
                                             const stringType& enclosureChars,
                                             const typename stringType::value_type/*charType*/& escapeChar) // or '\0'
@@ -1646,7 +1646,7 @@ wml::FoundryUtilities::splitStringWithEncs (const stringType& s,
                                         }
                                 }
                         } else {
-                                //throw std::runtime_error ("FoundryUtilities::splitStringWithEncs: Unexpected case");
+                                //throw std::runtime_error ("futil::splitStringWithEncs: Unexpected case");
                         }
                 }
 
@@ -1690,7 +1690,7 @@ wml::FoundryUtilities::splitStringWithEncs (const stringType& s,
                 }
 
                 entry = s.substr (a, range);
-                FoundryUtilities::stripChars (entry, escapeChar);
+                futil::stripChars (entry, escapeChar);
                 //DBG2 ("Adding entry '" << entry << "' to vector");
                 theVec.push_back (entry);
 
@@ -1715,4 +1715,4 @@ wml::FoundryUtilities::splitStringWithEncs (const stringType& s,
 
 #endif // __cplusplus
 
-#endif // _FOUNDRYUTILITIES_H_
+#endif // _FUTIL_H_
