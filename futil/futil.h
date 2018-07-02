@@ -1570,9 +1570,9 @@ namespace wml {
 template <typename stringType/*, typename charType*/>
 std::vector<stringType>
 wml::futil::splitStringWithEncs (const stringType& s,
-                                            const stringType& separatorChars,
-                                            const stringType& enclosureChars,
-                                            const typename stringType::value_type/*charType*/& escapeChar) // or '\0'
+                                 const stringType& separatorChars,
+                                 const stringType& enclosureChars,
+                                 const typename stringType::value_type/*charType*/& escapeChar) // or '\0'
 {
         //DBG2 ("Called for string >" << s << "<");
         // Run through the string, searching for separator and
