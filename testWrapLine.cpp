@@ -31,7 +31,7 @@
 
 std::ofstream DBGSTREAM;
 
-#include "FoundryUtilities.h"
+#include "futil.h"
 
 using namespace std;
 using namespace wml;
@@ -62,7 +62,7 @@ int main (int argc, char **argv)
 
         list<pair<string, string> >::const_iterator iTest = tests.begin();
         while (iTest != tests.end()) {
-                vector<string> out (FoundryUtilities::wrapLine (iTest->first, testLineLength, ','));
+                vector<string> out (futil::wrapLine (iTest->first, testLineLength, ','));
 
                 stringstream ssOut;
                 vector<string>::const_iterator iOut (out.begin()), end (out.end());

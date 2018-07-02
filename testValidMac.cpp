@@ -30,7 +30,7 @@
 
 std::ofstream DBGSTREAM;
 
-#include "FoundryUtilities.h"
+#include "futil.h"
 
 using namespace std;
 using namespace wml;
@@ -68,7 +68,7 @@ int main (int argc, char **argv)
 
         list<pair<string, bool> >::const_iterator iTest = tests.begin();
         while (iTest != tests.end()) {
-                bool out (FoundryUtilities::valid_mac (iTest->first));
+                bool out (futil::valid_mac (iTest->first));
                 if (out == iTest->second) {
                         ++passed;
                 } else {

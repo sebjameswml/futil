@@ -30,7 +30,7 @@
 
 std::ofstream DBGSTREAM;
 
-#include "FoundryUtilities.h"
+#include "futil.h"
 
 using namespace std;
 using namespace wml;
@@ -46,17 +46,17 @@ int main (int argc, char **argv)
         string fp1 ("/tmp/difftest1"), fp2 ("/tmp/difftest2"),
                 fp3 ("/tmp/difftest3");
 
-        FoundryUtilities::openFilestreamForOverwrite (f, fp1);
+        futil::openFilestreamForOverwrite (f, fp1);
         f << "This is a test" << endl;
-        FoundryUtilities::closeFilestream (f);
+        futil::closeFilestream (f);
 
-        FoundryUtilities::openFilestreamForOverwrite (f, fp2);
+        futil::openFilestreamForOverwrite (f, fp2);
         f << "This is a test" << endl;
-        FoundryUtilities::closeFilestream (f);
+        futil::closeFilestream (f);
 
-        FoundryUtilities::openFilestreamForOverwrite (f, fp3);
+        futil::openFilestreamForOverwrite (f, fp3);
         f << "This is another test" << endl;
-        FoundryUtilities::closeFilestream (f);
+        futil::closeFilestream (f);
 
         /*
          * Tests
@@ -82,7 +82,7 @@ int main (int argc, char **argv)
         list<pair<pair<string, string>, bool> >::const_iterator iTest = tests.begin();
         while (iTest != tests.end()) {
                 try {
-                        bool out (FoundryUtilities::filesDiffer (iTest->first.first, iTest->first.second));
+                        bool out (futil::filesDiffer (iTest->first.first, iTest->first.second));
                         if (out == iTest->second) {
                                 ++passed;
                         } else {

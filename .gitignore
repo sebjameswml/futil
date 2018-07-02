@@ -41,6 +41,9 @@ doc/html/
 *.log
 *~
 
+# make check output files
+*.trs
+
 futil/stamp-h1
 libtool
 ltmain.sh
@@ -66,3 +69,4 @@ testSplitString2
 testValidMac
 logmsg
 testUnicodeToUTF8
+testWrapLine
