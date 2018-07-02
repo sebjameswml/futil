@@ -51,8 +51,8 @@ extern "C" {
 #define PROCESSNOMOREPIPES   7
 #define PROCESSFORKFAILED    8
 
-
-using namespace std;
+using std::string;
+using std::list;
 
 namespace wml {
 
@@ -271,7 +271,7 @@ namespace wml {
                 /*!
                  * \brief Set the process finished message for a process
                  */
-                void setProcessFinishedMsg (const std::string& message);
+                void setProcessFinishedMsg (const string& message);
 
                 /*!
                  * \brief Set the error num for a process
@@ -291,7 +291,7 @@ namespace wml {
                 /*!
                  * \brief Getters
                  */
-                std::string getProcessFinishedMsg (void) const;
+                string getProcessFinishedMsg (void) const;
                 int getErrorNum (void) const;
                 bool getStdOutReady (void) const;
                 bool getStdErrReady (void) const;
@@ -302,7 +302,7 @@ namespace wml {
                 /*!
                  * \brief Holds the name of the process that finished
                  */
-                std::string processFinishedMessage;
+                string processFinishedMessage;
 
                 /*!
                  * \brief Holds a process error number

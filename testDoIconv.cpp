@@ -28,7 +28,7 @@
 
 #include "config.h"
 #include "WmlDbg.h"
-#include "FoundryUtilities.h"
+#include "futil.h"
 
 using namespace std;
 using namespace wml;
@@ -41,9 +41,9 @@ int main ()
         string outputString("");
 
         try {
-                FoundryUtilities::doIconv ("ISO-8859-1", "UTF-8", inputString, outputString);
+                futil::doIconv ("ISO-8859-1", "UTF-8", inputString, outputString);
         } catch (const exception& e) {
-                cerr << "Exception in FoundryUtilities::doIconv(): " << e.what() << endl;
+                cerr << "Exception in futil::doIconv(): " << e.what() << endl;
                 return -1;
         }
 
@@ -55,9 +55,9 @@ int main ()
         string outputString2("");
 
         try {
-                FoundryUtilities::doIconv ("ISO-8859-1", "UTF-8", inputString2, outputString2);
+                futil::doIconv ("ISO-8859-1", "UTF-8", inputString2, outputString2);
         } catch (const exception& e) {
-                cerr << "Exception in FoundryUtilities::doIconv(): " << e.what() << endl;
+                cerr << "Exception in futil::doIconv(): " << e.what() << endl;
                 return -1;
         }
 

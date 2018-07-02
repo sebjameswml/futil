@@ -32,7 +32,7 @@ extern "C" {
 
 #include "futil/config.h"
 #include "WmlDbg.h"
-#include "FoundryUtilities.h"
+#include "futil.h"
 
 using namespace std;
 using namespace wml;
@@ -46,7 +46,7 @@ int main(int argc, char** argv)
         string fpath ("/tmp/my_file");
         fstream f;
         try {
-                FoundryUtilities::openFilestreamForOverwrite (f, fpath);
+                futil::openFilestreamForOverwrite (f, fpath);
         } catch (const exception& e) {
                 cout << "Error opening '" << fpath << "': "
                      << e.what()  << endl;
@@ -54,17 +54,17 @@ int main(int argc, char** argv)
 
         try {
                 cout << "Calling getLock (f)" << endl;
-                FoundryUtilities::getLock (f);
+                futil::getLock (f);
                 cout << "Sleeping" << endl;
                 sleep (5);
                 cout << "Releasing lock" << endl;
-                FoundryUtilities::releaseLock (f);
+                futil::releaseLock (f);
 
         } catch (const exception& e) {
                 cout << "Error getting/releasing lock on '" << fpath << "': "
                      << e.what()  << endl;
         }
-        FoundryUtilities::closeFilestream (f);
+        futil::closeFilestream (f);
 
         DBGCLOSE();
 

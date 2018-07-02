@@ -31,7 +31,7 @@
 
 #include "futil/config.h"
 #include "WmlDbg.h"
-#include "FoundryUtilities.h"
+#include "futil.h"
 
 using namespace std;
 using namespace wml;
@@ -43,41 +43,41 @@ int main(int argc, char** argv)
         DBGOPEN ("testfutil.log");
 
         cout << "Running this program at time: "
-             << FoundryUtilities::timeNow() << endl;
+             << futil::timeNow() << endl;
 
-        FoundryUtilities::createDir ("/tmp/seb/another");
+        futil::createDir ("/tmp/seb/another");
 
         string s ("\\\\\\\\"); // Should be "\\\\" - 4 backslashes
         cout << "s at beginning is         '" << s << "'\n";
-        FoundryUtilities::searchReplace ("\\\\", "\\", s, true);
+        futil::searchReplace ("\\\\", "\\", s, true);
         cout << "After searchReplace, s is '" << s << "'\n";
 
         s  = "This has  a \\\\ in it.";
         cout << "s at beginning is         '" << s << "'\n";
-        FoundryUtilities::searchReplace ("\\\\", "\\", s, true);
+        futil::searchReplace ("\\\\", "\\", s, true);
         cout << "After searchReplace, s is '" << s << "'\n";
 
         s  = "\\\\ search text at start.";
         cout << "s at beginning is         '" << s << "'\n";
-        FoundryUtilities::searchReplace ("\\\\", "\\", s, true);
+        futil::searchReplace ("\\\\", "\\", s, true);
         cout << "After searchReplace, s is '" << s << "'\n";
 
         s = "abc._-d&";
         cout << "Original string: '"<<s<<"'\n";
-        FoundryUtilities::sanitize (s, CHARS_NUMERIC_ALPHA"_", true);
+        futil::sanitize (s, CHARS_NUMERIC_ALPHA"_", true);
         cout << "After sanitize, s is '" << s << "'\n";
 
         s = "abc._-d&";
-        FoundryUtilities::sanitizeReplace (s, CHARS_NUMERIC_ALPHA"_", '_');
+        futil::sanitizeReplace (s, CHARS_NUMERIC_ALPHA"_", '_');
         cout << "After sanitizeReplace, s is '" << s << "'\n";
 
-        cout << "Load av: " << FoundryUtilities::getLoadAverage() << '\n';
+        cout << "Load av: " << futil::getLoadAverage() << '\n';
 
         string into("");
         ifstream fromS;
         fromS.open ("testFile");
         if (fromS.is_open()) {
-                FoundryUtilities::copyFileToString (fromS, into);
+                futil::copyFileToString (fromS, into);
                 cout << "into is:\n" << into;
         }
 
@@ -87,37 +87,37 @@ int main(int argc, char** argv)
         string toPath ("/tmp/new.pdf");
         try {
                 stringstream ff;
-                FoundryUtilities::copyFile (fromFile, ff);
-                FoundryUtilities::copyFile (ff, toPath);
+                futil::copyFile (fromFile, ff);
+                futil::copyFile (ff, toPath);
         } catch (const exception& e) {
                 cout << "Exception: " << e.what() << endl;
         }
 
         string uPath ("wmloutbatch:///tmp/outbatch/hp9300/");
-        FoundryUtilities::stripUnixFile (uPath);
+        futil::stripUnixFile (uPath);
         cout << "Just the path is '" << uPath << "'\n";
 
         uPath = "wmloutbatch:///tmp/outbatch/hp9300/";
-        FoundryUtilities::stripUnixPath (uPath);
+        futil::stripUnixPath (uPath);
         cout << "Just the file is '" << uPath << "'\n";
 
         ofstream appendTo;
         appendTo.open (toPath.c_str(), ios::out|ios::app|ios::ate);
         if (appendTo.is_open()) {
                 // /tmp/new.pdf should now have /tmp/B108642.pdf twice.
-                FoundryUtilities::appendFile (fromFile, appendTo);
+                futil::appendFile (fromFile, appendTo);
                 appendTo.close();
         }
 
-        cout << "Free space: " << FoundryUtilities::freeSpaceFraction ("/tmp") << endl;
+        cout << "Free space: " << futil::freeSpaceFraction ("/tmp") << endl;
 
         string withHexEscapes("\\x41\\x42\\x43");
         cout << "Unconverted string: " << withHexEscapes << endl;
-        FoundryUtilities::convertCHexCharSequences (withHexEscapes);
+        futil::convertCHexCharSequences (withHexEscapes);
         cout << "Converted string: " << withHexEscapes << endl;
 
         // When testing, change this number to something which will work:
-        cout << FoundryUtilities::filesOpen (0) << " files are open for this process\n";
+        cout << futil::filesOpen (0) << " files are open for this process\n";
 
         DBGCLOSE();
 

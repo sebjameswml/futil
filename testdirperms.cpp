@@ -29,7 +29,7 @@
 
 #include "futil/config.h"
 #include "WmlDbg.h"
-#include "FoundryUtilities.h"
+#include "futil.h"
 
 using namespace std;
 using namespace wml;
@@ -41,7 +41,7 @@ int main(int argc, char** argv)
         DBGOPEN ("testdirperms.log");
 
         // Suppose /etc/inetd.conf is a hanging symlink?
-        FoundryUtilities::createDir ("/etc/wml/pp/blah", 0775, 0, 7);
+        futil::createDir ("/etc/wml/pp/blah", 0775, 0, 7);
 
         DBGCLOSE();
 

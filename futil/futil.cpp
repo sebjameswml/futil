@@ -63,7 +63,33 @@ extern "C" {
 #include <regex.h>
 }
 
-using namespace std;
+using std::ios_base;
+using std::ios;
+using std::istream;
+using std::ostream;
+using std::fstream;
+using std::ifstream;
+using std::ofstream;
+using std::stringstream;
+using std::ostringstream;
+
+using std::exception;
+using std::runtime_error;
+
+using std::vector;
+using std::list;
+using std::map;
+using std::set;
+using std::pair;
+using std::make_pair;
+
+using std::string;
+using std::cout;
+using std::endl;
+using std::hex;
+using std::dec;
+using std::uppercase;
+using std::getline;
 
 /*
  * futil implementation
@@ -638,7 +664,9 @@ wml::futil::getMemory (void)
 
         // MemTotal is the first line of meminfo.
         string line;
-        if (getline (f, line, '\n') == false) {
+        if (getline (f, line, '\n')) {
+            // Ok
+        } else {
                 f.close();
                 return 0;
         }
@@ -679,7 +707,7 @@ wml::futil::getCachedMemory (void)
 
         // Cached is the fourth line of meminfo and is first line with "Cached" in.
         string line;
-        while (getline (f, line, '\n') != false) {
+        while (getline (f, line, '\n')) {
                 if (line.find ("Cached", 0) != string::npos) {
                         break;
                 }
@@ -725,7 +753,7 @@ wml::futil::getBufferedMemory (void)
 
         // Buffers is the 3rd line of meminfo and is first line with "Buffers" in.
         string line;
-        while (getline (f, line, '\n') != false) {
+        while (getline (f, line, '\n')) {
                 if (line.find ("Buffers", 0) != string::npos) {
                         break;
                 }
@@ -770,7 +798,7 @@ wml::futil::getActiveMemory (void)
         }
 
         string line;
-        while (getline (f, line, '\n') != false) {
+        while (getline (f, line, '\n')) {
                 if (line.find ("Active", 0) != string::npos) {
                         break;
                 }
@@ -815,7 +843,7 @@ wml::futil::getInactiveMemory (void)
         }
 
         string line;
-        while (getline (f, line, '\n') != false) {
+        while (getline (f, line, '\n')) {
                 if (line.find ("Inactive", 0) != string::npos) {
                         break;
                 }
@@ -858,7 +886,7 @@ wml::futil::getLoadAverage (void)
                 return -1.0;
         }
         string line;
-        while (getline (f, line, '\n') != false) {
+        while (getline (f, line, '\n')) {
                 if (!line.empty()) {
                         break;
                 }
@@ -887,7 +915,7 @@ wml::futil::getUptime (void)
                 return -1.0;
         }
         string line;
-        while (getline (f, line, '\n') != false) {
+        while (getline (f, line, '\n')) {
                 if (!line.empty()) {
                         break;
                 }
@@ -4882,11 +4910,14 @@ wml::futil::getlineWithCopy (std::istream* istrm,
         line = "";
         bool gotline(false);
         if (!inputComplete) {
-                if ((gotline = getline (*istrm, line, eolChar))) {
+                if (getline (*istrm, line, eolChar)) {
                         DBG2 ("line is: '" << line << "'");
                         if (copystrm.is_open()) {
                                 copystrm << line << eolChar;
                         }
+                        gotline = true;
+                } else {
+                        gotline = false;
                 }
                 if (istrm->eof()) {
                         inputComplete = true;

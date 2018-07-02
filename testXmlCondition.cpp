@@ -29,7 +29,7 @@
 
 #include "config.h"
 #include "WmlDbg.h"
-#include "FoundryUtilities.h"
+#include "futil.h"
 
 using namespace std;
 using namespace wml;
@@ -42,17 +42,17 @@ int main ()
 
         test = "XmlNotAllowed";
         cout << "Before condition, test is '" << test << "'\n";
-        FoundryUtilities::conditionAsXmlTag (test);
+        futil::conditionAsXmlTag (test);
         cout << "After  condition, test is '" << test << "'\n";
 
         test = "2NotAllowed";
         cout << "Before condition, test is '" << test << "'\n";
-        FoundryUtilities::conditionAsXmlTag (test);
+        futil::conditionAsXmlTag (test);
         cout << "After  condition, test is '" << test << "'\n";
 
         test = "XML2Not&%All.o_wed";
         cout << "Before condition, test is '" << test << "'\n";
-        FoundryUtilities::conditionAsXmlTag (test);
+        futil::conditionAsXmlTag (test);
         cout << "After  condition, test is '" << test << "'\n";
 
         return 0;

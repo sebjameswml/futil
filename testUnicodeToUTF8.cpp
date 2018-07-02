@@ -29,7 +29,7 @@
 
 #include "config.h"
 #include "WmlDbg.h"
-#include "FoundryUtilities.h"
+#include "futil.h"
 
 using namespace std;
 using namespace wml;
@@ -41,31 +41,31 @@ int main ()
 
         string test("A J character is: &#x4a;"); // should be 'J'
         cout << "Before: " << test << endl;
-        FoundryUtilities::numericCharRefsToUTF8 (test);
+        futil::numericCharRefsToUTF8 (test);
         cout << "After: " << test << endl;
 
         // 2 bytes
         test = "The price is &#x61;100";
         cout << "Before: " << test << endl;
-        FoundryUtilities::numericCharRefsToUTF8 (test);
+        futil::numericCharRefsToUTF8 (test);
         cout << "After: " << test << endl;
 
         // 2 bytes
         test = "A char is &#xA2;";
         cout << "Before: " << test << endl;
-        FoundryUtilities::numericCharRefsToUTF8 (test);
+        futil::numericCharRefsToUTF8 (test);
         cout << "After: " << test << endl;
 
         // 3 bytes
         test = "A 3 byte utf8 char is &#x20AC;";
         cout << "Before: " << test << endl;
-        FoundryUtilities::numericCharRefsToUTF8 (test);
+        futil::numericCharRefsToUTF8 (test);
         cout << "After: " << test << endl;
 
         // 4 bytes
         test = "A 4 byte utf8 char is &#x24b62;";
         cout << "Before: " << test << endl;
-        FoundryUtilities::numericCharRefsToUTF8 (test);
+        futil::numericCharRefsToUTF8 (test);
         cout << "After: " << test << endl;
 
 

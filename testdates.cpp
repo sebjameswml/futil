@@ -30,7 +30,7 @@
 
 #include "futil/config.h"
 #include "WmlDbg.h"
-#include "FoundryUtilities.h"
+#include "futil.h"
 
 using namespace std;
 using namespace wml;
@@ -42,14 +42,14 @@ int main(int argc, char** argv)
         DBGOPEN ("testdates.log");
 
         cout << "Running this program at time: "
-             << FoundryUtilities::timeNow() << endl;
+             << futil::timeNow() << endl;
 
         string d("2009-01-21 23:59:55");
-        time_t n = FoundryUtilities::dateTimeToNum (d);
+        time_t n = futil::dateTimeToNum (d);
         cout << d << " as unix epoch is: " << n << endl;
 
         cout << "Converted back to datestr: "
-             << FoundryUtilities::numToDateTime (n, '-', ':') << endl;
+             << futil::numToDateTime (n, '-', ':') << endl;
 
         DBGCLOSE();
 
