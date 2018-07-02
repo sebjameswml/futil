@@ -38,7 +38,6 @@
 # pragma interface
 #endif
 
-#include "config.h"
 #include <glibmm/ustring.h>
 
 extern "C" {
