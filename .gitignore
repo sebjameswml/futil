@@ -28,6 +28,8 @@ configure
 depcomp
 install-sh
 missing
+emptydirs
+test-driver
 
 ## Misc WML extras
 .deps
@@ -37,6 +39,7 @@ config.*
 doc/Doxyfile
 doc/html/
 *.log
+*~
 
 futil/stamp-h1
 libtool
